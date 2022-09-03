@@ -1,0 +1,89 @@
+
+    <!DOCTYPE html>
+    <html lang="zh">
+    <head>
+        <meta charset="utf-8" />
+        <title>轻量级轮播图</title>
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <meta name="def-grey" content="false" />
+        <meta http-equiv="X-UA-Compatible" content="edge" />
+        <link rel="stylesheet" type="text/css" href="css/simple_style.css" />
+        <script type="text/javascript" src="js/simple_swiper.js"></script>
+    </head>
+    <body>
+        <div class="app">
+            <div id="swiper-demo"  class="simple-swiper-container">
+                <a id="prev" class="btn btn-prev"></a>
+                <a id="next" class="btn btn-next"></a>
+                <!-- 包裹 -->
+                <div class="swiper-wrapper">
+                    <div class="swiper-items">
+                        <img data="https://img.alicdn.com/imgextra/i3/6000000006897/O1CN01uFc5A720osRJbUXo9_!!6000000006897-2-octopus.png" alt="">
+                    </div>
+                    <div class="swiper-items">
+                        <img data="https://img.alicdn.com/imgextra/i3/6000000004318/O1CN01aB2EEd1hlgz6KdBOw_!!6000000004318-2-octopus.png" alt="">
+                    </div>
+                     <div class="swiper-items">
+                        <img data="https://img.alicdn.com/imgextra/i4/6000000004225/O1CN015iHpfc1h569R3Kpap_!!6000000004225-0-octopus.jpg" alt="">
+                    </div>
+                    <div class="swiper-items">
+                        <img data="https://img.alicdn.com/imgextra/i2/6000000005226/O1CN0185uPvd1oTYc3gso58_!!6000000005226-0-octopus.jpg" alt="">
+                    </div>
+                    <div class="swiper-items">
+                        <img data="https://img.alicdn.com/imgextra/i2/6000000002482/O1CN01PfpHuE1UCnoB45nnN_!!6000000002482-0-octopus.jpg" alt="">
+                    </div>
+                </div>
+                <div class="pagination"></div>
+            </div>
+        </div>
+        <style>
+            
+            #swiper-demo{
+                height:280px;
+                width: 520px;
+            }
+            .app{
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            body{
+                overflow: hidden;
+                height: 100vh;
+                margin: 0;
+                /* background-color: black; */
+            }
+            img{
+                width: 100%;
+                height: 100%;
+            }
+            .simple-swiper-container{
+                border:none;
+            }
+            .swiper-items{
+                flex-direction: row;
+            }
+        </style>
+        <script type="text/javascript">
+            new SimSwiper("#swiper-demo", {
+            button: {
+                prev: "#prev", // 前进后退按钮
+                next: "#next",
+            },
+            // autoplay: 3000,
+            easing:'ease',
+            duration:300,
+            loop: true,
+            lazy:{
+                prop:'data'
+            },
+            disableTouch:false,
+            pagination: {
+                el: ".pagination",
+                click: true, // 是否可以点击
+            }
+        });
+        </script>
+    </body>
+    </html>
