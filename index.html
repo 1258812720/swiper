@@ -18,19 +18,37 @@
                 <!-- 包裹 -->
                 <div class="swiper-wrapper">
                     <div class="swiper-items">
-                        <img data="https://img.alicdn.com/imgextra/i4/6000000001997/O1CN01h6Pl301QcfimQACBD_!!6000000001997-0-octopus.jpg" alt="">
+                        <img data="img/1.png" alt="">
                     </div>
                     <div class="swiper-items">
-                        <img data="https://img.alicdn.com/imgextra/i1/6000000002512/O1CN01zwlJk71UQXh3arbHf_!!6000000002512-0-octopus.jpg" alt="">
-                    </div>
-                     <div class="swiper-items">
-                        <img data="https://img.alicdn.com/imgextra/i4/6000000005215/O1CN01yDoALz1oOWGE3PA4x_!!6000000005215-0-octopus.jpg" alt="">
+                        <img data="img/2.jpg" alt="">
                     </div>
                     <div class="swiper-items">
-                        <img data="https://img.alicdn.com/imgextra/i3/6000000005761/O1CN01H6nPMB1sQaVr1EDDr_!!6000000005761-0-octopus.jpg" alt="">
+                        <img data="img/3.jpg" alt="">
                     </div>
                     <div class="swiper-items">
-                        <img data="https://img.alicdn.com/imgextra/i2/6000000006675/O1CN01SEpdnP1zBCW3KuZrU_!!6000000006675-0-octopus.jpg" alt="">
+                        <img data="img/4.png" alt="">
+                    </div>
+                    <div class="swiper-items">
+                        <img data="img/5.jpg" alt="">
+                    </div>
+                    <div class="swiper-items">
+                        <img data="img/6.jpg" alt="">
+                    </div>
+                    <div class="swiper-items">
+                        <img data="img/6.png" alt="">
+                    </div>
+                    <div class="swiper-items">
+                        <img data="img/7.png" alt="">
+                    </div>
+                    <div class="swiper-items">
+                        <img data="img/8.jpg" alt="">
+                    </div>
+                    <div class="swiper-items">
+                        <img data="img/9.jpg" alt="">
+                    </div>
+                    <div class="swiper-items">
+                        <img data="img/10.png" alt="">
                     </div>
                 </div>
                 <div class="pagination"></div>
@@ -41,6 +59,7 @@
             #swiper-demo{
                 height:280px;
                 width: 520px;
+                background-color: rgb(233, 233, 233);
             }
             .app{
                 height: 100%;
@@ -52,10 +71,9 @@
                 overflow: hidden;
                 height: 100vh;
                 margin: 0;
-                /* background-color: black; */
             }
             img{
-                width: 100%;
+                width: auto;
                 height: 100%;
             }
             .simple-swiper-container{
@@ -71,9 +89,7 @@
                 prev: "#prev", // 前进后退按钮
                 next: "#next",
             },
-            // autoplay: 3000,
-            easing:'ease',
-            duration:300,
+            autoplay: 6000,
             loop: true,
             lazy:{
                 prop:'data'

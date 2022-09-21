@@ -1151,7 +1151,7 @@
 						th.position = 0;
 						th.index = 0;
 						th.transform(0, 0, 0);// 返回到第一章
-					} else if (a > 0) {
+					}  if (a > 0) {
 						th.position = th.num * th.width;
 						th.index = th.num;
 						th.transform(-th.position, 0, 0)
