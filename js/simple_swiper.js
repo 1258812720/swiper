@@ -13,7 +13,7 @@
 
 })(this, function (el, conf) {
 	"use strict";
-	var root =el;
+	var root = el;
 	function r(a, b) {
 		var c = a.document, bn, bm,
 			d = function () {
@@ -739,6 +739,7 @@
 				};
 				d.find = k, d.expr = k.selectors, d.expr[":"] = d.expr.filters, d.unique = k.uniqueSort
 			}();
+		var c, bo;
 		d.fn.extend({
 			find: function (a) {
 				var b = this.pushStack("", "find", a),
@@ -774,7 +775,6 @@
 		}),
 			d.extend({
 				cssHooks: {
-
 				},
 			}), d.support.opacity || (d.cssHooks.opacity = {
 
@@ -890,6 +890,7 @@
 			touchX: 0,
 			position: 0,
 			prevIndex: 0,
+			offIndex: -1,
 			loadEnd: false,
 			autoplay: function () {
 				var time = typeof g_conf.autoplay === "number" ? g_conf.autoplay : 3500;
@@ -977,12 +978,7 @@
 				if (conf.loop) {
 					this.add(slider.lastElementChild);
 				}
-				slider.addEventListener("transitionrun", function () {
-					if (conf.lazy) {
-						var c = slider.childNodes;
-						th.add(c[th.curIndex])
-					}
-				})
+
 			},
 			stop: function () {
 				clearInterval(th.time);
@@ -1011,7 +1007,7 @@
 				return tagArr;
 			},
 			add: function (img_el) {
-				if (th.loadEnd) {
+				if (th.loadEnd & !img_el) {
 					return;
 				}
 				var t = null;
@@ -1030,16 +1026,17 @@
 									_img.removeAttribute(prop);
 									_img.classList.remove('lazy');
 								}
-							} catch (e) { void (e) }
+							} catch (e) { console.error(e); void (e) }
 						}
 						img_el.classList.remove('lazy')
-						var path = root +">.swiper-wrapper .lazy";
-						var y = document.querySelectorAll(path).length;						
+						var path = root + ">.swiper-wrapper .lazy";
+						var y = document.querySelectorAll(path).length;
 						if (y <= 0) {
 							th.loadEnd = true;
 						}
 					}
 				}, conf.duration || 0)
+
 			},
 			_prev: function () {
 				var _ = this;
@@ -1062,6 +1059,10 @@
 							pc[i].classList.remove("pagination-items-active");
 						}
 					}
+				}
+				if (conf.lazy) {
+					var c = slider.childNodes;
+					th.add(c[th.curIndex])
 				}
 				if (conf.change !== undefined && typeof conf.change === "function") {
 					conf.change({
@@ -1151,7 +1152,7 @@
 						th.position = 0;
 						th.index = 0;
 						th.transform(0, 0, 0);// 返回到第一章
-					}  if (a > 0) {
+					} if (a > 0) {
 						th.position = th.num * th.width;
 						th.index = th.num;
 						th.transform(-th.position, 0, 0)
