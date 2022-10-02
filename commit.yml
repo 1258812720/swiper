@@ -2,55 +2,22 @@
 branches: {
   }
 fileChange:
-  /img:
-    newFile: !uuid 'f7183471f64ccc02502377fe0600b6a95e56f589'
-    oldFile: !uuid 'd1c60569ac8b08e07d4a1ea39dc6df352907eeba'
-  /img/1.jpg:
-    newFile: null
-    oldFile: !uuid '2f4a4cac0db6b85ada138f2529e3452df8fc4344'
-  /img/1.png:
-    newFile: !uuid '25e05674637513c6cb3f960dda5ceb14aa96c27f'
-    oldFile: null
-  /img/10.png:
-    newFile: !uuid '6494abfaa256f584228d5e96b884faf273157dfe'
-    oldFile: null
-  /img/2.jpg:
-    newFile: !uuid '426064c5b8229bced134ddd74de900749b56c04d'
-    oldFile: !uuid '2a9266e1f91a3a641c49a2ba3e4e7f256b49b30a'
-  /img/3.jpg:
-    newFile: !uuid '6e58bc853cb27dd91307896586faec2535993f6c'
-    oldFile: !uuid '01cbc04a2919a5f79bd3522e3eeed11d7a09eeab'
-  /img/4.png:
-    newFile: !uuid '1fd786947f10d3264b6b11b9a8475ca5da7c85bc'
-    oldFile: !uuid '0fb601387f985c1a82704d6ea681f526187b1aca'
-  /img/5.jpg:
-    newFile: !uuid '113e50c650117be03daed84d6c82921109c5f25a'
-    oldFile: null
-  /img/6.jpg:
-    newFile: !uuid 'efcd9a22b7061e86cc49bafdd2c3d454cce52a11'
-    oldFile: null
-  /img/6.png:
-    newFile: !uuid 'fd37646c57c8c3f758d6dc0a014c424cfe421d12'
-    oldFile: null
-  /img/7.png:
-    newFile: !uuid '25e05674637513c6cb3f960dda5ceb14aa96c27f'
-    oldFile: null
-  /img/8.jpg:
-    newFile: !uuid '52b52d2449c73f5b5612d211a1e9423677c49321'
-    oldFile: null
-  /img/9.jpg:
-    newFile: !uuid '871d24fd40458a27e9244e3ad3e6cddd5bcb4d72'
-    oldFile: null
+  /css:
+    newFile: !uuid '7d933bbeefc629e4e0a19278176847574dcd3abd'
+    oldFile: !uuid 'd6d053b5c5c17244dcaff48622d9c002614c3e0b'
+  /css/simple_style.css:
+    newFile: !uuid 'e1d01a39ccc6c3cc73a73d28559ad39105fe16c2'
+    oldFile: !uuid 'cbbff997f0cf2997167a5c91cccb5e797d5c2ccd'
   /index.html:
-    newFile: !uuid '2686e83367f026560aac8288fed614e33da0ab3a'
-    oldFile: !uuid '4375a75ad128d15fbc06c7d3388a3aab2d45fbeb'
+    newFile: !uuid '947f892d5b01d2646329f2a943378e01abe51dc3'
+    oldFile: !uuid '2686e83367f026560aac8288fed614e33da0ab3a'
   /js:
-    newFile: !uuid 'afff7b7e708acb038f8c622d0e8ec9d63d4f97b0'
-    oldFile: !uuid 'def634413ff97448ad1fc606820cac395b68b1b2'
+    newFile: !uuid '0e0a1197d16d1f01a238c357ac10830cbebe472f'
+    oldFile: !uuid 'afff7b7e708acb038f8c622d0e8ec9d63d4f97b0'
   /js/simple_swiper.js:
-    newFile: !uuid '84e85b6fc78cd64c5d6f75308af6655ad853183b'
-    oldFile: !uuid '5c685d4076b1297b18da45d4791e89165d6af0da'
-gitCommitId: !uuid '01478b717a947accd22f6466560a373a1842b4bb'
+    newFile: !uuid '877b25a8dd94111663f9cbd2dd49e5bd3e831f4d'
+    oldFile: !uuid '84e85b6fc78cd64c5d6f75308af6655ad853183b'
+gitCommitId: !uuid '24099f5c13c2ca893f8cd7288cd5273deaa55db2'
 renames: {
   }
-revisionId: 3
+revisionId: 4
