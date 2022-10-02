@@ -1,5 +1,6 @@
 修复火狐浏览器回滚问题 :persevere: 
-new SimSwiper("#swiper-demo", {
+使用方法
+    new SimSwiper("#swiper-demo", {
             button: {// 前进后退按钮
                 prev: "#prev", 
                 next: "#next",
