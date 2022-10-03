@@ -18,16 +18,19 @@
                 <!-- 包裹 -->
                 <div class="swiper-wrapper">
                     <div class="swiper-items">
-                        <img data="https://img.alicdn.com/imgextra/i3/O1CN01Sf6dER1zbJ3uVQ0lE_!!6000000006732-0-tps-846-472.jpg" alt="">
+                        <img img="https://img.alicdn.com/imgextra/i3/6000000006952/O1CN01VmM4T921E4EUf6YpS_!!6000000006952-0-octopus.jpg" alt="">
                     </div>
                     <div class="swiper-items">
-                        <img data="https://img.alicdn.com/imgextra/i2/O1CN01XZC8Dd1IUs179sweg_!!6000000000897-2-tps-846-472.png" alt="">
+                        <img img="https://img.alicdn.com/imgextra/i4/6000000006704/O1CN01UxUmhe1zOU0euZp8c_!!6000000006704-0-octopus.jpg" alt="">
                     </div>
                     <div class="swiper-items">
-                        <img data="https://img.alicdn.com/imgextra/i1/6000000004553/O1CN015OiD201jVK4XWQbmD_!!6000000004553-0-octopus.jpg" alt="">
+                        <img img="https://img.alicdn.com/imgextra/i4/6000000008175/O1CN01bmQKJR2AGCcamI9lD_!!6000000008175-0-octopus.jpg" alt="">
                     </div>
                     <div class="swiper-items">
-                        <img data="https://img.alicdn.com/imgextra/i1/O1CN01YGUXOM1k5VKBPo5J3_!!6000000004632-2-tps-846-472.png" alt="">
+                        <img img="https://img.alicdn.com/imgextra/i1/6000000001018/O1CN018YS48c1JOHyg1XN4y_!!6000000001018-2-octopus.png" alt="">
+                    </div>
+                    <div class="swiper-items">
+                        <img img="https://img.alicdn.com/imgextra/i1/6000000001801/O1CN01JffUo81PAu5ytzSKC_!!6000000001801-0-octopus.jpg" alt="">
                     </div>
                 </div>
                 <div class="pagination"></div>
@@ -59,22 +62,30 @@
             .swiper-items{
                 flex-direction: row;
             }
+            body{
+                background-color: rgb(75, 75, 75);
+            }
         </style>
         <script type="text/javascript">
             new SimSwiper("#swiper-demo", {
             button: {
                 prev: "#prev", // 前进后退按钮
                 next: "#next",
+                prevKey:"ArrowLeft",// 键盘操作
+                nextKey:"ArrowRight"
             },
             autoplay: 6000,
             loop: true,
             lazy:{
-                prop:'data'
+                prop:'img'
             },
             disableTouch:false,
             pagination: {
                 el: ".pagination",
                 click: true, // 是否可以点击
+            },
+            change(e){
+                console.log(e)
             }
         });
         </script>
