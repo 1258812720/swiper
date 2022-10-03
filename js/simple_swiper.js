@@ -10,7 +10,6 @@
 			e.__proto__.SimSwiper = fn;
 		}
 	}
-
 })(this, function (el, conf) {
 	"use strict";
 	var root = el;
@@ -867,6 +866,9 @@
 		}
 		return tag;
 	}
+	function is_blank(str) {
+		return !str || str.trim() === '';
+	}
 
 	var con = document.querySelector(el),
 		g_conf = conf,
@@ -932,6 +934,17 @@
 								false
 							);
 						}
+						if (!is_blank(conf.button.prevKey)) {
+							document.addEventListener("keyup", function (t) {
+								if (conf.button.prevKey === t.key) {
+									t.preventDefault();
+									th._prev()
+								} else if (!is_blank(conf.button.nextKey) && t.key === conf.button.nextKey) {
+									t.preventDefault()
+									th._next()
+								}
+							})
+						}
 					}
 				} catch (e) {
 					throw new Error(e);
@@ -978,7 +991,6 @@
 				if (conf.loop) {
 					this.add(slider.lastElementChild);
 				}
-
 			},
 			stop: function () {
 				clearInterval(th.time);
@@ -1036,7 +1048,6 @@
 						}
 					}
 				}, conf.duration || 0)
-
 			},
 			_prev: function () {
 				var _ = this;
@@ -1060,14 +1071,14 @@
 						}
 					}
 				}
+				var c = slider.childNodes[th.curIndex];
 				if (conf.lazy) {
-					var c = slider.childNodes;
-					th.add(c[th.curIndex])
+					th.add(c)
 				}
-				if (conf.change !== undefined && typeof conf.change === "function") {
+				if (conf.change !== undefined && typeof conf.change === "function" && c) {
 					conf.change({
 						index: th.curIndex,
-						el: slider.childNodes[th.curIndex],
+						el: c,
 					});
 				}
 			},
@@ -1148,7 +1159,7 @@
 						slider.classList.add("through");
 						th.event();
 					}
-					if (Math.abs(a) > th.num * th.width) {
+					if (Math.abs(a) >= th.num * th.width) {
 						th.position = 0;
 						th.index = 0;
 						th.transform(0, 0, 0);// 返回到第一章
