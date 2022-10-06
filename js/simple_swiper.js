@@ -1133,18 +1133,19 @@
 				th.touchX = e.clientX || e.touches[0].clientX;
 				if (e.button === 0) {
 					document.addEventListener("mouseup", th.end, false);
-					document.addEventListener("mousemove", th.move, false);
+					document.addEventListener("mousemove", th.move, {
+						passive:false
+					});
 				}
 				document.addEventListener("touchmove", th.move, false);
 				document.addEventListener("touchend", th.end, false);
-				e.preventDefault()
 			},
 			checked: function (n) {
 				return !(Math.floor(n) === -1);
 			},
 			move: function (e) {
 				try {
-					e.preventDefault();
+					e.preventDefault()
 					var x = (e.clientX || e.touches[0].clientX); // 移动距离
 					var a = x - th.touchX - th.position; // 移动距离
 					var t, per = (x - th.touchX) / th.width; // 宽度
@@ -1154,9 +1155,7 @@
 						t = th.width + 100;// 右划
 					}
 					if (th.min(x)) {
-						e.preventDefault();
 						th.index = Math.abs(parseInt((a - t) / th.width));;
-						slider.classList.add("through");
 						th.event();
 					}
 					if (Math.abs(a) >= th.num * th.width) {
@@ -1200,7 +1199,6 @@
 				th.transform(th.index * th.width, 0, conf.duration || 300);
 				th.setPosition();
 				th.prevIndex = th.index;
-				slider.classList.remove("through");
 				document.removeEventListener("touchmove", th.move);
 				document.removeEventListener("touchend", th.end);
 				document.removeEventListener("mousemove", th.move, false);

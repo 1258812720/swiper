@@ -1,90 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh">
 
-    <!DOCTYPE html>
-    <html lang="zh">
-    <head>
-        <meta charset="utf-8" />
-        <title>轻量级轮播图</title>
-        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
-        <meta name="def-grey" content="false" />
-        <meta http-equiv="X-UA-Compatible" content="edge" />
-        <link rel="stylesheet" type="text/css" href="css/simple_style.css" />
-        <script type="text/javascript" src="js/simple_swiper.js"></script>
-    </head>
-    <body>
-        <div class="app">
-            <div id="swiper-demo"  class="simple-swiper-container">
-                <a id="prev" class="btn btn-prev"></a>
-                <a id="next" class="btn btn-next"></a>
-                <!-- 包裹 -->
-                <div class="swiper-wrapper">
-                    <div class="swiper-items">
-                        <img img="https://img.alicdn.com/imgextra/i3/6000000006952/O1CN01VmM4T921E4EUf6YpS_!!6000000006952-0-octopus.jpg" alt="">
-                    </div>
-                    <div class="swiper-items">
-                        <img img="https://img.alicdn.com/imgextra/i4/6000000006704/O1CN01UxUmhe1zOU0euZp8c_!!6000000006704-0-octopus.jpg" alt="">
-                    </div>
-                    <div class="swiper-items">
-                        <img img="https://img.alicdn.com/imgextra/i4/6000000008175/O1CN01bmQKJR2AGCcamI9lD_!!6000000008175-0-octopus.jpg" alt="">
-                    </div>
-                    <div class="swiper-items">
-                        <img img="https://img.alicdn.com/imgextra/i1/6000000001018/O1CN018YS48c1JOHyg1XN4y_!!6000000001018-2-octopus.png" alt="">
-                    </div>
-                    <div class="swiper-items">
-                        <img img="https://img.alicdn.com/imgextra/i1/6000000001801/O1CN01JffUo81PAu5ytzSKC_!!6000000001801-0-octopus.jpg" alt="">
+<head>
+    <meta charset="utf-8" />
+    <title>轻量级轮播图</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="def-grey" content="false" />
+    <meta http-equiv="X-UA-Compatible" content="edge" />
+    <link rel="short icon" href="img/logo.ico" />
+    <link rel="stylesheet" type="text/css" href="css/simple_style.css" />
+    <script type="text/javascript" src="js/simple_swiper.js"></script>
+</head>
+
+<body>
+    <div class="app">
+        <div id="swiper-demo" class="simple-swiper-container">
+            <a id="prev" class="btn btn-prev"></a>
+            <a id="next" class="btn btn-next"></a>
+            <!-- 包裹 -->
+            <div class="swiper-wrapper">
+                <div class="swiper-items">
+                    <a href="#1">
+                        <div class="test" style="background-color: rgb(255, 130, 130);">第一张</div>
+                    </a>
+                </div>
+                <div class="swiper-items">
+                    <a href="#2">
+                        <div class="test" style="background-color: rgb(90, 168, 0);">第二张</div>
+                    </a>
+                </div>
+                <div class="swiper-items">
+                    <div class="test" style="background-color: rgb(0, 85, 196);">第三张</div>
+                </div>
+                <div class="swiper-items">
+                    <div class="test" style="background-color: rgb(177, 0, 168);">第四张</div>
+                </div>
+                <div class="swiper-items">
+                    <div class="test" style="background-color: rgb(160, 45, 0);">第五张(图片懒加载)
+                        <img _src="img/4.png"/>
                     </div>
                 </div>
-                <div class="pagination"></div>
             </div>
+            <div class="pagination"></div>
         </div>
-        <style>
-            
-            #swiper-demo{
-                margin:20vh auto;
-                height:280px;
-                width: 520px;
-                background-color: rgb(233, 233, 233);
-            }
-            .app{
-                height: 100%;
-            }
-            body{
-                overflow: hidden;
-                height: 100vh;
-                margin: 0;
-            }
-            img{
-                width: 100%;
-                object-fit: fill;
-            }
-            .simple-swiper-container{
-                border:none;
-            }
-            .swiper-items{
-                flex-direction: row;
-            }
-            body{
-                background-color: rgb(75, 75, 75);
-            }
-        </style>
-        <script type="text/javascript">
-            new SimSwiper("#swiper-demo", {
+    </div>
+    <style>
+        #swiper-demo {
+            margin: 20vh auto;
+            height: 430px;
+            width: 820px;
+            background-color: rgb(233, 233, 233);
+        }
+        .test{
+            font-family: '黑体';
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color:white;
+            font-size:38px;
+            flex-direction: column;
+            text-decoration: none;
+
+        }
+        .app {
+            height: 100%;
+        }
+
+        body {
+            overflow: hidden;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .simple-swiper-container {
+            border: none;
+        }
+
+        .swiper-items {
+            flex-direction: row;
+        }
+        body {
+            background-color: #4b4b4b;
+        }
+    </style>
+    <script type="text/javascript">
+        new SimSwiper("#swiper-demo", {
             button: {
                 prev: "#prev", // 前进后退按钮
                 next: "#next",
-                prevKey:"ArrowLeft",// 键盘操作
-                nextKey:"ArrowRight"
+                prevKey: "ArrowLeft",// 键盘操作
+                nextKey: "ArrowRight"
             },
             autoplay: 6000,
             loop: true,
             lazy:{
-                prop:'img'
+                prop:"_src"
             },
-            disableTouch:false,
+            disableTouch: false,
             pagination: {
                 el: ".pagination",
                 click: true, // 是否可以点击
             }
         });
-        </script>
-    </body>
-    </html>
+    </script>
+</body>
+
+</html>
