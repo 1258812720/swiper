@@ -1130,6 +1130,7 @@
 				slider.addEventListener("mouseleave", th.stop, false);
 			},
 			start: function (e) {
+				e.preventDefault();
 				th.touchX = e.clientX || e.touches[0].clientX;
 				if (e.button === 0) {
 					document.addEventListener("mouseup", th.end, false);
