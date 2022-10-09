@@ -21,24 +21,27 @@
             <div class="swiper-wrapper">
                 <div class="swiper-items">
                     <a href="#1">
-                        <div class="test" style="background-color: rgb(255, 130, 130);">第一张</div>
+                        <img _src="https://img.alicdn.com/imgextra/i3/O1CN01Sf6dER1zbJ3uVQ0lE_!!6000000006732-0-tps-846-472.jpg"
+                            alt="">
                     </a>
                 </div>
                 <div class="swiper-items">
                     <a href="#2">
-                        <div class="test" style="background-color: rgb(90, 168, 0);">第二张</div>
+                        <img _src="https://img.alicdn.com/imgextra/i1/6000000006957/O1CN01i9ugkZ21GMDKmnPRh_!!6000000006957-0-octopus.jpg"
+                            alt="">
                     </a>
                 </div>
                 <div class="swiper-items">
-                    <div class="test" style="background-color: rgb(0, 85, 196);">第三张</div>
+                    <img
+                        _src="https://img.alicdn.com/imgextra/i3/O1CN017Z2XUL1nnQ94i2MTP_!!6000000005134-0-tps-846-472.jpg">
                 </div>
                 <div class="swiper-items">
-                    <div class="test" style="background-color: rgb(177, 0, 168);">第四张</div>
+                    <img _src="https://img.alicdn.com/imgextra/i1/O1CN01YGUXOM1k5VKBPo5J3_!!6000000004632-2-tps-846-472.png"
+                        alt="">
                 </div>
                 <div class="swiper-items">
-                    <div class="test" style="background-color: rgb(160, 45, 0);">第五张(图片懒加载)
-                        <img _src="img/4.png"/>
-                    </div>
+                    <img
+                        _src="https://gw.alicdn.com/imgextra/i4/O1CN01a71ilU1T2RCTvUXDY_!!6000000002324-0-tps-846-472.jpg" />
                 </div>
             </div>
             <div class="pagination"></div>
@@ -47,22 +50,24 @@
     <style>
         #swiper-demo {
             margin: 20vh auto;
-            height: 430px;
-            width: 820px;
+            height: 315px;
+            width: 630px;
             background-color: rgb(233, 233, 233);
+            border-radius: 12px;
         }
-        .test{
+
+        .test {
             font-family: '黑体';
             height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            color:white;
-            font-size:38px;
+            color: white;
+            font-size: 38px;
             flex-direction: column;
             text-decoration: none;
-
         }
+
         .app {
             height: 100%;
         }
@@ -76,9 +81,14 @@
         .simple-swiper-container {
             border: none;
         }
-
+        .swiper-items img{
+            width: 100%;
+            height: 100%;
+        }
         .swiper-items {
             flex-direction: row;
+            border-radius: 12px;
+            overflow: hidden;
         }
     </style>
     <script type="text/javascript">
@@ -91,8 +101,8 @@
             },
             autoplay: 6000,
             loop: true,
-            lazy:{
-                prop:"_src"
+            lazy: {
+                prop: "_src"
             },
             disableTouch: false,
             pagination: {
