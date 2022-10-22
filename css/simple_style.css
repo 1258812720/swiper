@@ -105,7 +105,7 @@
     margin-right: 5px;
     box-sizing: border-box;
     cursor: pointer;
-    background-color: rgb(180, 180, 180);
+    background-color: rgb(255, 255, 255);
     border-radius: 15px;
     transition: width .21s;
 }
