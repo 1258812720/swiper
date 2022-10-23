@@ -13,6 +13,7 @@
 })(this, function (el, conf) {
 	"use strict";
 	var root = el;
+
 	function r(a, b) {
 		var c = a.document, bn, bm,
 			d = function () {
@@ -900,7 +901,7 @@
 					function () {
 						th._next();
 					},
-					time > th.duration ? time : 1200
+					time > th.duration ? time : 1400
 				);
 			},
 			init: function () {
@@ -956,14 +957,6 @@
 					con.addEventListener("mouseleave", th.boot, false);
 					con.addEventListener("touchstart", th.stop, false);
 					con.addEventListener("touchend", th.boot, false);
-					window.addEventListener(
-						"visibilitychange",
-						function () {
-							var is = document.visibilityState;
-							is === "visible" ? th.boot() : th.stop();
-						},
-						false
-					);
 				}
 				if (!conf.disableTouch) {
 					_this.touchInit();
@@ -1019,35 +1012,40 @@
 				return tagArr;
 			},
 			add: function (img_el) {
-				if (th.loadEnd & !img_el) {
+				if (th.loadEnd) {
 					return;
 				}
-				var t = null;
-				clearTimeout(t);
-				t = setTimeout(function () {
-					var img = th.children(img_el, "img");
-					if (img) {
-						for (var i = 0; i < img.length; i++) {
-							var _img = img[i];
-							try {
-								var at = _img.getAttribute('src');
-								if (!at) {
-									var prop = conf.lazy.prop || 'data-src';
-									var url = _img.getAttribute(prop);
-									_img.setAttribute('src', url);
-									_img.removeAttribute(prop);
-									_img.classList.remove('lazy');
-								}
-							} catch (e) { console.error(e); void (e) }
+				if (!img_el) {
+					return;
+				}
+				else {
+					var t = null;
+					clearTimeout(t);
+					t = setTimeout(function () {
+						var img = th.children(img_el, "img");
+						if (img) {
+							for (var i = 0; i < img.length; i++) {
+								var _img = img[i];
+								try {
+									var at = _img.getAttribute('src');
+									if (!at) {
+										var prop = conf.lazy.prop || 'data-src';
+										var url = _img.getAttribute(prop);
+										_img.setAttribute('src', url);
+										_img.removeAttribute(prop);
+										_img.classList.remove('lazy');
+									}
+								} catch (e) { console.error(e); void (e) }
+							}
+							img_el.classList.remove('lazy')
+							var path = root + ">.swiper-wrapper .lazy";
+							var y = document.querySelectorAll(path).length;
+							if (y <= 0) {
+								th.loadEnd = true;
+							}
 						}
-						img_el.classList.remove('lazy')
-						var path = root + ">.swiper-wrapper .lazy";
-						var y = document.querySelectorAll(path).length;
-						if (y <= 0) {
-							th.loadEnd = true;
-						}
-					}
-				}, conf.duration || 0)
+					}, conf.duration || 0)
+				}
 			},
 			_prev: function () {
 				var _ = this;
@@ -1121,7 +1119,7 @@
 					transform: "translate3d(-" + x + "px,-" + y + "px,0px)",
 					transition: "all " + delay + "ms " + easing,
 				}, function () {
-					t.play();
+					t.play()
 				})
 			},
 			touchInit: function () {
@@ -1130,13 +1128,10 @@
 				slider.addEventListener("mouseleave", th.stop, false);
 			},
 			start: function (e) {
-				e.preventDefault();
 				th.touchX = e.clientX || e.touches[0].clientX;
 				if (e.button === 0) {
 					document.addEventListener("mouseup", th.end, false);
-					document.addEventListener("mousemove", th.move, {
-						passive:false
-					});
+					document.addEventListener("mousemove", th.move, false);
 				}
 				document.addEventListener("touchmove", th.move, false);
 				document.addEventListener("touchend", th.end, false);
@@ -1146,23 +1141,22 @@
 			},
 			move: function (e) {
 				try {
-					e.preventDefault()
+					e.preventDefault();
 					var x = (e.clientX || e.touches[0].clientX); // 移动距离
 					var a = x - th.touchX - th.position; // 移动距离
 					var t, per = (x - th.touchX) / th.width; // 宽度
 					if (th.checked(per)) {
-						t = -th.width / 10;
+						t = -th.width / 10; // 左滑
 					} else {
 						t = th.width + 100;// 右划
 					}
 					if (th.min(x)) {
 						th.index = Math.abs(parseInt((a - t) / th.width));;
-						th.event();
 					}
 					if (Math.abs(a) >= th.num * th.width) {
 						th.position = 0;
 						th.index = 0;
-						th.transform(0, 0, 0);// 返回到第一章
+						th.transform(0, 0, 0);// 返回到第一个元素
 					} if (a > 0) {
 						th.position = th.num * th.width;
 						th.index = th.num;
@@ -1171,30 +1165,12 @@
 						th.transform(-a, 0, 0)
 					}
 				} catch (e) {
+					th.transform(-a, 0, 0)
 					void e;
 				}
 			},
 			setPosition: function () {
 				this.position = this.index * this.width;
-			},
-			event: function () {
-				var nodes = slider.children;
-				var _thisNode = nodes[th.prevIndex];
-				var a = th.children(_thisNode, "a");
-				if (a && a.length > 0) {
-					for (var _a in a) {
-						a[_a].onclick = function () { return false; };
-					}
-					for (var k = 0; k < nodes.length; k++) {
-						if (k !== th.prevIndex) {
-							var oa = nodes[k];
-							var b = th.children(oa, "a");
-							for (var _b in b) {
-								b[_b].onclick = function () { };
-							}
-						}
-					};
-				}
 			},
 			end: function () {
 				th.transform(th.index * th.width, 0, conf.duration || 300);
@@ -1202,8 +1178,9 @@
 				th.prevIndex = th.index;
 				document.removeEventListener("touchmove", th.move);
 				document.removeEventListener("touchend", th.end);
-				document.removeEventListener("mousemove", th.move, false);
-				document.removeEventListener("mouseup", th.end, false);
+				document.removeEventListener("mousemove", th.move);
+				document.removeEventListener("mousemove", th.move);
+				document.removeEventListener("mouseup", th.end);
 			},
 			min: function (x) {
 				var c = Math.abs(x - this.touchX);
@@ -1260,7 +1237,6 @@
 		}
 		setting.init();
 	})();
-
 	function setStyle(el, prop, value) {
 		try {
 			el.style[prop] = value;
@@ -1271,4 +1247,5 @@
 	function getStyle(el, prop) {
 		return Math.ceil(parseFloat(window.getComputedStyle(el)[prop])) || el.getBoundingClientRect()[prop];
 	};
+	return undefined;
 });

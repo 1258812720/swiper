@@ -12,7 +12,6 @@
     user-select: none;
     border: 1px solid rgb(226, 226, 226);
 }
-
 .simple-swiper-container>.swiper-wrapper {
     width: 100%;
     height: 100%;
@@ -91,6 +90,8 @@
 .simple-swiper-container>.pagination {
     position: absolute;
     bottom: 0;
+    margin: auto;
+    min-width: 120px;
     width: 100%;
     height: auto;
     z-index: 5;
@@ -107,12 +108,10 @@
     cursor: pointer;
     background-color: rgb(255, 255, 255);
     border-radius: 15px;
-    transition: width .21s;
 }
 
 .pagination .pagination-items-active {
     background-color: rgb(255, 89, 0);
-    width: 24px;
 }
 
 
