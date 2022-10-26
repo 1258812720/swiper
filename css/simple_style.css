@@ -1,7 +1,6 @@
 .simple-swiper-container {
     width: 1600px;
     height: 350px;
-    margin: auto;
     overflow: hidden;
     position: relative;
     -webkit-touch-callout: none;
@@ -28,9 +27,6 @@
     touch-action: none;
 }
 
-.swiper-slider .through {
-    pointer-events: none;
-}
 
 .simple-swiper-container>.swiper-wrapper>.through {
     cursor: grab!important;
@@ -47,14 +43,22 @@
     border-radius: 10px;
 }
 
-
-
 .simple-swiper-container>.btn {
     position: absolute;
     cursor: pointer;
     z-index: 5;
     top: 45%;
+    width: 35px;
+    height: 65px;
+    background: #000000;
+    opacity: .8;
     display: none;
+    font-size: 45px;
+    color: white;
+    font-family: '黑体';
+    text-align: center;
+    line-height: 65px;
+
 }
 
 .simple-swiper-container:hover>.btn {
@@ -65,18 +69,6 @@
     left: 0;
 }
 
-.simple-swiper-container>.btn-next::before {
-    border-left: 12px solid #2a82d5;
-    border-right: 12px solid transparent;
-}
-
-.simple-swiper-container>.btn-next::before,
-.simple-swiper-container>.btn-prev::before {
-    content: "";
-    border-top: 12px solid transparent;
-    border-bottom: 12px solid transparent;
-    display: block;
-}
 
 .simple-swiper-container>.btn-prev::before {
     border-left: 12px solid transparent;
@@ -108,12 +100,12 @@
     cursor: pointer;
     background-color: rgb(255, 255, 255);
     border-radius: 15px;
+    
 }
 
 .pagination .pagination-items-active {
     background-color: rgb(255, 89, 0);
 }
-
 
 .no-click a {
     pointer-events: none;
