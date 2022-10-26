@@ -870,7 +870,9 @@
 	function is_blank(str) {
 		return !str || str.trim() === '';
 	}
-
+	var is_mobile = function () {
+		return (/Android|iPhone|iPad|X11/i.test(navigator.userAgent));
+	}
 	var con = document.querySelector(el),
 		g_conf = conf,
 		slider = null,
@@ -936,7 +938,7 @@
 							);
 						}
 						if (!is_blank(conf.button.prevKey)) {
-							document.addEventListener("keyup", function (t) {
+							document.addEventListener("keydown", function (t) {
 								if (conf.button.prevKey === t.key) {
 									t.preventDefault();
 									th._prev()
@@ -952,11 +954,13 @@
 				}
 				if (g_conf.autoplay) {
 					th.boot();
-					con.addEventListener("mousedown", th.stop, false);
-					con.addEventListener("mouseup", th.boot, false);
-					con.addEventListener("mouseleave", th.boot, false);
-					con.addEventListener("touchstart", th.stop, false);
-					con.addEventListener("touchend", th.boot, false);
+					if (is_mobile()) {
+						con.addEventListener("touchstart", th.stop, true);
+						con.addEventListener("touchend", th.boot, true);
+					} else {
+						con.addEventListener("mouseenter", th.stop, false);
+						con.addEventListener("mouseleave", th.boot, false);
+					}
 				}
 				if (!conf.disableTouch) {
 					_this.touchInit();
@@ -1123,18 +1127,23 @@
 				})
 			},
 			touchInit: function () {
-				slider.addEventListener("mousedown", th.start, false);
-				slider.addEventListener("touchstart", th.start, false);
-				slider.addEventListener("mouseleave", th.stop, false);
+				if (is_mobile()) {
+					slider.addEventListener("touchstart", th.start, !1);
+				} else {
+					slider.addEventListener("mousedown", th.start, !1);
+					slider.addEventListener("mouseleave", th.stop, !1);
+				}
 			},
 			start: function (e) {
 				th.touchX = e.clientX || e.touches[0].clientX;
-				if (e.button === 0) {
+				if (is_mobile()) {
+					document.addEventListener("touchmove", th.move, true);
+					document.addEventListener("touchend", th.end, true);
+				} else if (!is_mobile() && e.button === 0) {
+					e.preventDefault();
 					document.addEventListener("mouseup", th.end, false);
 					document.addEventListener("mousemove", th.move, false);
 				}
-				document.addEventListener("touchmove", th.move, false);
-				document.addEventListener("touchend", th.end, false);
 			},
 			checked: function (n) {
 				return !(Math.floor(n) === -1);
@@ -1172,14 +1181,14 @@
 			setPosition: function () {
 				this.position = this.index * this.width;
 			},
-			end: function () {
+			end: function (e) {
 				th.transform(th.index * th.width, 0, conf.duration || 300);
 				th.setPosition();
 				th.prevIndex = th.index;
 				document.removeEventListener("touchmove", th.move);
 				document.removeEventListener("touchend", th.end);
-				document.removeEventListener("mousemove", th.move);
-				document.removeEventListener("mousemove", th.move);
+
+				let x = document.removeEventListener("mousemove", th.move);
 				document.removeEventListener("mouseup", th.end);
 			},
 			min: function (x) {
