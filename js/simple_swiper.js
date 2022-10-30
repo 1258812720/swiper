@@ -1188,7 +1188,7 @@
 				document.removeEventListener("touchmove", th.move);
 				document.removeEventListener("touchend", th.end);
 
-				let x = document.removeEventListener("mousemove", th.move);
+				document.removeEventListener("mousemove", th.move);
 				document.removeEventListener("mouseup", th.end);
 			},
 			min: function (x) {
