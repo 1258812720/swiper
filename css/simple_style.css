@@ -50,17 +50,18 @@
     top: 45%;
     width: 35px;
     height: 45px;
-    background: #000000;
+    background-color: #000000;
     opacity: .8;
     display: none;
     font-size: 25px;
     color: white;
+    justify-content: center;
     font-family: '黑体';
-    text-align: center;
+    align-items: center;
 }
 
 .simple-swiper-container:hover>.btn {
-    display: block;
+    display: flex;
 }
 
 .simple-swiper-container>.btn-prev {
@@ -91,7 +92,7 @@
 .pagination .pagination-items {
     display: inline-block;
     height: 8px;
-    width: 18px;
+    width: 8px;
     margin-left: 5px;
     margin-right: 5px;
     box-sizing: border-box;
