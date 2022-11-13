@@ -1150,9 +1150,9 @@
 				for (var key in ar) {
 					if (typeof ar[key] === "object") {
 						if (b) {
-							ar[key].onclick = (e) => e.preventDefault()
+							ar[key].onclick = function(e) {e.preventDefault()} 
 						} else {
-							ar[key].onclick = () => void (undefined)
+							ar[key].onclick = function() {return void (undefined)} 
 						}
 					}
 				}
