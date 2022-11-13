@@ -15,48 +15,56 @@
 <body>
     <div class="app">
         <div id="swiper-demo" class="simple-swiper-container">
-            <a id="prev" class="btn btn-prev"> < </a>
-            <a id="next" class="btn btn-next"> > </a>
-            <!-- 包裹 -->
-            <div class="swiper-wrapper">
-                <div class="swiper-items">
-                    <a href="#1">
-                        <img _src="https://img.alicdn.com/imgextra/i3/6000000002398/O1CN01LgniH81TaKYVFc37W_!!6000000002398-0-octopus.jpg"
-                            alt="">
-                    </a>
-                </div>
-                <div class="swiper-items">
-                    <a href="#2">
-                        <img _src="https://img.alicdn.com/imgextra/i1/6000000005074/O1CN01VSanHD1nLwQQCOIvy_!!6000000005074-0-octopus.jpg"
-                            alt="">
-                    </a>
-                </div>
-                <div class="swiper-items">
-                    <img
-                        _src="https://img.alicdn.com/imgextra/i1/6000000000352/O1CN01HMHXJd1ETGCibTx81_!!6000000000352-2-octopus.png">
-                </div>
-                <div class="swiper-items">
-                    <img _src="https://img.alicdn.com/imgextra/i1/O1CN01YGUXOM1k5VKBPo5J3_!!6000000004632-2-tps-846-472.png"
-                        alt="">
-                </div>
-                <div class="swiper-items">
-                    <img _src="https://gw.alicdn.com/imgextra/i4/O1CN01a71ilU1T2RCTvUXDY_!!6000000002324-0-tps-846-472.jpg"
-                        alt="">
-                </div>
-            </div>
-            <div class="pagination"></div>
+            <a id="prev" class="btn btn-prev">
+                < </a>
+                    <a id="next" class="btn btn-next"> > </a>
+                    <!-- 包裹 -->
+                    <div class="swiper-wrapper">
+                        <div class="swiper-items">
+                            <a href="https://www.baidu.com" target="_blank">
+                                <img _src="https://img.alicdn.com/imgextra/i3/6000000002398/O1CN01LgniH81TaKYVFc37W_!!6000000002398-0-octopus.jpg"
+                                    alt="">
+                            </a>
+                        </div>
+                        <div class="swiper-items">
+                            <a href="https://www.baidu.com" target="_blank">
+                                <img _src="https://img.alicdn.com/imgextra/i1/6000000005074/O1CN01VSanHD1nLwQQCOIvy_!!6000000005074-0-octopus.jpg"
+                                    alt="">
+                            </a>
+                        </div>
+                        <div class="swiper-items">
+                            <a href="https://www.baidu.com" target="_blank">
+                                <img
+                                    _src="https://img.alicdn.com/imgextra/i1/6000000000352/O1CN01HMHXJd1ETGCibTx81_!!6000000000352-2-octopus.png">
+                            </a>
+                        </div>
+                        <div class="swiper-items">
+                            <a href="https://www.baidu.com" target="_blank">
+                                <img _src="https://img.alicdn.com/imgextra/i1/O1CN01YGUXOM1k5VKBPo5J3_!!6000000004632-2-tps-846-472.png"
+                                    alt="">
+                            </a>
+                        </div>
+                        <div class="swiper-items">
+                            <a href="https://www.baidu.com" target="_blank">
+                                <img _src="https://gw.alicdn.com/imgextra/i4/O1CN01a71ilU1T2RCTvUXDY_!!6000000002324-0-tps-846-472.jpg"
+                                    alt=""></a>
+                        </div>
+                    </div>
+                    <div class="pagination"></div>
         </div>
     </div>
     <style>
         #swiper-demo {
-            margin:5% auto;
+            margin: 1% auto;
             height: 315px;
             width: 564px;
             border-radius: 12px;
         }
 
         .app {
+            text-align: center;
             height: 100%;
+            padding-top: 80px;
         }
 
         body {
@@ -68,10 +76,12 @@
         .simple-swiper-container {
             border: none;
         }
-        .swiper-items img{
+
+        .swiper-items img {
             width: 100%;
             height: 100%;
         }
+
         .swiper-items {
             flex-direction: row;
             border-radius: 12px;
@@ -79,7 +89,7 @@
         }
     </style>
     <script type="text/javascript">
-      new SimSwiper("#swiper-demo", {
+        const as = new SimSwiper("#swiper-demo", {
             button: {
                 prev: "#prev", // 前进后退按钮
                 next: "#next",
