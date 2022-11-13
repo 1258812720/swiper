@@ -24,9 +24,7 @@
     left: 0;
     top: 0;
     height: 100%;
-    touch-action: none;
 }
-
 
 .simple-swiper-container>.swiper-wrapper>.through {
     cursor: grab!important;
@@ -40,6 +38,7 @@
 .simple-swiper-container>.swiper-wrapper>.swiper-slider>.swiper-items {
     vertical-align: top;
     text-align: center;
+    backface-visibility: hidden;
     border-radius: 10px;
 }
 
