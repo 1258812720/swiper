@@ -1150,16 +1150,16 @@
 				for (var key in ar) {
 					if (typeof ar[key] === "object") {
 						if (b) {
-							ar[key].onclick = function(e) {e.preventDefault()} 
+							ar[key].onclick = function (e) { e.preventDefault() }
 						} else {
-							ar[key].onclick = function() {return void (undefined)} 
+							ar[key].onclick = function () { return void (undefined) }
 						}
 					}
 				}
 			},
 			start: function (e) {
 				th.touchX = e.clientX || e.touches[0].clientX;
-				if(!is_mobile()){
+				if (!is_mobile()) {
 					th.link_handler(false)
 				}
 				if (is_mobile()) {
@@ -1187,21 +1187,20 @@
 					}
 					if (th.min(x)) {
 						th.index = Math.abs(parseInt((a - t) / th.width));
-						if(!is_mobile()){
+						if (!is_mobile()) {
 							th.link_handler(true);
 						}
 					}
-					if (Math.abs(a) >= th.num * th.width||(th.position>=th.num*th.width)) {
+					if (Math.abs(a) >= th.num * th.width || (th.position > th.num * th.width)) {
 						th.position = 0;
 						th.index = 0;
 						th.transform(0, 0, 0);// 返回到第一个元素
-					} else if (a >= 0) {
+					} if (a > 0) {
 						th.position = th.num * th.width;
+						th.transform(th.position, 0, 0)
 						th.index = th.num;
-						th.transform(-th.position, 0, 0)
-					} else {
-						th.transform(-a, 0, 0)
 					}
+					th.transform(-a, 0, 0)
 				} catch (er) {
 					th.transform(-a, 0, 0)
 					void e;
@@ -1221,7 +1220,7 @@
 			},
 			min: function (x) {
 				var c = Math.abs(x - this.touchX);
-				return c >= (conf.threshold || 80);
+				return c >= 80;
 			}
 		};
 	(function () {
