@@ -1044,7 +1044,7 @@
 								th.loadEnd = true;
 							}
 						}
-					}, conf.duration || 0)
+					}, Math.min((conf.duration || 0),100))
 				}
 			},
 			_prev: function () {
