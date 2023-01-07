@@ -816,7 +816,6 @@
 	}
 	"use strict";
 	var fun = r(window, undefined);
-
 	conf.isT = true;
 	if (window.navigator) {
 		var nav = window.navigator.userAgent;
@@ -831,22 +830,26 @@
 		}
 	}
 
+	/** el 容器 name 子节点名称 */
 	var getChild = function (el, name) {
-		var c = el.children;
 		var res = {
 			child: null,
-			self: null
+			self: document.querySelector(el),
+			wrap: null
 		};
-		if (name) {
+		if (!res.self) {
+			return null;
+		}
+		var c = res.self.children;
+		if (res.self) {
 			for (var a = 0; a < c.length; a++) {
 				var i = c[a];
-				if (i.className === 'swiper-wrapper') {
-					res.child = document.querySelectorAll('#' + name + '>.' + i.firstElementChild.className);
-					res.self = document.querySelector('#' + name);
+				if (i.className === name.replace(".", "")) {
+					res.child = Array.from(i.children);
+					res.wrap = i;
+					break;
 				}
 			}
-		} else {
-			res.self = c
 		}
 		return res;
 	}
@@ -876,7 +879,7 @@
 		duration = conf.duration || 300,
 		easing = conf.easing || "ease",
 		isCube = conf.effect && conf.effect === 'cube',
-		tm = getChild(con, con.id + " >.swiper-wrapper"),
+		tm = getChild(el, ".swiper-wrapper"),
 		_wc = tm.child;
 	var th = null,
 		setting = {
@@ -1044,7 +1047,7 @@
 								th.loadEnd = true;
 							}
 						}
-					}, Math.min((conf.duration || 0),100))
+					}, Math.min((conf.duration || 0), 100))
 				}
 			},
 			_prev: function () {
@@ -1220,10 +1223,11 @@
 			},
 			min: function (x) {
 				var c = Math.abs(x - this.touchX);
-				return c >= 80;
+				return c >= 5;
 			}
 		};
 	(function () {
+
 		var _vmNode = undefined;
 		if (arguments.length !== 2) {
 			el = ".simple-swiper-container";
@@ -1257,7 +1261,7 @@
 		}
 		_slider.appendChild(_vmNode);
 		_wrap.appendChild(_slider);
-		con.replaceChild(_wrap, tm.self);
+		con.replaceChild(_wrap, tm.wrap);
 		slider = _slider;
 		if (conf.pagination && conf.pagination.el) {
 			var mx = tm.child.length,
