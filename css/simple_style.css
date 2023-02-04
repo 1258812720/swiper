@@ -11,6 +11,7 @@
     user-select: none;
     border: 1px solid rgb(226, 226, 226);
 }
+
 .simple-swiper-container>.swiper-wrapper {
     width: 100%;
     height: 100%;
@@ -28,7 +29,7 @@
 
 
 .simple-swiper-container>.swiper-wrapper>.through {
-    cursor: grab!important;
+    cursor: grab !important;
 }
 
 
@@ -55,13 +56,15 @@
     display: none;
     font-size: 25px;
     color: white;
-    justify-content: center;
+
     font-family: '黑体';
-    align-items: center;
+
 }
 
 .simple-swiper-container:hover>.btn {
     display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .simple-swiper-container>.btn-prev {
@@ -99,7 +102,7 @@
     cursor: pointer;
     background-color: rgb(255, 255, 255);
     border-radius: 15px;
-    
+
 }
 
 .pagination .pagination-items-active {
