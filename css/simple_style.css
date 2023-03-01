@@ -56,9 +56,7 @@
     display: none;
     font-size: 25px;
     color: white;
-
     font-family: '黑体';
-
 }
 
 .simple-swiper-container:hover>.btn {
@@ -83,7 +81,7 @@
 
 .simple-swiper-container>.pagination {
     position: absolute;
-    bottom: 0;
+    bottom:-21px;
     margin: auto;
     min-width: 120px;
     width: 100%;
@@ -102,7 +100,8 @@
     cursor: pointer;
     background-color: rgb(255, 255, 255);
     border-radius: 15px;
-
+    position: relative;
+    top:-21px;
 }
 
 .pagination .pagination-items-active {
