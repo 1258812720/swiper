@@ -635,7 +635,6 @@
 						var a = k,
 							b = c.createElement("div"),
 							d = "__sizzle__";
-						b.innerHTML = "<p class='TEST'></p>";
 						if (!b.querySelectorAll || b.querySelectorAll(".TEST").length !== 0) {
 							k = function (b, e, f, g) {
 								e = e || c;
@@ -772,21 +771,6 @@
 			d.extend({
 				cssHooks: {
 				},
-			}), d.support.opacity || (d.cssHooks.opacity = {
-
-			}), d(function () {
-				d.support.reliableMarginRight || (d.cssHooks.marginRight = {
-					get: function (a, b) {
-						var c;
-						d.swap(a, {
-							display: "inline-block"
-						}, function () {
-							b ? c = bm(a, "margin-right", "marginRight") : c = a.style
-								.marginRight
-						});
-						return c
-					}
-				})
 			}), c.defaultView && c.defaultView.getComputedStyle && (bn = function (a, c, e) {
 				var f, g, h;
 				e = e.replace(bg, "-$1").toLowerCase();
@@ -812,9 +796,8 @@
 				return !d.expr.filters.hidden(a)
 			});
 		return d;
-
 	}
-	"use strict";
+
 	var fun = r(window, undefined);
 	conf.isT = true;
 	if (window.navigator) {
@@ -829,8 +812,6 @@
 			}
 		}
 	}
-
-	/** el 容器 name 子节点名称 */
 	var getChild = function (el, name) {
 		var res = {
 			child: null,
@@ -911,7 +892,7 @@
 				th.duration = duration;
 				th.num = _wc.length;
 				th.width = getStyle(con, "width");
-				setStyle(slider, "width", isCube ? '100%' : this.width * (conf.loop ? _wc.length + 1 : _wc.length) + "px");
+				setStyle(slider, { width: isCube ? '100%' : this.width * (conf.loop ? _wc.length + 1 : _wc.length) + "px" });
 				var _this = th;
 				try {
 					window.addEventListener("resize", function () {
@@ -1119,7 +1100,7 @@
 			transform: function (x, y, delay) {
 				var t = this;
 				var _prop = null;
-				if (!conf.accelerate) {
+				if (conf.accelerate === undefined || conf.accelerate) {
 					_prop = {
 						transform: "translate3d(" + (-x) + "px," + (- y) + "px,0px)",
 						position: 'absolute',
@@ -1246,9 +1227,12 @@
 		try {
 			for (var s in _wc) {
 				var _i = _wc[s];
-				setStyle(_i, 'width', _ew + 'px');
-				setStyle(_i, 'height', '100%');
-				setStyle(_i, 'display', 'inline-block');
+				setStyle(_i,
+					{
+						width: _ew + 'px',
+						height: '100%',
+						float: 'left'
+					});
 				_i.classList.add('lazy');
 				_vmNode.appendChild(_i);
 			}
@@ -1277,9 +1261,15 @@
 		}
 		setting.init();
 	})();
-	function setStyle(el, prop, value) {
+	function setStyle(el, props) {
 		try {
-			el.style[prop] = value;
+			if (!el || !props) {
+				return;
+			}
+			for (var key in props) {
+				el.style[key] = props[key];
+			}
+
 		} catch (err) {
 			void (err)
 		}
