@@ -14,6 +14,31 @@
 
 <body>
     <div class="app">
+        <div id="swiper-1" class="simple-swiper-container">
+            <a id="prev1" class="btn btn-prev">
+                < </a>
+                    <a id="next1" class="btn btn-next">
+                        >
+                    </a>
+                    <div class="swiper-wrapper">
+                        <div class="swiper-items">
+                            <img data="https://img.alicdn.com/imgextra/i2/6000000003900/O1CN01KhLUkK1egFTRkNLts_!!6000000003900-0-octopus.jpg" alt="">
+                        </div>
+                        <div class="swiper-items">
+                            <img data="https://img.alicdn.com/imgextra/i4/6000000005560/O1CN0127innD1qwWwPOINDz_!!6000000005560-2-octopus.png" alt="">
+                        </div>
+                        <div class="swiper-items">
+                            <img data="https://img.alicdn.com/imgextra/i3/6000000007015/O1CN01emTrC621gvDiIVmdE_!!6000000007015-0-octopus.jpg" alt="">
+                        </div>
+                        <div class="swiper-items">
+                            <img data="https://img.alicdn.com/imgextra/i3/6000000002076/O1CN01pbnE0c1RCr3BX5k6C_!!6000000002076-0-octopus.jpg" alt="">
+                        </div>
+                        <div class="swiper-items">
+                            <img data="https://img.alicdn.com/imgextra/i2/6000000007235/O1CN01o4tOE223JgLxjNMaf_!!6000000007235-2-octopus.png" alt="">
+                        </div>
+                    </div>
+                    <div class="pagination"></div>
+        </div>
         <div id="swiper-demo" class="simple-swiper-container">
             <a id="prev" class="btn btn-prev">
                 < </a>
@@ -71,19 +96,23 @@
                                     alt=""></a>
                         </div>
                         <div class="swiper-items">
-                            <a class="my-items" href="https://pro.jd.com/mall/active/2yM8xKtrySR5Jr944i2CA4xYSNmL/index.html"
+                            <a class="my-items"
+                                href="https://pro.jd.com/mall/active/2yM8xKtrySR5Jr944i2CA4xYSNmL/index.html"
                                 target="_blank">
                                 <img _src="https://gw.alicdn.com/bao/uploaded/i1/1879900048/O1CN0154UnFU1CE1pUXBYcv_!!0-saturn_solar.jpg_300x300q90.jpg_.webp"
                                     alt=""></a>
-                            <a class="my-items" href="https://pro.jd.com/mall/active/2yM8xKtrySR5Jr944i2CA4xYSNmL/index.html"
+                            <a class="my-items"
+                                href="https://pro.jd.com/mall/active/2yM8xKtrySR5Jr944i2CA4xYSNmL/index.html"
                                 target="_blank">
                                 <img _src="https://gw.alicdn.com/bao/uploaded/i2/2200653778743/O1CN01ltmsOO2ESLYjHBNfe_!!0-item_pic.jpg_300x300q90.jpg_.webp"
                                     alt=""></a>
-                            <a class="my-items" href="https://pro.jd.com/mall/active/2yM8xKtrySR5Jr944i2CA4xYSNmL/index.html"
+                            <a class="my-items"
+                                href="https://pro.jd.com/mall/active/2yM8xKtrySR5Jr944i2CA4xYSNmL/index.html"
                                 target="_blank">
                                 <img _src="https://gw.alicdn.com/bao/uploaded/i4/1879900048/O1CN01cAyrGG1CE1pMNWEie_!!0-saturn_solar.jpg_300x300q90.jpg_.webp"
                                     alt=""></a>
-                            <a class="my-items" href="https://pro.jd.com/mall/active/2yM8xKtrySR5Jr944i2CA4xYSNmL/index.html"
+                            <a class="my-items"
+                                href="https://pro.jd.com/mall/active/2yM8xKtrySR5Jr944i2CA4xYSNmL/index.html"
                                 target="_blank">
                                 <img _src="https://gw.alicdn.com/imgextra/i2/119877521/O1CN01XFZZaB25QfURHlfuD_!!0-saturn_solar.jpg_300x300q90.jpg_.webp"
                                     alt=""></a>
@@ -101,10 +130,17 @@
             border: 1px solid rgb(97, 97, 97);
         }
 
+        #swiper-1 {
+            margin: 16px auto;
+            height: 320px;
+            width: 560px;
+        }
+
         .app {
             text-align: center;
             height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
         }
@@ -118,7 +154,8 @@
         .simple-swiper-container {
             border: none;
         }
-        .my-items{
+
+        .my-items {
             display: flex;
             align-items: center;
 
@@ -127,6 +164,7 @@
             height: 100%;
             overflow: hidden;
         }
+
         .swiper-items img {
             width: 100%;
             height: auto;
@@ -155,13 +193,27 @@
             lazy: {
                 prop: "_src"
             },
-            accelerate:true,// 硬件加速
+            accelerate: true,// 硬件加速
+            duration: 300,
+            
+        });
+        new SimSwiper("#swiper-1", {
+            button: {
+                prev: "#prev1", // 前进后退按钮
+                next: "#next1"
+            },
+            autoplay: 5000,
+            loop: true,
+            lazy: {
+                prop: "data"
+            },
+            accelerate: true,// 硬件加速
             duration: 300,
             pagination: {
                 el: ".pagination",
                 click: true, // 是否可以点击
             }
-        });
+        })
     </script>
 </body>
 

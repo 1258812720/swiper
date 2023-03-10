@@ -30,7 +30,7 @@
 				var d = function (a, b) {
 					return new d.fn.init(a, b, g)
 				},
-					g, h = /^(?:[^<]*(<[\w\W]+>)[^>]*$|#([\w\-]+)$)/,
+					g, h = /^($)/,
 					i = /\S/,
 					m = /^<(\w+)\s*\/?>(?:<\/\1>)?$/,
 					r = /(webkit)[ \/]([\w.]+)/,
@@ -51,30 +51,11 @@
 							this.context = this[0] = a, this.length = 1;
 							return this
 						}
-						if (a === "body" && !e && c.body) {
-							this.context = c, this[0] = c.body, this.selector = "body", this.length = 1;
-							return this
-						}
 						if (typeof a === "string") {
 							g = h.exec(a);
 							if (!g || !g[1] && e) return !e || e.jquery ? (e || f).find(a) : this
 								.constructor(e)
 								.find(a);
-							if (g[1]) {
-								e = e instanceof d ? e[0] : e, k = e ? e.ownerDocument || e : c, j = m.exec(
-									a),
-									j ? d.isPlainObject(e) ? (a = [c.createElement(j[1])], d.fn.attr.call(a,
-										e, !0)) : a = [k.createElement(j[1])] : (j = d.buildFragment([g[1]],
-											[k]),
-											a = (j.cacheable ? d.clone(j.fragment) : j.fragment).childNodes);
-								return d.merge(this, a)
-							}
-							i = c.getElementById(g[2]);
-							if (i && i.parentNode) {
-								if (i.id !== g[2]) return f.find(a);
-								this.length = 1, this[0] = i
-							}
-							this.context = c, this.selector = a;
 							return this
 						}
 						if (d.isFunction(a)) return f.ready(a);
@@ -91,13 +72,6 @@
 					},
 					each: function (a, b) {
 						return d.each(this, a, b)
-					},
-					ready: function (a) {
-						d.bindReady(), x.done(a);
-						return this
-					},
-					eq: function (a) {
-						return a === -1 ? this.slice(a) : this.slice(a, +a + 1)
 					},
 					push: B,
 					sort: [].sort,
@@ -124,23 +98,7 @@
 				}, d.extend({
 					isReady: !1,
 					readyWait: 1,
-					bindReady: function () {
-						if (!x) {
-							x = d._Deferred();
-							if (c.readyState === "complete") return setTimeout(d.ready, 1);
-							if (c.addEventListener) c.addEventListener("DOMContentLoaded", y, !1), a
-								.addEventListener("load", d.ready, !1);
-							else if (c.attachEvent) {
-								c.attachEvent("onreadystatechange", y), a.attachEvent("onload", d
-									.ready);
-								var b = !1;
-								try {
-									b = a.frameElement == null
-								} catch (e) { }
-								c.documentElement.doScroll && b && G()
-							}
-						}
-					},
+
 					isFunction: function (a) {
 						return d.type(a) === "function"
 					},
@@ -178,13 +136,6 @@
 						a.length = d;
 						return a
 					},
-					map: function (a, b, c) {
-						var d = [],
-							e;
-						for (var f = 0, g = a.length; f < g; f++) e = b(a[f], f, c), e != null && (d[d
-							.length] = e);
-						return d.concat.apply([], d)
-					},
 					guid: 1,
 					uaMatch: function (a) {
 						a = a.toLowerCase();
@@ -210,66 +161,9 @@
 						});
 				return d
 			}(),
-			e = "0".split(" ")
-		d.extend({
-			_Deferred: function () {
-				var a = [],
-					b, e, f = {
-						done: function () {
-							if (!e) {
-								var c = arguments,
-									g, h, i, j, k;
-								b && (k = b, b = 0);
-								for (g = 0, h = c.length; g < h; g++) i = c[g], j = d.type(i), j ===
-									"array" ? f.done.apply(f, i) : j === "function" && a.push(i);
-								k && f.resolveWith(k[0], k[1])
-							}
-							return this
-						},
-					};
-				return f
-			}
-		}),
-			function () {
-				d.support = {};
-			}();
-		var F = {
-			focus: "focusin",
-			blur: "focusout"
-		};
-		d.each(["live", "die"], function (a, c) {
-			d.fn[c] = function (a, e, f, g) {
-				var h, i = 0,
-					j, k, l, m = g || this.selector,
-					n = g ? this : d(this.context);
-				if (typeof a === "object" && !a.preventDefault) {
-					for (var o in a) n[c](o, e, a[o], m);
-					return this
-				}
-				d.isFunction(e) && (f = e, e = b), a = (a || "").split(" ");
-				while ((h = a[i++]) != null) {
-					j = r.exec(h), k = "", j && (k = j[0], h = h.replace(r, ""));
-					if (h === "hover") {
-						a.push("mouseenter" + k, "mouseleave" + k);
-						continue
-					}
-					l = h, h === "focus" || h === "blur" ? (a.push(F[h] + k), h = h + k) : h = (F[h] ||
-						h) +
-						k;
-					if (c === "live")
-						for (var p = 0, q = n.length; p < q; p++) d.event.add(n[p], "live." + H(h, m), {
-							data: e,
-							selector: m,
-							handler: f,
-							origType: h,
-							origHandler: f,
-							preType: l
-						});
-					else n.unbind("live." + H(h, m), f)
-				}
-				return this
-			}
-		}), d.each(
+			e = "0".split(" ");
+		d.support = {};
+		d.each(
 			""
 				.split(" "),
 			function (a, b) {
@@ -379,7 +273,7 @@
 					var f, g, h = a,
 						i = [],
 						j = c,
-						m = c && c[0] && k.isXML(c[0]);
+						m = c && c[0];//&& k.isXML(c[0])
 					while (a && c.length) {
 						for (var n in l.filter)
 							if ((f = l.leftMatch[n].exec(a)) != null && f[2]) {
@@ -721,8 +615,10 @@
 						return !1
 					}, k.isXML = function (a) {
 						var b = (a ? a.ownerDocument || a : 0).documentElement;
-						return b ? b.nodeName !== "HTML" : !1
+						var r = b ? b.nodeName !== "HTML" : !1
+						return r
 					};
+
 				var v = function (a, b) {
 					var c, d = [],
 						e = "",
@@ -778,16 +674,6 @@
 				if (h = g.getComputedStyle(a, null)) f = h.getPropertyValue(e), f === "" && !d.contains(a
 					.ownerDocument.documentElement, a) && (f = d.style(a, e));
 				return f
-			}), c.documentElement.currentStyle && (bo = function (a, b) {
-				var c, d = a.currentStyle && a.currentStyle[b],
-					e = a.runtimeStyle && a.runtimeStyle[b],
-					f = a.style;
-				!bh.test(d) && bi.test(d) && (c = f.left, e && (a.runtimeStyle.left = a.currentStyle.left), f
-					.left =
-					b === "fontSize" ? "1em" : d || 0, d = f.pixelLeft + "px", f.left = c, e && (a
-						.runtimeStyle
-						.left = e));
-				return d === "" ? "auto" : d
 			}), bm = bn || bo, d.expr && d.expr.filters && (d.expr.filters.hidden = function (a) {
 				var b = a.offsetWidth,
 					c = a.offsetHeight;
@@ -945,7 +831,7 @@
 				if (!conf.disableTouch) {
 					_this.touch_init();
 				}
-				if (g_conf.pagination && g_conf.pagination["el"] !== undefined) {
+				if (g_conf.pagination && page && g_conf.pagination["el"] !== undefined) {
 					page.childNodes[th.curIndex].classList.add("pagination-items-active");
 					if (g_conf.pagination["click"]) {
 						var poc = page.childNodes;
@@ -1044,7 +930,7 @@
 			play: function () {
 				th.curIndex = th.index === this.num ? 0 : th.index;
 				var c = slider.childNodes[th.curIndex];
-				if (conf.pagination && conf.pagination.el) {
+				if (conf.pagination && page && conf.pagination.el) {
 					var pc = page.childNodes;
 					for (var i = 0; i < pc.length; i++) {
 						if (i === th.curIndex) {
@@ -1080,7 +966,8 @@
 						_t.transform(0, 0, 0)
 					}
 					_t.index = 1;
-					fun(el).find(":visible")
+					var b = document.documentElement.nodeName;
+					fun(el).find(":visible");
 				}
 				else if (_t.index < 0) {
 					if (conf.loop) {
@@ -1161,13 +1048,13 @@
 			move: function (e) {
 				try {
 					e.preventDefault();
-					var x = (e.clientX || e.touches[0].clientX); // 移动距离
-					var a = x - th.touchX - th.position; // 移动距离
-					var t, per = (x - th.touchX) / th.width; // 宽度
+					var x = (e.clientX || e.touches[0].clientX);
+					var a = x - th.touchX - th.position;
+					var t, per = (x - th.touchX) / th.width;
 					if (th.checked(per)) {
-						t = -th.width / 10; // 左滑
+						t = -th.width / 10;
 					} else {
-						t = th.width + 100;// 右划
+						t = th.width + 100;
 					}
 					if (th.min(x)) {
 						th.index = Math.abs(parseInt((a - t) / th.width));
@@ -1175,11 +1062,12 @@
 							th.link_handler(true);
 						}
 					}
-					if (Math.abs(a) >= th.num * th.width || (th.position > th.num * th.width)) {
+					let test = Math.abs(a) >= th.num * th.width;
+					if (test) {
 						th.position = 0;
 						th.index = 0;
-						th.transform(0, 0, 0);// 返回到第一个元素
-					} if (a > 0) {
+						th.transform(0, 0, 0);
+					} else if (!test && a > 0) {
 						th.position = th.num * th.width;
 						th.transform(th.position, 0, 0)
 						th.index = th.num;
@@ -1257,7 +1145,10 @@
 				vo.appendChild(p_el);
 			}
 			page = document.querySelector(conf.pagination.el);
-			page.appendChild(vo);
+			if (page) {
+				page.appendChild(vo);
+			}
+
 		}
 		setting.init();
 	})();
