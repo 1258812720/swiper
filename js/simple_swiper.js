@@ -698,6 +698,16 @@
 			}
 		}
 	}
+	var toArray = function (o) {
+		if (!o) { return [] }
+		var arrays = [];
+		var i = 0;
+		var len = o.length;
+		for (; i < len; i++) {
+			arrays.push(o[i]);
+		}
+		return arrays;
+	}
 	var getChild = function (el, name) {
 		var res = {
 			child: null,
@@ -712,7 +722,13 @@
 			for (var a = 0; a < c.length; a++) {
 				var i = c[a];
 				if (i.className === name.replace(".", "")) {
-					res.child = Array.from(i.children);
+					var children = i.children;
+					if (Array.from === undefined) {
+						res.child = toArray(children)
+					} else {
+						res.child = Array.from(children);
+					}
+					console.log(res.child)
 					res.wrap = i;
 					break;
 				}
@@ -854,6 +870,9 @@
 				if (conf.loop) {
 					this.add(slider.lastElementChild);
 				}
+				window.addEventListener("visibilitychange", function () {
+					document.visibilityState === "visible" ? th.boot() : th.stop();
+				})
 			},
 			stop: function () {
 				clearInterval(th.time);
@@ -1048,7 +1067,7 @@
 			move: function (e) {
 				try {
 					e.preventDefault();
-					var x = (e.clientX || e.touches[0].clientX);
+					var x = (e.clientX || (e.touches ? e.touches[0].clientX : 0));
 					var a = x - th.touchX - th.position;
 					var t, per = (x - th.touchX) / th.width;
 					if (th.checked(per)) {
@@ -1057,7 +1076,8 @@
 						t = th.width + 100;
 					}
 					if (th.min(x)) {
-						th.index = Math.abs(parseInt((a - t) / th.width));
+						let u = Math.abs(parseInt((a - t) / th.width));
+						th.index = u > th.num ? th.num : u;
 						if (!is_mobile()) {
 							th.link_handler(true);
 						}
@@ -1067,15 +1087,19 @@
 						th.position = 0;
 						th.index = 0;
 						th.transform(0, 0, 0);
-					} else if (!test && a > 0) {
+					}
+					else if (a > 0) {
 						th.position = th.num * th.width;
 						th.transform(th.position, 0, 0)
 						th.index = th.num;
 					}
-					th.transform(-a, 0, 0)
+					else {
+						th.transform(-a, 0, 0)
+					}
 				} catch (er) {
+					console.error(er);
 					th.transform(-a, 0, 0)
-					void e;
+					void er;
 				}
 			},
 			setPosition: function () {
