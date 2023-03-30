@@ -160,8 +160,7 @@
 							c.readyState === "complete" && (c.detachEvent("onreadystatechange", y), d.ready())
 						});
 				return d
-			}(),
-			e = "0".split(" ");
+			}();
 		d.support = {};
 		d.each(
 			""
@@ -635,33 +634,12 @@
 			find: function (a) {
 				var b = this.pushStack("", "find", a),
 					c = 0;
+					console.log(1)
 				for (var e = 0, f = this.length; e < f; e++) {
 					c = b.length, d.find(a, this[e], b);
-					if (e > 0)
-						for (var g = c; g < b.length; g++)
-							for (var h = 0; h < c; h++)
-								if (b[h] === b[g]) {
-									b.splice(g--, 1);
-									break
-								}
+					return b;
 				}
 				return b
-			},
-			has: function (a) {
-				var b = d(a);
-				return this.filter(function () {
-					for (var a = 0, c = b.length; a < c; a++)
-						if (d.contains(this, b[a])) return !0
-				})
-			},
-			not: function (a) {
-				return this.pushStack(Q(this, a, !1), "not", a)
-			},
-			filter: function (a) {
-				return this.pushStack(Q(this, a, !0), "filter", a)
-			},
-			is: function (a) {
-				return !!a && d.filter(a, this).length > 0
 			}
 		}),
 			d.extend({
@@ -685,6 +663,7 @@
 	}
 
 	var fun = r(window, undefined);
+	console.log(fun)
 	conf.isT = true;
 	if (window.navigator) {
 		var nav = window.navigator.userAgent;
@@ -728,7 +707,6 @@
 					} else {
 						res.child = Array.from(children);
 					}
-					console.log(res.child)
 					res.wrap = i;
 					break;
 				}
@@ -985,15 +963,14 @@
 						_t.transform(0, 0, 0)
 					}
 					_t.index = 1;
-					var b = document.documentElement.nodeName;
-					fun(el).find(":visible");
+					fun(el).find(":visible")
 				}
 				else if (_t.index < 0) {
 					if (conf.loop) {
 						_t.transform(_t.num * _t.width, 0, 0)
 					}
 					_t.index = _t.num - 1;
-					fun(el).find(":visible")
+					fun(el).find(":visible");
 				}
 				_t.duration = duration;
 				_t.transform(_t.index * _t.width, 0, _t.duration);
