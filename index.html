@@ -193,21 +193,22 @@
             lazy: {
                 prop: "_src"
             },
-            accelerate: true,// 硬件加速
+            accelerate: !0,// 硬件加速
             duration: 300,
-            
         });
         new SimSwiper("#swiper-1", {
             button: {
                 prev: "#prev1", // 前进后退按钮
-                next: "#next1"
+                next: "#next1",
+                prevKey: "ArrowLeft",// 键盘操作
+                nextKey: "ArrowRight"
             },
             autoplay: 5000,
             loop: true,
             lazy: {
                 prop: "data"
             },
-            accelerate: true,// 硬件加速
+            accelerate: !0,// 硬件加速
             duration: 300,
             pagination: {
                 el: ".pagination",
