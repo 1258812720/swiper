@@ -734,6 +734,9 @@
 	var is_mobile = function() {
 		return (/Android|iPhone|iPad|X11/i.test(navigator.userAgent));
 	}
+	var is_ie = function() {
+		return /Trident/i.test(navigator.userAgent);
+	}
 	var con = document.querySelector(el),
 		g_conf = conf,
 		slider = null,
@@ -745,8 +748,6 @@
 		_wc = tm.child;
 	var th = null,
 		setting = {
-			prev: null,
-			next: null,
 			index: 0,
 			width: 0,
 			num: 1,
@@ -758,6 +759,8 @@
 			prevIndex: 0,
 			offIndex: -1,
 			loadEnd: false,
+			prev: null,
+			next: null,
 			autoplay: function() {
 				var time = typeof g_conf.autoplay === "number" ? g_conf.autoplay : 3500;
 				th.time = setInterval(
@@ -768,6 +771,8 @@
 				);
 			},
 			init: function() {
+				this.prev = this._prev;
+				this.next = this._next;
 				this.lastNode = slider.lastChild;
 				th = this;
 				th.duration = duration;
@@ -855,7 +860,8 @@
 				}
 				window.addEventListener("visibilitychange", function() {
 					document.visibilityState === "visible" ? th.boot() : th.stop();
-				})
+				});
+				return this;
 			},
 			stop: function() {
 				clearInterval(th.time);
@@ -1042,7 +1048,7 @@
 			start: function(e) {
 				th.touchX = e.clientX || e.touches[0].clientX;
 				if (!is_mobile()) {
-					th.link_handler(false)
+					th.link_handler(false);
 				}
 				if (is_mobile()) {
 					document.addEventListener("touchmove", th.move, {
@@ -1058,6 +1064,12 @@
 						passive: false
 					});
 				}
+				th.set_drab(true);
+			},
+			set_drab: function(b) {
+				setStyle(slider, {
+					cursor: b ? "grab" : "default"
+				});
 			},
 			checked: function(n) {
 				return !(Math.floor(n) === -1);
@@ -1105,19 +1117,21 @@
 				this.position = this.index * this.width;
 			},
 			end: function() {
-				th.setPosition();
 				th.transform(th.index * th.width, 0, conf.duration || 300);
+				th.setPosition();
 				th.prevIndex = th.index;
 				document.removeEventListener("touchmove", th.move);
 				document.removeEventListener("touchend", th.end);
-				document.removeEventListener("mousemove", th.move, true);
+				document.removeEventListener("mousemove", th.move, is_ie);
 				document.removeEventListener("mouseup", th.end);
+				th.set_drab(false)
 			},
 			min: function(x) {
 				var c = Math.abs(x - this.touchX);
 				return c >= 5;
 			}
 		};
+	var globa_this = null;
 	(function() {
 		var _vmNode = undefined;
 		if (arguments.length !== 2) {
@@ -1173,7 +1187,7 @@
 			}
 
 		}
-		setting.init();
+		globa_this = setting.init();
 	})();
 
 	function setStyle(el, props) {
@@ -1193,5 +1207,5 @@
 	function getStyle(el, prop) {
 		return Math.ceil(parseFloat(window.getComputedStyle(el)[prop])) || el.getBoundingClientRect()[prop];
 	};
-	return conf;
+	return globa_this;
 });
