@@ -1,122 +1,122 @@
 .simple-swiper-container {
-    width: 1600px;
-    height: 350px;
-    overflow: hidden;
-    position: relative;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border: 1px solid rgb(226, 226, 226);
+	width: 1600px;
+	height: 350px;
+	overflow: hidden;
+	position: relative;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	border: 1px solid rgb(226, 226, 226);
 }
 
 .simple-swiper-container>.swiper-wrapper {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    min-height: 220px;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	min-height: 220px;
 }
 
 .simple-swiper-container>.swiper-wrapper>.swiper-slider {
-    overflow: hidden;
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
+	overflow: hidden;
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
 }
 
 
 .simple-swiper-container>.swiper-wrapper>.through {
-    cursor: grab !important;
+	cursor: grab !important;
 }
 
 
 .simple-swiper-container>.swiper-wrapper>.swiper-slider>.swiper-items img {
-    border: none;
+	border: none;
 }
 
 .simple-swiper-container>.swiper-wrapper>.swiper-slider>.swiper-items {
-    vertical-align: top;
-    text-align: center;
-    backface-visibility: hidden;
-    border-radius: 10px;
+	vertical-align: top;
+	text-align: center;
+	backface-visibility: hidden;
+	border-radius: 10px;
 }
 
 .simple-swiper-container>.btn {
-    position: absolute;
-    cursor: pointer;
-    z-index: 5;
-    top: 45%;
-    width: 35px;
-    height: 45px;
-    background-color: #000000;
-    opacity: .8;
-    display: none;
-    font-size: 25px;
-    color: white;
-    font-family: '黑体';
+	position: absolute;
+	cursor: pointer;
+	z-index: 5;
+	top: 45%;
+	width: 35px;
+	height: 45px;
+	background-color: #000000;
+	opacity: .8;
+	display: none;
+	font-size: 25px;
+	color: white;
+	font-family: '黑体';
 }
 
 .simple-swiper-container:hover>.btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .simple-swiper-container>.btn-prev {
-    left: 0;
+	left: 0;
 }
 
 
 .simple-swiper-container>.btn-prev::before {
-    border-left: 12px solid transparent;
-    border-right: 12px solid #2a82d5;
+	border-left: 12px solid transparent;
+	border-right: 12px solid #2a82d5;
 }
 
 .simple-swiper-container>.btn-next {
-    right: 0;
+	right: 0;
 }
 
 .simple-swiper-container>.pagination {
-    position: absolute;
-    bottom:-21px;
-    margin: auto;
-    min-width: 120px;
-    width: 100%;
-    height: auto;
-    z-index: 5;
-    text-align: center;
+	position: absolute;
+	bottom: -21px;
+	margin: auto;
+	min-width: 120px;
+	width: 100%;
+	height: auto;
+	z-index: 5;
+	text-align: center;
 }
 
 .pagination .pagination-items {
-    display: inline-block;
-    height: 8px;
-    width: 8px;
-    margin-left: 5px;
-    margin-right: 5px;
-    box-sizing: border-box;
-    cursor: pointer;
-    background-color: rgb(255, 255, 255);
-    border-radius: 15px;
-    position: relative;
-    top:-21px;
+	display: inline-block;
+	height: 8px;
+	width: 8px;
+	margin-left: 5px;
+	margin-right: 5px;
+	box-sizing: border-box;
+	cursor: pointer;
+	background-color: rgb(255, 255, 255);
+	border-radius: 15px;
+	position: relative;
+	top: -21px;
 }
 
 .pagination .pagination-items-active {
-    background-color: rgb(255, 89, 0);
+	background-color: rgb(255, 89, 0);
 }
 
 .no-click a {
-    pointer-events: none;
+	pointer-events: none;
 }
 
 
 .swiper-cube-wrapper>.swiper-slider {
-    position: relative;
-    border: 1px solid;
-    box-sizing: border-box;
-    transform-style: preserve-3d;
-    transform: rotateX(80deg);
+	position: relative;
+	border: 1px solid;
+	box-sizing: border-box;
+	transform-style: preserve-3d;
+	transform: rotateX(80deg);
 }
