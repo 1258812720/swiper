@@ -761,6 +761,7 @@
 			loadEnd: false,
 			prev: null,
 			next: null,
+			accelerate: true,
 			autoplay: function() {
 				var time = typeof g_conf.autoplay === "number" ? g_conf.autoplay : 3500;
 				th.time = setInterval(
@@ -861,6 +862,10 @@
 				window.addEventListener("visibilitychange", function() {
 					document.visibilityState === "visible" ? th.boot() : th.stop();
 				});
+				this.set_default_position();
+				if (typeof conf.accelerate == 'boolean') {
+					this.accelerate = conf.accelerate;
+				}
 				return this;
 			},
 			stop: function() {
@@ -994,13 +999,16 @@
 				th.setPosition();
 				return _t;
 			},
+			set_default_position: function() {
+				this.transform(this.index * this.width, 0, conf.duration || 300)
+			},
 			goto: function() {
 				this.transform(this.index * this.width, 0, conf.duration || 300)
 			},
 			transform: function(x, y, delay) {
 				var t = this;
 				var _prop = null;
-				if (conf.accelerate === undefined || conf.accelerate) {
+				if (t.accelerate) {
 					_prop = {
 						transform: "translate3d(" + (-x) + "px," + (-y) + "px,0px)",
 						position: 'absolute',
