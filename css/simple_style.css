@@ -112,7 +112,11 @@
 	pointer-events: none;
 }
 
-
+.swiper-slider > .swiper-items >a{
+    display: block;
+    height: 100%;
+    width: 100%;
+}
 .swiper-cube-wrapper>.swiper-slider {
 	position: relative;
 	border: 1px solid;
