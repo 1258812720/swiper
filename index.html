@@ -1,143 +1,146 @@
 <!DOCTYPE html>
 <html lang="zh">
 
-<head>
-	<meta charset="utf-8" />
-	<title>轻量级轮播图</title>
-	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
-	<meta name="def-grey" content="false" />
-	<meta http-equiv="X-UA-Compatible" content="edge" />
-	<link rel="short icon" href="img/logo.ico" />
-	<link rel="stylesheet" type="text/css" href="css/simple_style.css" />
-	<script type="text/javascript" src="js/simple_swiper.js">
-	</script>
-</head>
+	<head>
+		<meta charset="utf-8" />
+		<title>轻量级轮播图</title>
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<meta name="def-grey" content="false" />
+		<meta http-equiv="X-UA-Compatible" content="edge" />
+		<link rel="short icon" href="img/logo.ico" />
+		<link rel="stylesheet" type="text/css" href="css/simple_style.css" />
+		<script type="text/javascript" src="js/simple_swiper.js">
+		</script>
+	</head>
 
-<body>
-	<div class="app">
-		<div id="swiper-demo" class="simple-swiper-container">
-			<a id="prev1" class="btn btn-prev">
-				< </a>
-					<a id="next1" class="btn btn-next">
-						>
-					</a>
-					<div class="swiper-wrapper">
-						<div class="swiper-items">
-							<a href="#1">
-								<img data="https://img.alicdn.com/imgextra/i4/O1CN016lTQtu1sW5Kjh2N81_!!6000000005773-0-tps-846-472.jpg"
-									alt="">
-							</a>
+	<body>
+		<div class="app">
+			<div id="swiper-demo" class="simple-swiper-container">
+				<a id="prev1" class="btn btn-prev">
+					< </a>
+						<a id="next1" class="btn btn-next">
+							>
+						</a>
+						<div class="swiper-wrapper">
+							<div class="swiper-items">
+								<a href="#1">
+									<img data="https://img.alicdn.com/imgextra/i4/O1CN016lTQtu1sW5Kjh2N81_!!6000000005773-0-tps-846-472.jpg"
+										alt="">
+								</a>
+							</div>
+							<div class="swiper-items">
+								<a href="#2">
+									<img data="https://img.alicdn.com/imgextra/i4/O1CN01GOlEEW1zidUliI8O7_!!6000000006748-2-tps-846-472.png"
+										alt="">
+								</a>
+							</div>
+							<div class="swiper-items">
+								<a href="#3">
+									<img data="https://img.alicdn.com/imgextra/i4/O1CN01cmWoxh1S6H07yrmcM_!!6000000002197-0-tps-846-472.jpg"
+										alt="">
+								</a>
+							</div>
+							<div class="swiper-items">
+								<a href="#4">
+									<img data="https://img.alicdn.com/imgextra/i4/O1CN01LHWdyp1yvAidcNMDR_!!6000000006640-0-tps-846-472.jpg"
+										alt="">
+								</a>
+							</div>
+							<div class="swiper-items">
+								<a href="#5">
+									<img data="https://img.alicdn.com/imgextra/i2/O1CN01lFNk4Z1JDkviZe8EG_!!6000000000995-2-tps-846-472.png"
+										alt="">
+								</a>
+							</div>
 						</div>
-						<div class="swiper-items">
-							<a href="#2">
-								<img data="https://img.alicdn.com/imgextra/i4/O1CN01GOlEEW1zidUliI8O7_!!6000000006748-2-tps-846-472.png"
-									alt="">
-							</a>
-						</div>
-						<div class="swiper-items">
-							<a href="#3">
-								<img data="https://img.alicdn.com/imgextra/i4/O1CN01cmWoxh1S6H07yrmcM_!!6000000002197-0-tps-846-472.jpg"
-									alt="">
-							</a>
-						</div>
-						<div class="swiper-items">
-							<a href="#4">
-								<img data="https://img.alicdn.com/imgextra/i4/O1CN01LHWdyp1yvAidcNMDR_!!6000000006640-0-tps-846-472.jpg"
-									alt="">
-							</a>
-						</div>
-						<div class="swiper-items">
-							<a href="#5">
-								<img data="https://img.alicdn.com/imgextra/i2/O1CN01lFNk4Z1JDkviZe8EG_!!6000000000995-2-tps-846-472.png"
-									alt="">
-							</a>
-						</div>
-					</div>
-					<div class="pagination"></div>
+						<div class="pagination"></div>
+			</div>
+			<div class="controller">
+				<button id="btn"> 下一张 </button>
+				<label for="enable"> <input type="checkbox" checked id="enable"
+						value="false" />开启硬件加速(默认开启，开启后可以更流畅，兼容低版本浏览器需手动关闭) </label>
+				<div id="code">
+
+				</div>
+			</div>
 		</div>
-		<div class="controller">
-			<button id="btn"> 下一张 </button>
-			<label for="enable"> <input type="checkbox" checked id="enable"
-					value="false" />开启硬件加速(默认开启，开启后可以更流畅，兼容低版本浏览器需手动关闭) </label>
-		</div>
-	</div>
-	<style>
-		#swiper-demo {
-			margin: 0 auto;
-			height: 344px;
-			width: 580px;
-			box-shadow: 0 0 0 0 red;
-		}
-
-		.controller {
-			width: 580px;
-			margin:10px auto;
-			background-color: white;
-		}
-		
-		.app {
-			text-align: center;
-		}
-
-		.simple-swiper-container {
-			border: none;
-		}
-
-		.my-items {
-			display: flex;
-			align-items: center;
-			width: 20%;
-			position: relative;
-			height: 100%;
-			overflow: hidden;
-		}
-
-		.swiper-items img {
-			width: 100%;
-			height: 100%;
-		}
-
-		.swiper-items {
-			flex-direction: row;
-			border-radius: 12px;
-			overflow: hidden;
-			display: flex;
-			flex-direction: row;
-			flex-wrap: nowrap;
-			justify-content: space-around;
-		}
-	</style>
-	<script type="text/javascript">
-		var demo = new SimSwiper("#swiper-demo", {
-			button: {
-				prev: "#prev1", // 前进后退按钮
-				next: "#next1",
-				prevKey: "ArrowLeft", // 键盘操作
-				nextKey: "ArrowRight"
-			},
-			autoplay: 50000,
-			loop: true,
-			lazy: {
-				prop: "data"
-			},
-			duration: 300,
-			pagination: {
-				el: ".pagination",
-				click: true, // 是否可以点击
-			},
-			on:{
-				end(ev){
-					console.log(ev)
-				}
+		<style>
+			#swiper-demo {
+				margin: 0 auto;
+				height: 344px;
+				width: 580px;
+				border-radius: 10px;
+				box-shadow: 0px 3px 7px 1px #a5a5a5;
 			}
-		});
-		document.getElementById("btn").onclick = function () {
-			demo.next();
-		}
-		document.getElementById("enable").onchange = function () {
-			demo.accelerate = this.checked
-		}
-	</script>
-</body>
+
+			.controller {
+				width: 580px;
+				margin: 10px auto;
+				background-color: white;
+			}
+
+			.app {
+				text-align: center;
+			}
+
+			.simple-swiper-container {
+				border: none;
+			}
+
+			.my-items {
+				display: flex;
+				align-items: center;
+				width: 20%;
+				position: relative;
+				height: 100%;
+				overflow: hidden;
+			}
+
+			.swiper-items img {
+				width: 100%;
+				height: 100%;
+			}
+
+			.swiper-items {
+				flex-direction: row;
+				border-radius: 12px;
+				overflow: hidden;
+				display: flex;
+				flex-direction: row;
+				flex-wrap: nowrap;
+				justify-content: space-around;
+			}
+
+			#code {
+				text-align: left;
+			}
+		</style>
+		<script type="text/javascript">
+			var demo = new SimSwiper("#swiper-demo", {
+				button: {
+					prev: "#prev1", // 前进后退按钮
+					next: "#next1",
+					prevKey: "ArrowLeft", // 键盘操作
+					nextKey: "ArrowRight"
+				},
+				autoplay: 50000,
+				loop: true,
+				lazy: {
+					prop: "data"
+				},
+				duration: 300,
+				pagination: {
+					el: ".pagination",
+					click: true, // 是否可以点击
+				}
+			});
+			document.getElementById("btn").onclick = function() {
+				demo.next();
+			}
+			document.getElementById("enable").onchange = function() {
+				demo.accelerate = this.checked
+			}
+		</script>
+	</body>
 
 </html>
