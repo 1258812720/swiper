@@ -1,4 +1,4 @@
-(function(e, fn) {
+(function (e, fn) {
 	"use strict";
 	if (e.__proto__ === undefined) {
 		e.SimSwiper = fn;
@@ -10,14 +10,14 @@
 			e.__proto__.SimSwiper = fn;
 		}
 	}
-})(this, function(el, conf) {
+})(this, function (el, conf) {
 	"use strict";
 	var root = el;
 
 	function r(a, b) {
 		var c = a.document,
 			bn, bm,
-			d = function() {
+			d = function () {
 				function G() {
 					if (!d.isReady) {
 						try {
@@ -29,9 +29,9 @@
 						d.ready()
 					}
 				}
-				var d = function(a, b) {
-						return new d.fn.init(a, b, g)
-					},
+				var d = function (a, b) {
+					return new d.fn.init(a, b, g)
+				},
 					g, h = /^($)/,
 					i = /\S/,
 					m = /^<(\w+)\s*\/?>(?:<\/\1>)?$/,
@@ -45,135 +45,135 @@
 					E = Array.prototype.indexOf,
 					F = {};
 				d.fn = d.prototype = {
-						constructor: d,
-						init: function(a, e, f) {
-							var g, i, j, k;
-							if (!a) return this;
-							if (a.nodeType) {
-								this.context = this[0] = a, this.length = 1;
-								return this
-							}
-							if (typeof a === "string") {
-								g = h.exec(a);
-								if (!g || !g[1] && e) return !e || e.jquery ? (e || f).find(a) : this
-									.constructor(e)
-									.find(a);
-								return this
-							}
-							if (d.isFunction(a)) return f.ready(a);
-							a.selector !== b && (this.selector = a.selector, this.context = a.context);
-							return d.makeArray(a, this)
-						},
-						pushStack: function(a, b, c) {
-							var e = this.constructor();
-							d.isArray(a) ? B.apply(e, a) : d.merge(e, a), e.prevObject = this, e.context = this
-								.context, b === "find" ? e.selector = this.selector + (this.selector ? " " :
-									"") +
+					constructor: d,
+					init: function (a, e, f) {
+						var g, i, j, k;
+						if (!a) return this;
+						if (a.nodeType) {
+							this.context = this[0] = a, this.length = 1;
+							return this
+						}
+						if (typeof a === "string") {
+							g = h.exec(a);
+							if (!g || !g[1] && e) return !e || e.jquery ? (e || f).find(a) : this
+								.constructor(e)
+								.find(a);
+							return this
+						}
+						if (d.isFunction(a)) return f.ready(a);
+						a.selector !== b && (this.selector = a.selector, this.context = a.context);
+						return d.makeArray(a, this)
+					},
+					pushStack: function (a, b, c) {
+						var e = this.constructor();
+						d.isArray(a) ? B.apply(e, a) : d.merge(e, a), e.prevObject = this, e.context = this
+							.context, b === "find" ? e.selector = this.selector + (this.selector ? " " :
+								"") +
 								c : b && (e.selector = this.selector + "." + b + "(" + c + ")");
-							return e
-						},
-						each: function(a, b) {
-							return d.each(this, a, b)
-						},
-						push: B,
-						sort: [].sort,
-						splice: [].splice
-					}, d.fn.init.prototype = d.fn, d.extend = d.fn.extend = function() {
-						var a, c, e, f, g, h, i = arguments[0] || {},
-							j = 1,
-							k = arguments.length,
-							l = !1;
-						typeof i === "boolean" && (l = i, i = arguments[1] || {}, j = 2), typeof i !== "object" && !
-							d
+						return e
+					},
+					each: function (a, b) {
+						return d.each(this, a, b)
+					},
+					push: B,
+					sort: [].sort,
+					splice: [].splice
+				}, d.fn.init.prototype = d.fn, d.extend = d.fn.extend = function () {
+					var a, c, e, f, g, h, i = arguments[0] || {},
+						j = 1,
+						k = arguments.length,
+						l = !1;
+					typeof i === "boolean" && (l = i, i = arguments[1] || {}, j = 2), typeof i !== "object" && !
+						d
 							.isFunction(i) && (i = {}), k === j && (i = this, --j);
-						for (; j < k; j++)
-							if ((a = arguments[j]) != null)
-								for (c in a) {
-									e = i[c], f = a[c];
-									if (i === f) continue;
-									l && f && (d.isPlainObject(f) || (g = d.isArray(f))) ? (g ? (g = !1, h = e && d
-											.isArray(e) ? e : []) : h = e && d.isPlainObject(e) ? e : {}, i[c] =
-										d
+					for (; j < k; j++)
+						if ((a = arguments[j]) != null)
+							for (c in a) {
+								e = i[c], f = a[c];
+								if (i === f) continue;
+								l && f && (d.isPlainObject(f) || (g = d.isArray(f))) ? (g ? (g = !1, h = e && d
+									.isArray(e) ? e : []) : h = e && d.isPlainObject(e) ? e : {}, i[c] =
+									d
 										.extend(l, h, f)) : f !== b && (i[c] = f)
-								}
-						return i
-					}, d.extend({
-						isReady: !1,
-						readyWait: 1,
-
-						isFunction: function(a) {
-							return d.type(a) === "function"
-						},
-						isArray: Array.isArray || function(a) {
-							return d.type(a) === "array"
-						},
-						type: function(a) {
-							return a == null ? String(a) : F[z.call(a)] || "object"
-						},
-						each: function(a, c, e) {
-							var f, g = 0,
-								h = a.length,
-								i = h === b || d.isFunction(a);
-							if (e) {
-								if (i) {
-									for (f in a)
-										if (c.apply(a[f], e) === !1) break
-								} else
-									for (; g < h;)
-										if (c.apply(a[g++], e) === !1) break
-							} else if (i) {
-								for (f in a)
-									if (c.call(a[f], f, a[f]) === !1) break
-							} else
-								for (var j = a[0]; g < h && c.call(j, g, j) !== !1; j = a[++g]) {}
-							return a
-						},
-						merge: function(a, c) {
-							var d = a.length,
-								e = 0;
-							if (typeof c.length === "number")
-								for (var f = c.length; e < f; e++) a[d++] = c[e];
-							else
-								while (c[e] !== b) a[d++] = c[e++];
-							a.length = d;
-							return a
-						},
-						guid: 1,
-						uaMatch: function(a) {
-							a = a.toLowerCase();
-							var b = r.exec(a) || s.exec(a) || t.exec(a) || a.indexOf("compatible") < 0 && u
-								.exec(a) || [];
-							return {
-								browser: b[1] || "",
-								version: b[2] || "0"
 							}
-						},
-						browser: {}
-					}), d.each("Boolean Number String Function Array Date RegExp Object".split(" "), function(a,
-						b) {
-						F["[object " + b + "]"] = b.toLowerCase()
-					}), w = d.uaMatch(v), w.browser && (d.browser[w.browser] = !0, d.browser.version = w.version), d
-					.browser.webkit && (d.browser.safari = !0), E && (d.inArray = function(a, b) {
+					return i
+				}, d.extend({
+					isReady: !1,
+					readyWait: 1,
+
+					isFunction: function (a) {
+						return d.type(a) === "function"
+					},
+					isArray: Array.isArray || function (a) {
+						return d.type(a) === "array"
+					},
+					type: function (a) {
+						return a == null ? String(a) : F[z.call(a)] || "object"
+					},
+					each: function (a, c, e) {
+						var f, g = 0,
+							h = a.length,
+							i = h === b || d.isFunction(a);
+						if (e) {
+							if (i) {
+								for (f in a)
+									if (c.apply(a[f], e) === !1) break
+							} else
+								for (; g < h;)
+									if (c.apply(a[g++], e) === !1) break
+						} else if (i) {
+							for (f in a)
+								if (c.call(a[f], f, a[f]) === !1) break
+						} else
+							for (var j = a[0]; g < h && c.call(j, g, j) !== !1; j = a[++g]) { }
+						return a
+					},
+					merge: function (a, c) {
+						var d = a.length,
+							e = 0;
+						if (typeof c.length === "number")
+							for (var f = c.length; e < f; e++) a[d++] = c[e];
+						else
+							while (c[e] !== b) a[d++] = c[e++];
+						a.length = d;
+						return a
+					},
+					guid: 1,
+					uaMatch: function (a) {
+						a = a.toLowerCase();
+						var b = r.exec(a) || s.exec(a) || t.exec(a) || a.indexOf("compatible") < 0 && u
+							.exec(a) || [];
+						return {
+							browser: b[1] || "",
+							version: b[2] || "0"
+						}
+					},
+					browser: {}
+				}), d.each("Boolean Number String Function Array Date RegExp Object".split(" "), function (a,
+					b) {
+					F["[object " + b + "]"] = b.toLowerCase()
+				}), w = d.uaMatch(v), w.browser && (d.browser[w.browser] = !0, d.browser.version = w.version), d
+					.browser.webkit && (d.browser.safari = !0), E && (d.inArray = function (a, b) {
 						return E.call(b, a)
 					}), i.test("聽"), g = d(c), c.addEventListener ? y =
-					function() {
-						c.removeEventListener("DOMContentLoaded", y, !1)
-					} : c.attachEvent && (y = function() {
-						c.readyState === "compvare" && (c.detachEvent("onreadystatechange", y), d.ready())
-					});
+						function () {
+							c.removeEventListener("DOMContentLoaded", y, !1)
+						} : c.attachEvent && (y = function () {
+							c.readyState === "compvare" && (c.detachEvent("onreadystatechange", y), d.ready())
+						});
 				return d
 			}();
 		d.support = {};
 		d.each(
-				""
+			""
 				.split(" "),
-				function(a, b) {
-					d.fn[b] = function(a, c) {
-						c == null && (c = a, a = null);
-						return arguments.length > 0 ? this.bind(b, a, c) : this.trigger(b)
-					}, d.attrFn && (d.attrFn[b] = !0)
-				}),
-			function() {
+			function (a, b) {
+				d.fn[b] = function (a, c) {
+					c == null && (c = a, a = null);
+					return arguments.length > 0 ? this.bind(b, a, c) : this.trigger(b)
+				}, d.attrFn && (d.attrFn[b] = !0)
+			}),
+			function () {
 				var a =
 					/((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^\[\]]*\]|['"][^'"]*['"]|[^\[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?((?:.|\r|\n)*)/g,
 					e = 0,
@@ -182,11 +182,11 @@
 					h = !0,
 					i = /\\/g,
 					j = /\W/;
-				[0, 0].sort(function() {
+				[0, 0].sort(function () {
 					h = !1;
 					return 0
 				});
-				var k = function(b, d, e, g) {
+				var k = function (b, d, e, g) {
 					e = e || [], d = d || c;
 					var h = d;
 					if (d.nodeType !== 1 && d.nodeType !== 9) return [];
@@ -215,14 +215,14 @@
 						!g && x.length > 1 && d.nodeType === 9 && !w && l.match.ID.test(x[0]) && !l.match.ID
 							.test(x[
 								x.length - 1]) && (q = k.find(x.shift(), d, w), d = q.expr ? k.filter(q.expr, q
-								.set)[0] : q.set[0]);
+									.set)[0] : q.set[0]);
 						if (d) {
 							q = g ? {
-									expr: x.pop(),
-									set: p(g)
-								} : k.find(x.pop(), x.length === 1 && (x[0] === "~" || x[0] === "+") && d
-									.parentNode ? d.parentNode : d, w), j = q.expr ? k.filter(q.expr, q.set) : q
-								.set, x.length > 0 ? n = p(j) : u = !1;
+								expr: x.pop(),
+								set: p(g)
+							} : k.find(x.pop(), x.length === 1 && (x[0] === "~" || x[0] === "+") && d
+								.parentNode ? d.parentNode : d, w), j = q.expr ? k.filter(q.expr, q.set) : q
+									.set, x.length > 0 ? n = p(j) : u = !1;
 							while (x.length) r = x.pop(), s = r, l.relative[r] ? s = x.pop() : r = "", s ==
 								null &&
 								(s = d), l.relative[r](n, s, w)
@@ -236,19 +236,19 @@
 									.contains(d, n[t])) && e.push(j[t]);
 							else
 								for (t = 0; n[t] != null; t++) n[t] && n[t].nodeType === 1 && e.push(j[t]);
-					else e.push.apply(e, n);
+						else e.push.apply(e, n);
 					else p(n, e);
 					o && (k(o, h, e, g), k.uniqueSort(e));
 					return e
 				};
-				k.uniqueSort = function(a) {
+				k.uniqueSort = function (a) {
 					if (r) {
 						g = h, a.sort(r);
 						if (g)
 							for (var b = 1; b < a.length; b++) a[b] === a[b - 1] && a.splice(b--, 1)
 					}
 					return a
-				}, k.find = function(a, b, c) {
+				}, k.find = function (a, b, c) {
 					var d;
 					if (!a) return [];
 					for (var e = 0, f = l.order.length; e < f; e++) {
@@ -270,7 +270,7 @@
 						set: d,
 						expr: a
 					}
-				}, k.filter = function(a, c, d, e) {
+				}, k.filter = function (a, c, d, e) {
 					var f, g, h = a,
 						i = [],
 						j = c,
@@ -311,120 +311,120 @@
 					return j
 				};
 				var l = k.selectors = {
-						order: ["ID", "NAME", "TAG"],
-						match: {
-							ID: /#((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,
-							CLASS: /\.((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,
-							NAME: /\[name=['"]*((?:[\w\u00c0-\uFFFF\-]|\\.)+)['"]*\]/,
-							ATTR: /\[\s*((?:[\w\u00c0-\uFFFF\-]|\\.)+)\s*(?:(\S?=)\s*(?:(['"])(.*?)\3|(#?(?:[\w\u00c0-\uFFFF\-]|\\.)*)|)|)\s*\]/,
-							TAG: /^((?:[\w\u00c0-\uFFFF\*\-]|\\.)+)/,
-							CHILD: /:(only|nth|last|first)-child(?:\(\s*(even|odd|(?:[+\-]?\d+|(?:[+\-]?\d*)?n\s*(?:[+\-]\s*\d+)?))\s*\))?/,
-							POS: /:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^\-]|$)/,
-							PSEUDO: /:((?:[\w\u00c0-\uFFFF\-]|\\.)+)(?:\((['"]?)((?:\([^\)]+\)|[^\(\)]*)+)\2\))?/
-						},
-						leftMatch: {},
+					order: ["ID", "NAME", "TAG"],
+					match: {
+						ID: /#((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,
+						CLASS: /\.((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,
+						NAME: /\[name=['"]*((?:[\w\u00c0-\uFFFF\-]|\\.)+)['"]*\]/,
+						ATTR: /\[\s*((?:[\w\u00c0-\uFFFF\-]|\\.)+)\s*(?:(\S?=)\s*(?:(['"])(.*?)\3|(#?(?:[\w\u00c0-\uFFFF\-]|\\.)*)|)|)\s*\]/,
+						TAG: /^((?:[\w\u00c0-\uFFFF\*\-]|\\.)+)/,
+						CHILD: /:(only|nth|last|first)-child(?:\(\s*(even|odd|(?:[+\-]?\d+|(?:[+\-]?\d*)?n\s*(?:[+\-]\s*\d+)?))\s*\))?/,
+						POS: /:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^\-]|$)/,
+						PSEUDO: /:((?:[\w\u00c0-\uFFFF\-]|\\.)+)(?:\((['"]?)((?:\([^\)]+\)|[^\(\)]*)+)\2\))?/
+					},
+					leftMatch: {},
 
-						find: {
+					find: {
 
-						},
-						preFilter: {
+					},
+					preFilter: {
 
+					},
+					filters: {},
+					setFilters: {
+						eq: function (a, b, c) {
+							return c[3] - 0 === b
+						}
+					},
+					filter: {
+						PSEUDO: function (a, b, c, d) {
+							var e = b[1],
+								f = l.filters[e];
+							if (f) return f(a, c, b, d);
+							if (e === "contains") return (a.textContent || a.innerText || k.getText([a]) ||
+								"")
+								.indexOf(b[3]) >= 0;
+							if (e === "not") {
+								var g = b[3];
+								for (var h = 0, i = g.length; h < i; h++)
+									if (g[h] === a) return !1;
+								return !0
+							}
+							k.error(e)
 						},
-						filters: {},
-						setFilters: {
-							eq: function(a, b, c) {
-								return c[3] - 0 === b
+						CHILD: function (a, b) {
+							var c = b[1],
+								d = a;
+							switch (c) {
+								case "only":
+								case "first":
+									while (d = d.previousSibling)
+										if (d.nodeType === 1) return !1;
+									if (c === "first") return !0;
+									d = a;
+								case "last":
+									while (d = d.nextSibling)
+										if (d.nodeType === 1) return !1;
+									return !0;
+								case "nth":
+									var e = b[2],
+										f = b[3];
+									if (e === 1 && f === 0) return !0;
+									var g = b[0],
+										h = a.parentNode;
+									if (h && (h.sizcache !== g || !a.nodeIndex)) {
+										var i = 0;
+										for (d = h.firstChild; d; d = d.nextSibling) d.nodeType === 1 && (d
+											.nodeIndex = ++i);
+										h.sizcache = g
+									}
+									var j = a.nodeIndex - f;
+									return e === 0 ? j === 0 : j % e === 0 && j / e >= 0
 							}
 						},
-						filter: {
-							PSEUDO: function(a, b, c, d) {
-								var e = b[1],
-									f = l.filters[e];
-								if (f) return f(a, c, b, d);
-								if (e === "contains") return (a.textContent || a.innerText || k.getText([a]) ||
-										"")
-									.indexOf(b[3]) >= 0;
-								if (e === "not") {
-									var g = b[3];
-									for (var h = 0, i = g.length; h < i; h++)
-										if (g[h] === a) return !1;
-									return !0
-								}
-								k.error(e)
-							},
-							CHILD: function(a, b) {
-								var c = b[1],
-									d = a;
-								switch (c) {
-									case "only":
-									case "first":
-										while (d = d.previousSibling)
-											if (d.nodeType === 1) return !1;
-										if (c === "first") return !0;
-										d = a;
-									case "last":
-										while (d = d.nextSibling)
-											if (d.nodeType === 1) return !1;
-										return !0;
-									case "nth":
-										var e = b[2],
-											f = b[3];
-										if (e === 1 && f === 0) return !0;
-										var g = b[0],
-											h = a.parentNode;
-										if (h && (h.sizcache !== g || !a.nodeIndex)) {
-											var i = 0;
-											for (d = h.firstChild; d; d = d.nextSibling) d.nodeType === 1 && (d
-												.nodeIndex = ++i);
-											h.sizcache = g
-										}
-										var j = a.nodeIndex - f;
-										return e === 0 ? j === 0 : j % e === 0 && j / e >= 0
-								}
-							},
-							ID: function(a, b) {
-								return a.nodeType === 1 && a.getAttribute("id") === b
-							},
-							TAG: function(a, b) {
-								return b === "*" && a.nodeType === 1 || a.nodeName.toLowerCase() === b
-							},
-							CLASS: function(a, b) {
-								return (" " + (a.className || a.getAttribute("class")) + " ").indexOf(b) > -1
-							},
-							ATTR: function(a, b) {
-								var c = b[1],
-									d = l.attrHandle[c] ? l.attrHandle[c](a) : a[c] != null ? a[c] : a
+						ID: function (a, b) {
+							return a.nodeType === 1 && a.getAttribute("id") === b
+						},
+						TAG: function (a, b) {
+							return b === "*" && a.nodeType === 1 || a.nodeName.toLowerCase() === b
+						},
+						CLASS: function (a, b) {
+							return (" " + (a.className || a.getAttribute("class")) + " ").indexOf(b) > -1
+						},
+						ATTR: function (a, b) {
+							var c = b[1],
+								d = l.attrHandle[c] ? l.attrHandle[c](a) : a[c] != null ? a[c] : a
 									.getAttribute(
 										c),
-									e = d + "",
-									f = b[2],
-									g = b[4];
-								return d == null ? f === "!=" : f === "=" ? e === g : f === "*=" ? e.indexOf(
-										g) >=
-									0 : f === "~=" ? (" " + e + " ").indexOf(g) >= 0 : g ? f === "!=" ? e !==
+								e = d + "",
+								f = b[2],
+								g = b[4];
+							return d == null ? f === "!=" : f === "=" ? e === g : f === "*=" ? e.indexOf(
+								g) >=
+								0 : f === "~=" ? (" " + e + " ").indexOf(g) >= 0 : g ? f === "!=" ? e !==
 									g :
 									f === "^=" ? e.indexOf(g) === 0 : f === "$=" ? e.substr(e.length - g
 										.length) ===
-									g : f === "|=" ? e === g || e.substr(0, g.length + 1) === g + "-" : !1 :
+										g : f === "|=" ? e === g || e.substr(0, g.length + 1) === g + "-" : !1 :
 									e &&
 									d !== !1
-							},
-							POS: function(a, b, c, d) {
-								var e = b[2],
-									f = l.setFilters[e];
-								if (f) return f(a, c, b, d)
-							}
+						},
+						POS: function (a, b, c, d) {
+							var e = b[2],
+								f = l.setFilters[e];
+							if (f) return f(a, c, b, d)
 						}
-					},
+					}
+				},
 					m = l.match.POS,
-					n = function(a, b) {
+					n = function (a, b) {
 						return "\\" + (b - 0 + 1)
 					};
 				for (var o in l.match) l.match[o] = new RegExp(l.match[o].source + /(?![^\[]*\])(?![^\(]*\))/
-						.source), l
-					.leftMatch[o] = new RegExp(/(^(?:.|\r|\n)*?)/.source + l.match[o].source.replace(/\\(\d+)/g,
-						n));
-				var p = function(a, b) {
+					.source), l
+						.leftMatch[o] = new RegExp(/(^(?:.|\r|\n)*?)/.source + l.match[o].source.replace(/\\(\d+)/g,
+							n));
+				var p = function (a, b) {
 					a = Array.prototype.slice.call(a, 0);
 					if (b) {
 						b.push.apply(b, a);
@@ -435,7 +435,7 @@
 				try {
 					Array.prototype.slice.call(c.documentElement.childNodes, 0)[0].nodeType
 				} catch (q) {
-					p = function(a, b) {
+					p = function (a, b) {
 						var c = 0,
 							d = b || [];
 						if (f.call(a) === "[object Array]") Array.prototype.push.apply(d, a);
@@ -447,91 +447,91 @@
 					}
 				}
 				var r, s;
-				c.documentElement.compareDocumentPosition ? r = function(a, b) {
-						if (a === b) {
-							g = !0;
-							return 0
-						}
-						if (!a.compareDocumentPosition || !b.compareDocumentPosition) return a
-							.compareDocumentPosition ?
-							-1 : 1;
-						return a.compareDocumentPosition(b) & 4 ? -1 : 1
-					} : (r = function(a, b) {
-						var c, d, e = [],
-							f = [],
-							h = a.parentNode,
-							i = b.parentNode,
-							j = h;
-						if (a === b) {
-							g = !0;
-							return 0
-						}
-						if (h === i) return s(a, b);
-						if (!h) return -1;
-						if (!i) return 1;
-						while (j) e.unshift(j), j = j.parentNode;
-						j = i;
-						while (j) f.unshift(j), j = j.parentNode;
-						c = e.length, d = f.length;
-						for (var k = 0; k < c && k < d; k++)
-							if (e[k] !== f[k]) return s(e[k], f[k]);
-						return k === c ? s(a, f[k], -1) : s(e[k], b, 1)
-					}, s = function(a, b, c) {
-						if (a === b) return c;
-						var d = a.nextSibling;
-						while (d) {
-							if (d === b) return -1;
-							d = d.nextSibling
-						}
-						return 1
-					}), k.getText = function(a) {
-						var b = "",
-							c;
-						for (var d = 0; a[d]; d++) c = a[d], c.nodeType === 3 || c.nodeType === 4 ? b += c
-							.nodeValue : c
+				c.documentElement.compareDocumentPosition ? r = function (a, b) {
+					if (a === b) {
+						g = !0;
+						return 0
+					}
+					if (!a.compareDocumentPosition || !b.compareDocumentPosition) return a
+						.compareDocumentPosition ?
+						-1 : 1;
+					return a.compareDocumentPosition(b) & 4 ? -1 : 1
+				} : (r = function (a, b) {
+					var c, d, e = [],
+						f = [],
+						h = a.parentNode,
+						i = b.parentNode,
+						j = h;
+					if (a === b) {
+						g = !0;
+						return 0
+					}
+					if (h === i) return s(a, b);
+					if (!h) return -1;
+					if (!i) return 1;
+					while (j) e.unshift(j), j = j.parentNode;
+					j = i;
+					while (j) f.unshift(j), j = j.parentNode;
+					c = e.length, d = f.length;
+					for (var k = 0; k < c && k < d; k++)
+						if (e[k] !== f[k]) return s(e[k], f[k]);
+					return k === c ? s(a, f[k], -1) : s(e[k], b, 1)
+				}, s = function (a, b, c) {
+					if (a === b) return c;
+					var d = a.nextSibling;
+					while (d) {
+						if (d === b) return -1;
+						d = d.nextSibling
+					}
+					return 1
+				}), k.getText = function (a) {
+					var b = "",
+						c;
+					for (var d = 0; a[d]; d++) c = a[d], c.nodeType === 3 || c.nodeType === 4 ? b += c
+						.nodeValue : c
 							.nodeType !== 8 && (b += k.getText(c.childNodes));
-						return b
-					},
-					function() {
+					return b
+				},
+					function () {
 						var a = c.createElement("div"),
 							d = "script" + (new Date).getTime(),
 							e = c.documentElement;
 						a.innerHTML = "<a name='" + d + "'/>", e.insertBefore(a, e.firstChild), c.getElementById(
 							d) && (
-							l.find.ID = function(a, c, d) {
-								if (typeof c.getElementById !== "undefined" && !d) {
-									var e = c.getElementById(a[1]);
-									return e ? e.id === a[1] || typeof e.getAttributeNode !== "undefined" && e
-										.getAttributeNode("id").nodeValue === a[1] ? [e] : b : []
-								}
-							}, l.filter.ID = function(a, b) {
-								var c = typeof a.getAttributeNode !== "undefined" && a.getAttributeNode("id");
-								return a.nodeType === 1 && c && c.nodeValue === b
-							}), e.removeChild(a), e = a = null
+								l.find.ID = function (a, c, d) {
+									if (typeof c.getElementById !== "undefined" && !d) {
+										var e = c.getElementById(a[1]);
+										return e ? e.id === a[1] || typeof e.getAttributeNode !== "undefined" && e
+											.getAttributeNode("id").nodeValue === a[1] ? [e] : b : []
+									}
+								}, l.filter.ID = function (a, b) {
+									var c = typeof a.getAttributeNode !== "undefined" && a.getAttributeNode("id");
+									return a.nodeType === 1 && c && c.nodeValue === b
+								}), e.removeChild(a), e = a = null
 					}(),
-					function() {
+					function () {
 						var a = c.createElement("div");
 						a.appendChild(c.createComment("")), a.getElementsByTagName("*").length > 0 && (l.find.TAG =
-								function(a, b) {
-									var c = b.getElementsByTagName(a[1]);
-									if (a[1] === "*") {
-										var d = [];
-										for (var e = 0; c[e]; e++) c[e].nodeType === 1 && d.push(c[e]);
-										c = d
-									}
-									return c
-								}), a.innerHTML = "<a href='#'></a>", a.firstChild && typeof a.firstChild
-							.getAttribute !== "undefined" && a.firstChild.getAttribute("href") !== "#" && (l
-								.attrHandle
-								.href = function(a) {
-									return a.getAttribute("href", 2)
-								}), a = null
-					}(), c.querySelectorAll && function() {
+							function (a, b) {
+								var c = b.getElementsByTagName(a[1]);
+								if (a[1] === "*") {
+									var d = [];
+									for (var e = 0; c[e]; e++) c[e].nodeType === 1 && d.push(c[e]);
+									c = d
+								}
+								return c
+							}), a.innerHTML = "<a href='#'></a>", a.firstChild && typeof a.firstChild
+								.getAttribute !== "undefined" && a.firstChild.getAttribute("href") !== "#" && (l
+									.attrHandle
+									.href = function (a) {
+										return a.getAttribute("href", 2)
+									}), a = null
+					}(), c.querySelectorAll && function () {
 						var a = k,
 							b = c.createElement("div"),
 							d = "__sizzle__";
 						if (!b.querySelectorAll || b.querySelectorAll(".TEST").length !== 0) {
-							k = function(b, e, f, g) {
+							k = function (b, e, f, g) {
 								e = e || c;
 								if (!g && !k.isXML(e)) {
 									var h = /^(\w+$)|^\.([\w\-]+$)|^#([\w\-]+$)/.exec(b);
@@ -549,7 +549,7 @@
 										}
 										try {
 											return p(e.querySelectorAll(b), f)
-										} catch (j) {}
+										} catch (j) { }
 									} else if (e.nodeType === 1 && e.nodeName.toLowerCase() !== "object") {
 										var m = e,
 											n = e.getAttribute("id"),
@@ -558,11 +558,11 @@
 											r = /^\s*[+~]/.test(b);
 										n ? o = o.replace(/'/g, "\\$&") : e.setAttribute("id", o), r && q && (
 											e = e
-											.parentNode);
+												.parentNode);
 										try {
 											if (!r || q) return p(e.querySelectorAll("[id='" + o + "'] " + b),
 												f)
-										} catch (s) {} finally {
+										} catch (s) { } finally {
 											n || m.removeAttribute("id")
 										}
 									}
@@ -573,10 +573,10 @@
 							b = null
 						}
 					}(),
-					function() {
+					function () {
 						var a = c.documentElement,
 							b = a.matchesSelector || a.mozMatchesSelector || a.webkitMatchesSelector || a
-							.msMatchesSelector;
+								.msMatchesSelector;
 						if (b) {
 							var d = !b.call(c.createElement("div"), "div"),
 								e = !1;
@@ -585,42 +585,42 @@
 							} catch (f) {
 								e = !0
 							}
-							k.matchesSelector = function(a, c) {
+							k.matchesSelector = function (a, c) {
 								c = c.replace(/\=\s*([^'"\]]*)\s*\]/g, "='$1']");
 								if (!k.isXML(a)) try {
 									if (e || !l.match.PSEUDO.test(c) && !/!=/.test(c)) {
 										var f = b.call(a, c);
 										if (f || !d || a.document && a.document.nodeType !== 11) return f
 									}
-								} catch (g) {}
+								} catch (g) { }
 								return k(c, null, null, [a]).length > 0
 							}
 						}
 					}(),
-					function() {
+					function () {
 						var a = c.createElement("div");
 						a.innerHTML = "<div class='test e'></div><div class='test'></div>";
 						if (a.getElementsByClassName && a.getElementsByClassName("e").length !== 0) {
 							a.lastChild.className = "e";
 							if (a.getElementsByClassName("e").length === 1) return;
-							l.order.splice(1, 0, "CLASS"), l.find.CLASS = function(a, b, c) {
+							l.order.splice(1, 0, "CLASS"), l.find.CLASS = function (a, b, c) {
 								if (typeof b.getElementsByClassName !== "undefined" && !c) return b
 									.getElementsByClassName(a[1])
 							}, a = null
 						}
-					}(), c.documentElement.contains ? k.contains = function(a, b) {
+					}(), c.documentElement.contains ? k.contains = function (a, b) {
 						return a !== b && (a.contains ? a.contains(b) : !0)
-					} : c.documentElement.compareDocumentPosition ? k.contains = function(a, b) {
+					} : c.documentElement.compareDocumentPosition ? k.contains = function (a, b) {
 						return !!(a.compareDocumentPosition(b) & 16)
-					} : k.contains = function() {
+					} : k.contains = function () {
 						return !1
-					}, k.isXML = function(a) {
+					}, k.isXML = function (a) {
 						var b = (a ? a.ownerDocument || a : 0).documentElement;
 						var r = b ? b.nodeName !== "HTML" : !1
 						return r
 					};
 
-				var v = function(a, b) {
+				var v = function (a, b) {
 					var c, d = [],
 						e = "",
 						f = b.nodeType ? [b] : b;
@@ -633,30 +633,30 @@
 			}();
 		var c, bo;
 		d.fn.extend({
-				find: function(a) {
-					var b = this.pushStack("", "find", a),
-						c = 0;
-					for (var e = 0, f = this.length; e < f; e++) {
-						c = b.length, d.find(a, this[e], b);
-						return b;
-					}
-					return b
+			find: function (a) {
+				var b = this.pushStack("", "find", a),
+					c = 0;
+				for (var e = 0, f = this.length; e < f; e++) {
+					c = b.length, d.find(a, this[e], b);
+					return b;
 				}
-			}),
+				return b
+			}
+		}),
 			d.extend({
 				cssHooks: {},
-			}), c.defaultView && c.defaultView.getComputedStyle && (bn = function(a, c, e) {
+			}), c.defaultView && c.defaultView.getComputedStyle && (bn = function (a, c, e) {
 				var f, g, h;
 				e = e.replace(bg, "-$1").toLowerCase();
 				if (!(g = a.ownerDocument.defaultView)) return b;
 				if (h === g.getComputedStyle(a, null)) f = h.getPropertyValue(e), f === "" && !d.contains(a
 					.ownerDocument.documentElement, a) && (f = d.style(a, e));
 				return f
-			}), bm = bn || bo, d.expr && d.expr.filters && (d.expr.filters.hidden = function(a) {
+			}), bm = bn || bo, d.expr && d.expr.filters && (d.expr.filters.hidden = function (a) {
 				var b = a.offsetWidth,
 					c = a.offsetHeight;
 				return b === 0 && c === 0 || !d.support.reliableHiddenOffsets && (a.style.display)
-			}, d.expr.filters.visible = function(a) {
+			}, d.expr.filters.visible = function (a) {
 				return !d.expr.filters.hidden(a)
 			});
 		return d;
@@ -675,7 +675,7 @@
 			}
 		}
 	}
-	var toArray = function(o) {
+	var toArray = function (o) {
 		if (!o) {
 			return []
 		}
@@ -687,7 +687,7 @@
 		}
 		return arrays;
 	}
-	var getChild = function(el, name) {
+	var getChild = function (el, name) {
 		var res = {
 			child: null,
 			self: document.querySelector(el),
@@ -731,13 +731,13 @@
 	function is_blank(str) {
 		return !str || str.trim() === '';
 	}
-	var is_mobile = function() {
+	var is_mobile = function () {
 		return (/Android|iPhone|iPad|X11/i.test(navigator.userAgent));
 	}
-	var is_ie = function() {
+	var is_ie = function () {
 		return /Trident/i.test(navigator.userAgent);
 	}
-	var object_empty = function(obj) {
+	var object_empty = function (obj) {
 		if (!obj) {
 			return false
 		}
@@ -760,6 +760,7 @@
 		setting = {
 			index: 0,
 			width: 0,
+			height: 0,
 			num: 1,
 			duration: undefined,
 			time: null,
@@ -773,16 +774,16 @@
 			next: null,
 			accelerate: true,
 			events: ["start", "move", "end"],
-			autoplay: function() {
+			autoplay: function () {
 				var time = typeof g_conf.autoplay === "number" ? g_conf.autoplay : 3500;
 				th.time = setInterval(
-					function() {
+					function () {
 						th._next();
 					},
 					time > th.duration ? time : 1400
 				);
 			},
-			init: function() {
+			init: function () {
 				this.prev = this._prev;
 				this.next = this._next;
 				this.lastNode = slider.lastChild;
@@ -790,20 +791,29 @@
 				th.duration = duration;
 				th.num = _wc.length;
 				th.width = getStyle(con, "width");
-				setStyle(slider, {
-					width: isCube ? '100%' : this.width * (conf.loop ? _wc.length + 1 : _wc.length) +
-						"px"
-				});
+				th.height = getStyle(con, "height");
+				if (th.is_horizontal()) {
+					setStyle(slider, {
+						width: isCube ? '100%' : this.width * (conf.loop ? _wc.length + 1 : _wc.length) +
+							"px"
+					});
+				} else {
+					setStyle(slider, {
+						height: this.height * (conf.loop ? _wc.length + 1 : _wc.length) +
+							"px"
+					});
+				}
+
 				var _this = th;
 				try {
-					window.addEventListener("resize", function() {
+					window.addEventListener("resize", function () {
 						slider.style.transition = "all 0s";
 					});
 					if (conf.button) {
 						if (conf.button.prev) {
 							document.querySelector(
 								"#" + con.id + ">" + conf.button["prev"]
-							).addEventListener("click", function() {
+							).addEventListener("click", function () {
 								_this._prev();
 							});
 						}
@@ -812,14 +822,14 @@
 								"#" + con.id + ">" + conf.button["next"]
 							).addEventListener(
 								"click",
-								function() {
+								function () {
 									_this._next();
 								},
 								false
 							);
 						}
 						if (!is_blank(conf.button.prevKey)) {
-							document.addEventListener("keydown", function(t) {
+							document.addEventListener("keydown", function (t) {
 								if (conf.button.prevKey === t.key) {
 									t.preventDefault();
 									th._prev()
@@ -849,11 +859,12 @@
 				}
 				if (g_conf.pagination && page && g_conf.pagination["el"] !== undefined) {
 					page.childNodes[th.curIndex].classList.add("pagination-items-active");
-					if (g_conf.pagination["click"]) {
+					if (g_conf.pagination["click"] && g_conf.pagination["click"] !== false) {
 						var poc = page.childNodes;
-						for (var i = 0; i < poc.length; i++) {
+						var i = 0;
+						for (; i < poc.length; i++) {
 							poc[i].index = i;
-							poc[i].onclick = function() {
+							poc[i].onclick = function () {
 								th.index = th.curIndex = this.index;
 								th.goto();
 							};
@@ -870,7 +881,7 @@
 				if (conf.loop) {
 					this.add(slider.lastElementChild);
 				}
-				window.addEventListener("visibilitychange", function() {
+				window.addEventListener("visibilitychange", function () {
 					document.visibilityState === "visible" ? th.boot() : th.stop();
 				});
 				this.set_default_position();
@@ -879,21 +890,20 @@
 				}
 				return this;
 			},
-			stop: function() {
+			stop: function () {
 				clearInterval(th.time);
 			},
-			boot: function() {
+			boot: function () {
 				if (th.time !== null) {
 					clearInterval(th.time);
 				}
 				th.autoplay();
 			},
-			children: function(parent, name) {
+			children: function (parent, name) {
 				if (!parent) {
 					return
 				}
 				var tagArr = [];
-
 				function deep(_p) {
 					var c = _p ? _p.children : parent.children;
 					for (var it = 0; it < c.length; it++) {
@@ -908,7 +918,7 @@
 				deep();
 				return tagArr;
 			},
-			add: function(img_el) {
+			add: function (img_el) {
 				if (th.loadEnd) {
 					return;
 				}
@@ -917,7 +927,7 @@
 				} else {
 					var t = null;
 					clearTimeout(t);
-					t = setTimeout(function() {
+					t = setTimeout(function () {
 						var img = th.children(img_el, "img");
 						if (img) {
 							for (var i = 0; i < img.length; i++) {
@@ -933,7 +943,7 @@
 									}
 								} catch (e) {
 									console.error(e);
-									void(e)
+									void (e)
 								}
 							}
 							img_el.classList.remove('lazy')
@@ -946,19 +956,19 @@
 					}, Math.min((conf.duration || 0), 100))
 				}
 			},
-			_prev: function() {
+			_prev: function () {
 				var _ = this;
 				_.index--;
 				_.slide_to();
 			},
-			_next: function() {
+			_next: function () {
 				var _ = this;
 				_.index++;
 				_.slide_to();
 			},
-			play: function() {
-				th.curIndex = th.index === this.num ? 0 : th.index;
-				var _ = th;
+			play: function () {
+				var _ = this;
+				_.curIndex = _.index === _.num ? 0 : _.index;
 				var c = slider.childNodes[th.curIndex];
 				if (conf.pagination && page && conf.pagination.el) {
 					var pc = page.childNodes;
@@ -971,10 +981,10 @@
 					}
 				}
 				if (conf.lazy) {
-					th.add(c);
+					_.add(c);
 				}
 			},
-			hook: function(type) {
+			hook: function (type) {
 				/* event hooks */
 				var on = conf.on;
 				if (!object_empty(on)) {
@@ -994,69 +1004,77 @@
 					}
 				}
 			},
-			css: function(a, b, c) {
+			css: function (a, b, c) {
 				if (!a || !b) {
 					return
 				}
-				for (var p in b) {
-					a.style[p] = b[p];
-				}
+				setStyle(a, b);
 				if (c && typeof c === 'function') {
 					c()
 				}
 			},
-			slide_to: function() {
+			slide_to: function () {
 				var _t = this;
+				var val;
 				if (_t.index === _t.num + 1) {
 					if (conf.loop) {
-						_t.transform(0, 0, 0)
+						val = 0;
+						_t.transform(val, 0)
 					}
 					_t.index = 1;
 					fun(el).find(":visible")
 				} else if (_t.index < 0) {
 					if (conf.loop) {
-						_t.transform(_t.num * _t.width, 0, 0)
+						val = _t.is_horizontal() ? _t.num * _t.width : _t.num * _t.height
+						_t.transform(val, 0)
 					}
 					_t.index = _t.num - 1;
 					fun(el).find(":visible");
 				}
 				_t.duration = duration;
-				_t.transform(_t.index * _t.width, 0, _t.duration);
+				val = _t.is_horizontal() ? _t.index * _t.width : _t.index * _t.height
+				_t.transform(val, _t.duration);
 				th.setPosition();
 				return _t;
 			},
-			set_default_position: function() {
-				this.transform(this.index * this.width, 0, conf.duration || 300)
+			is_horizontal: function () {
+				return !conf.direction || conf.direction.toLowerCase() === 'horizontal'
 			},
-			goto: function() {
-				this.transform(this.index * this.width, 0, conf.duration || 300)
+			set_default_position: function () {
+				this.goto()
 			},
-			transform: function(x, y, delay) {
+			goto: function () {
+				var __dis = this.index * (this.is_horizontal() ? this.width : this.height);
+				this.transform(__dis, conf.duration || 300),
+					this.position = __dis
+			},
+			transform: function (x, delay) {
 				var t = this;
 				var _prop = null;
-
 				if (t.accelerate) {
+					var ts = t.is_horizontal() ? "translate3d(" + (-x) + "px,0px,0px)" : "translate3d(0px," + (-x) + "px,0px)"
 					_prop = {
-						transform: "translate3d(" + (-x) + "px," + (-y) + "px,0px)",
+						transform: ts,
 						position: 'absolute',
 						left: 0,
+						top: 0,
 						backfaceVisibility: 'hidden',
 						transition: "all " + delay + "ms " + easing,
 					}
 				} else {
 					_prop = {
-						left: -x + "px",
 						transform: "translate3d(0px,0px,0px)",
 						position: 'absolute',
 						backfaceVisibility: 'hidden',
 						transition: "all " + delay + "ms " + easing,
 					}
+					_prop[t.is_horizontal() ? 'left' : 'top'] = -x + "px";
 				}
-				t.css(slider, _prop, function() {
+				t.css(slider, _prop, function () {
 					t.play();
 				});
 			},
-			touch_init: function() {
+			touch_init: function () {
 				if (is_mobile()) {
 					slider.addEventListener("touchstart", th.start, !1);
 				} else {
@@ -1064,24 +1082,24 @@
 					slider.addEventListener("mouseleave", th.stop, !1);
 				}
 			},
-			link_handler: function(b) {
+			link_handler: function (b) {
 				var ar = th.children(slider, "a");
 				for (var key in ar) {
 					if (typeof ar[key] === "object") {
 						if (b) {
-							ar[key].onclick = function(e) {
+							ar[key].onclick = function (e) {
 								e.preventDefault()
 							}
 						} else {
-							ar[key].onclick = function() {
-								return void(undefined)
+							ar[key].onclick = function () {
+								return void (undefined)
 							}
 						}
 					}
 				}
 			},
-			start: function(e) {
-				th.touchX = e.clientX || e.touches[0].clientX;
+			start: function (e) {
+				th.touchX = th.is_horizontal() ? e.clientX || e.touches[0].clientX : e.clientY || e.clientY || e.touches[0].clientY;
 				if (!is_mobile()) {
 					th.link_handler(false);
 				}
@@ -1101,27 +1119,28 @@
 				}
 				th.set_drab(true);
 			},
-			set_drab: function(b) {
+			set_drab: function (b) {
 				setStyle(slider, {
 					cursor: b ? "grab" : "default"
 				});
 			},
-			checked: function(n) {
+			checked: function (n) {
 				return !(Math.floor(n) === -1);
 			},
-			move: function(e) {
+			move: function (e) {
 				try {
 					e.preventDefault();
-					var x = (e.clientX || (e.touches ? e.touches[0].clientX : 0));
+					var x = th.is_horizontal() ? (e.clientX || (e.touches ? e.touches[0].clientX : 0)) : (e.clientY || (e.touches ? e.touches[0].clientY : 0));
 					var a = x - th.touchX - th.position;
-					var t, per = (x - th.touchX) / th.width;
+					var __h = (th.is_horizontal() ? th.width : th.height)
+					var t, per = (x - th.touchX) / __h;
 					if (th.checked(per)) {
-						t = -th.width / 10;
+						t = -__h / 10;
 					} else {
-						t = th.width + 100;
+						t = __h + 100;
 					}
 					if (th.min(x)) {
-						var u = Math.abs(parseInt((a - t) / th.width));
+						var u = Math.abs(parseInt((a - t) / __h));
 						if (u > th.num) {
 							th.index = th.num;
 						} else {
@@ -1131,28 +1150,28 @@
 							th.link_handler(true);
 						}
 					}
-					var test = Math.abs(a) >= th.num * th.width;
-					if (test) {
+					var p = Math.abs(a) >= th.num * __h;
+					if (p) {
 						th.position = 0;
 						th.index = 0;
 						th.transform(0, 0, 0);
 					} else if (a > 0) {
-						th.position = th.num * th.width;
+						th.position = th.num * __h;
 						th.transform(th.position, 0, 0)
 						th.index = th.num;
 					} else {
-						th.transform(-a, 0, 0)
+						th.transform(-a, 0)
 					}
 				} catch (er) {
-					th.transform(-a, 0, 0)
+					th.transform(-a, 0)
 					void er;
 				}
 			},
-			setPosition: function() {
-				this.position = this.index * this.width;
+			setPosition: function () {
+				this.position = this.index * (this.is_horizontal() ? this.width : this.height);
 			},
-			end: function() {
-				th.transform(th.index * th.width, 0, conf.duration || 300);
+			end: function () {
+				th.transform(th.index * (th.is_horizontal() ? th.width : th.height), conf.duration || 300);
 				th.setPosition();
 				th.prevIndex = th.index;
 				document.removeEventListener("touchmove", th.move);
@@ -1161,13 +1180,13 @@
 				document.removeEventListener("mouseup", th.end);
 				th.set_drab(false)
 			},
-			min: function(x) {
+			min: function (x) {
 				var c = Math.abs(x - this.touchX);
 				return c >= 5;
 			}
 		};
 	var globa_this = null;
-	(function() {
+	(function () {
 		var _vmNode = undefined;
 		if (arguments.length !== 2) {
 			el = ".simple-swiper-container";
@@ -1175,8 +1194,8 @@
 			g_conf = conf;
 		}
 		var _wrap = renderNode("div", {
-				"class": "swiper-wrapper"
-			}),
+			"class": "swiper-wrapper"
+		}),
 			_vmNode = renderNode(),
 			_slider = renderNode("div", {
 				"class": "swiper-slider"
@@ -1188,16 +1207,23 @@
 		try {
 			for (var s in _wc) {
 				var _i = _wc[s];
-				setStyle(_i, {
-					width: _ew + 'px',
-					height: '100%',
-					float: 'left'
-				});
+				if (setting.is_horizontal()) {
+					setStyle(_i, {
+						width: _ew + 'px',
+						height: '100%',
+						float: 'left'
+					});
+				} else {
+					setStyle(_i, {
+						width: _ew + 'px',
+						height: getStyle(con, 'height') + 'px',
+					});
+				}
 				_i.classList.add('lazy');
 				_vmNode.appendChild(_i);
 			}
 		} catch (e) {
-			void(e)
+			void (e)
 		}
 		if (conf.loop) {
 			var _c = _wc[0].cloneNode(true);
@@ -1234,10 +1260,9 @@
 			}
 
 		} catch (err) {
-			void(err)
+			void (err)
 		}
 	}
-
 	function getStyle(el, prop) {
 		return Math.ceil(parseFloat(window.getComputedStyle(el)[prop])) || el.getBoundingClientRect()[prop];
 	};
