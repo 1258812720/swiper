@@ -26,7 +26,7 @@
 							<a target="_blank"
 								href="https://detail.tmall.com/item.htm?spm=a21n57.1.0.0.1e93523cyKB4XY&id=731741508216&ns=1&abbucket=9">
 								<div class="people-cover">
-									<img data="https://g-search1.alicdn.com/img/bao/uploaded/i4/i2/475340243/O1CN01atjDpm1DfL6pp2LgF_!!0-item_pic.jpg_580x580q90.jpg"
+									<img src="https://g-search1.alicdn.com/img/bao/uploaded/i4/i2/475340243/O1CN01atjDpm1DfL6pp2LgF_!!0-item_pic.jpg_580x580q90.jpg"
 										alt="" />
 								</div>
 								<div class="desc">
@@ -39,7 +39,7 @@
 							<a target="_blank"
 								href="https://detail.tmall.com/item.htm?spm=a21n57.1.0.0.1e93523cyKB4XY&id=720247419778&ns=1&abbucket=9">
 								<div class="people-cover">
-									<img data="https://g-search3.alicdn.com/img/bao/uploaded/i4/i4/919920167/O1CN01MLZBCl1D6WzrJfcwT_!!0-item_pic.jpg_580x580q90.jpg"
+									<img src="https://g-search3.alicdn.com/img/bao/uploaded/i4/i4/919920167/O1CN01MLZBCl1D6WzrJfcwT_!!0-item_pic.jpg_580x580q90.jpg"
 										alt="" />
 								</div>
 								<div class="desc">
@@ -52,7 +52,7 @@
 							<a target="_blank"
 								href="https://click.simba.taobao.com/cc_im?spm=a21n57.1.0.0&p=%D7%A8%BC%AD&s=1393675034&k=1025&e=D64b23Mirpe7E694paygcHXEK7%2BDaP3NCF5GyKU%2Bd93S9tufXlyiUBfdquGvgGK1vJuNUsiYQJ21s31L07KTrKWsTaT8XDr0CDwgkygfpcOrGWAIaas%2FdLDMuqIEz4yzMr8J3hxFS%2Fh7SbxyOu3ET%2Bbz%2FTgLoH2Sj8D1BdPwSRZnAayH29DsxKrpqyF0SiMD%2BheJfy3BIokXkjfCryX%2FTqi%2FzXru02JpEDB5VN1ZV7Nxr0gy0DMztY6CB4Zyu7sAaJe1U%2F1ShAg8BE8i2Jp3SGSHWzdzJLrG%2FrkpFqNOvTwy2sjbGuBraVQX%2B65DY1s2qGKFvVUC74a6YNtzbkoPEv%2FMSt%2BJ55gcUbW8nK%2FdD98AVlYVp6yk%2FwoMGC9MLeAwhQ01ZSrdQIA5iIqaRP8lIPo8LSu%2FhXjk9LJy783aZC0ku6bw%2F5o5imwwqwb9jUmXVsBB1hWYI%2FEth0KDK8K68GblU675aV0gDMglm3SQdsq%2BT1GCjjn1LgS2C4%2BCAmdOo4bYF%2BjeaaMN%2FEmKkFaShEc22lXaZqGbt%2B4%2FYZQTTqjUts3uipuC%2FZj7HIWWl7tl2ZL%2BzO2a%2Fviuv%2FAg37ezT6YRkd4aHHTI4XIz%2Fmuf48rmZGp2qdvmdFaCqIws9s52a27m1nriEiP1KUlPCbpWhTqnHjgReQ7nuTQKKQs5NqaFFow9FzvaC%2FkjcoMAwVcmdOFeHYT1Xvh2zCTNqBIQ5hcVBZE93O65Qi%2F2Ca%2BXB87C0eVVp6igtw2FfENucQ3Acei8loH0TVrDXe8HZCWpXte3y4%2Fixh%2B9dZBlyY7PkSjrxd%2BXDtA3A79RACTrn5jx22Oxybr4IxMv1dSWgrSRjPr%2FH6tS7UFDfGL7sCYnEFaOK97awQpj6bCRtn7nK2FcQJr5Cw4mkaNyrPADkXPbO3XU0VjdMCqJdysQkSJTtamHbKMIs74H2O1UkeiEQ5ocVSst62MWar%2BXulYQ7lcCeDYxpetgkwPl9DcF5TeMnPLUqi361MNbbqYsNua8OyiE">
 								<div class="people-cover">
-									<img data="https://img.alicdn.com/imgextra/i1/25471184/O1CN01DjbXNE1KcJjpLDyfz_!!0-saturn_solar.jpg_580x580q90.jpg"
+									<img src="https://img.alicdn.com/imgextra/i1/25471184/O1CN01DjbXNE1KcJjpLDyfz_!!0-saturn_solar.jpg_580x580q90.jpg"
 										alt="" />
 								</div>
 								<div class="desc">
@@ -144,7 +144,6 @@
 			overflow: hidden;
 		}
 
-
 		.swiper-items {
 			flex-direction: row;
 			border-radius: 12px;
@@ -167,12 +166,13 @@
 				prevKey: "ArrowLeft", // 键盘操作
 				nextKey: "ArrowRight"
 			},
-			autoplay: 3600,
+			autoplay: false,
 			loop: true,
-			lazy: {
-				prop: "data"
-			},
-			direction: 'vertical', // 方向 默认：水平 horizontal  vertical 垂直 
+			effect: "cube",
+			// lazy: {
+			// 	prop: "data"
+			// },
+			direction: 'horizontal', // 方向 默认：水平 horizontal  vertical 垂直 
 			duration: 300,
 			pagination: {
 				el: ".pagination",

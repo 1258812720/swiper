@@ -20,7 +20,6 @@
 }
 
 .simple-swiper-container>.swiper-wrapper>.swiper-slider {
-	overflow: hidden;
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -102,6 +101,7 @@
 	border-radius: 15px;
 	position: relative;
 	top: -21px;
+	border: 1px solid blueviolet;
 }
 
 .pagination .pagination-items-active {
@@ -112,15 +112,28 @@
 	pointer-events: none;
 }
 
-.swiper-slider > .swiper-items >a{
-    display: block;
-    height: 100%;
-    width: 100%;
+.swiper-slider>.swiper-items>a {
+	display: block;
+	height: 100%;
+	width: 100%;
 }
-.swiper-cube-wrapper>.swiper-slider {
+.simple-swiper-cube{
+	overflow: visible!important;
+}
+.simple-swiper-cube>.swiper-wrapper>.swiper-slider {
 	position: relative;
 	border: 1px solid;
 	box-sizing: border-box;
+	
 	transform-style: preserve-3d;
-	transform: rotateX(80deg);
+	/* transform: rotateX(80deg); */
+}
+
+.simple-swiper-cube>.swiper-wrapper>.swiper-slider>.swiper-items {
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	background-color: white;
 }
