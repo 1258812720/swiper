@@ -15,6 +15,25 @@
 
 <body>
 	<div class="app">
+		<div  class="swiper-taobao simple-swiper-container">
+			<span id="prev2" class="btn btn-prev">
+				< </span>
+					<span id="next2" class="btn btn-next">
+						>
+					</span>
+			<div class="swiper-wrapper">
+				<div class="swiper-items">
+					<img src="https://img.alicdn.com/imgextra/i4/6000000007460/O1CN01NxQs0F24yjXGAGAQl_!!6000000007460-0-octopus.jpg" alt="">	
+				</div>
+				<div class="swiper-items">
+					<img src="https://img.alicdn.com/imgextra/i2/6000000006163/O1CN01pV5die1vOhq0hEoYm_!!6000000006163-0-octopus.jpg" alt="">	
+				</div>
+				<div class="swiper-items">
+					<img src="https://img.alicdn.com/imgextra/i4/6000000003421/O1CN01B1jPFq1b8rpDtMdvg_!!6000000003421-0-octopus.jpg" alt="">	
+				</div>
+				
+			</div>
+		</div>
 		<div id="swiper-demo" class="simple-swiper-container">
 			<span id="prev1" class="btn btn-prev">
 				< </span>
@@ -81,7 +100,14 @@
 			justify-content: center;
 			align-items: center;
 		}
-
+		.swiper-taobao{
+			width: 564px;
+			height: 315px;
+			margin: auto;
+			position: relative;
+			overflow: hidden;
+			border-radius: 12px;
+		}
 		.cover-item {
 			box-sizing: border-box;
 			padding-top: 25px;
@@ -158,6 +184,14 @@
 		}
 	</style>
 	<script type="text/javascript">
+		var taobao = new SimSwiper(".swiper-taobao",{
+			loop:true,
+			button:{
+				prev: "#prev2", // 前进后退按钮
+				next: "#next2",
+			},
+			direction: 'horizontal'
+		})
 		var demo = new SimSwiper("#swiper-demo", {
 			button: {
 				prev: "#prev1", // 前进后退按钮
@@ -170,7 +204,7 @@
 			lazy: {
 				prop: "data"
 			},
-			direction: 'horizontal', // 方向 默认：水平 horizontal  vertical 垂直 
+			direction: 'vertical', // 方向 默认：水平 horizontal  vertical 垂直 
 			duration: 300,
 			pagination: {
 				el: ".pagination",

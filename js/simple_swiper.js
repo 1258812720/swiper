@@ -13,6 +13,10 @@
 })(this, function (el, conf) {
 	"use strict";
 	var root = el;
+	if (!document.querySelector(el)) {
+		console.error("找不到父容器", el);
+		return;
+	}
 	var fun = function (el) {
 		let _el = null;
 		if (typeof el === 'string') {
@@ -23,16 +27,24 @@
 		_el.getBoundingClientRect().top;
 		return;
 	};
-	conf.isT = true;
+	if (!conf) {
+		var conf = {
+			loop: true,
+			duration: 300,
+			autoplay: true,
+			easing: "ease"
+		}
+	}
+	var isT = true;
 	if (window.navigator) {
 		var nav = window.navigator.userAgent;
 		var index = nav.indexOf("Chrome");
 		if (index !== -1) {
 			var ch = nav.substr(index + 7, 9);
 			if (typeof parseInt(ch)) {
-				conf.isT = true;
+				isT = true;
 			} else {
-				conf.isT = false;
+				isT = false;
 			}
 		}
 	}
@@ -51,7 +63,7 @@
 	var getChild = function (el, name) {
 		var res = {
 			child: null,
-			self: document.querySelector(el),
+			self: typeof el === 'string' ? document.querySelector(el) : el,
 			wrap: null
 		};
 		if (!res.self) {
@@ -112,9 +124,9 @@
 		g_conf = conf,
 		slider = null,
 		page = null,
-		duration = conf.duration || 300,
-		easing = conf.easing || "ease",
-		isCube = conf.effect && conf.effect === 'cube',
+		duration = conf &&conf.duration ? conf.duration : 300,
+		easing = conf && conf.easing ? conf.easing : "ease",
+		isCube = conf ? conf.effect && conf.effect === 'cube' : false,
 		tm = getChild(el, ".swiper-wrapper"),
 		_wc = tm.child;
 	var th = null,
@@ -134,7 +146,6 @@
 			prev: null,
 			next: null,
 			accelerate: true,
-			events: ["start", "move", "end"],
 			autoplay: function () {
 				var time = typeof g_conf.autoplay === "number" ? g_conf.autoplay : 3500;
 				th.time = setInterval(
@@ -145,6 +156,7 @@
 				);
 			},
 			init: function () {
+				var _this = this;
 				this.prev = this._prev;
 				this.next = this._next;
 				this.lastNode = slider.lastChild;
@@ -155,32 +167,30 @@
 				th.height = getStyle(con, "height");
 				if (th.is_horizontal()) {
 					setStyle(slider, {
-						width: isCube ? '100%' : this.width * (conf.loop ? _wc.length + 1 : _wc.length) +
+						width: isCube ? '100%' : this.width * ((conf && conf.loop) ? _wc.length + 1 : _wc.length) +
 							"px"
 					});
 				} else {
 					setStyle(slider, {
-						height: this.height * (conf.loop ? _wc.length + 1 : _wc.length) +
+						height: this.height * (conf && conf.loop ? _wc.length + 1 : _wc.length) +
 							"px"
 					});
 				}
-
-				var _this = th;
 				try {
 					window.addEventListener("resize", function () {
 						slider.style.transition = "all 0s";
 					});
-					if (conf.button) {
+					if (conf && conf.button) {
 						if (conf.button.prev) {
 							document.querySelector(
-								"#" + con.id + ">" + conf.button["prev"]
+								(root) + ">" + conf.button["prev"]
 							).addEventListener("click", function () {
 								_this._prev();
 							});
 						}
-						if (conf.button.next) {
+						if (conf && conf.button.next) {
 							document.querySelector(
-								"#" + con.id + ">" + conf.button["next"]
+								(root) + ">" + conf.button["next"]
 							).addEventListener(
 								"click",
 								function () {
@@ -216,7 +226,7 @@
 					}
 				}
 				if (!conf.disabvarouch) {
-					_this.touch_init();
+					this.touch_init();
 				}
 				if (g_conf.pagination && page && g_conf.pagination["el"] !== undefined) {
 					page.childNodes[th.curIndex].classList.add("pagination-items-active");
@@ -239,7 +249,7 @@
 					});
 				}
 				this.add(slider.firstElementChild);
-				if (conf.loop) {
+				if (conf && conf.loop) {
 					this.add(slider.lastElementChild);
 				}
 				window.addEventListener("visibilitychange", function () {
@@ -363,14 +373,14 @@
 						_t.transform(val, 0)
 					}
 					_t.index = 1;
-					fun(el)
+					fun(root)
 				} else if (_t.index < 0) {
 					if (conf.loop) {
 						val = _t.is_horizontal() ? _t.num * _t.width : _t.num * _t.height
 						_t.transform(val, 0)
 					}
 					_t.index = _t.num - 1;
-					fun(el);
+					fun(root);
 				}
 				_t.duration = duration;
 				val = _t.is_horizontal() ? _t.index * _t.width : _t.index * _t.height
@@ -528,6 +538,7 @@
 		};
 	var globa_this = null;
 	(function () {
+
 		var _vmNode = undefined;
 		if (arguments.length !== 2) {
 			el = ".simple-swiper-container";
