@@ -50,12 +50,13 @@
 	top: 45%;
 	width: 35px;
 	height: 45px;
-	background-color: #000000;
 	opacity: .8;
 	display: none;
 	font-size: 25px;
 	color: white;
 	font-family: '黑体';
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 .simple-swiper-container:hover>.btn {
@@ -66,6 +67,7 @@
 
 .simple-swiper-container>.btn-prev {
 	left: 0;
+	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNjk3ODE4NTAzNDYwIiBjbGFzcz0iaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjU4MjIiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PHBhdGggZD0iTTY4OSAxNjUuMUwzMDguMiA0OTMuNWMtMTAuOSA5LjQtMTAuOSAyNy41IDAgMzdMNjg5IDg1OC45YzE0LjIgMTIuMiAzNSAxLjIgMzUtMTguNVYxODMuNmMwLTE5LjctMjAuOC0zMC43LTM1LTE4LjV6IiBmaWxsPSIjMTI5NmRiIiBwLWlkPSI1ODIzIj48L3BhdGg+PC9zdmc+);
 }
 
 
@@ -76,6 +78,7 @@
 
 .simple-swiper-container>.btn-next {
 	right: 0;
+	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNjk3ODE4NjIwNDczIiBjbGFzcz0iaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjY4MTYiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PHBhdGggZD0iTTcxNS44IDQ5My41TDMzNSAxNjUuMWMtMTQuMi0xMi4yLTM1LTEuMi0zNSAxOC41djY1Ni44YzAgMTkuNyAyMC44IDMwLjcgMzUgMTguNWwzODAuOC0zMjguNGMxMC45LTkuNCAxMC45LTI3LjYgMC0zN3oiIGZpbGw9IiMxMjk2ZGIiIHAtaWQ9IjY4MTciPjwvcGF0aD48L3N2Zz4=);
 }
 
 .simple-swiper-container>.pagination {
@@ -117,14 +120,16 @@
 	height: 100%;
 	width: 100%;
 }
-.simple-swiper-cube{
-	overflow: visible!important;
+
+.simple-swiper-cube {
+	overflow: visible !important;
 }
+
 .simple-swiper-cube>.swiper-wrapper>.swiper-slider {
 	position: relative;
 	border: 1px solid;
 	box-sizing: border-box;
-	
+
 	transform-style: preserve-3d;
 	/* transform: rotateX(80deg); */
 }
