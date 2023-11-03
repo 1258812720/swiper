@@ -35,16 +35,40 @@
 			easing: "ease"
 		}
 	}
-	var isT = true;
-	if (window.navigator) {
-		var nav = window.navigator.userAgent;
-		var index = nav.indexOf("Chrome");
-		if (index !== -1) {
-			var ch = nav.substr(index + 7, 9);
-			if (typeof parseInt(ch)) {
-				isT = true;
-			} else {
-				isT = false;
+	var ArrayFind = function (arr, element) {
+		var tag = false;
+		if (arr.length) {
+			arr.forEach(function (i) {
+				if (i === element) {
+					tag = true;
+					return;
+				}
+			});
+		}
+		return tag;
+	}
+	/**
+	 * 事件绑定
+	 * __ {el:Document,event:String,fn,passive:bool}
+	 */
+	var events = ["visibilitychange", "scroll", "touchstart", "click", "touchmove", "touchend", "mouseup", "mousedown", "mouseleave", "mousemove", "mouseout", "resize", "keydown"];
+	var bind = function (_el, event, fun, passive) {
+		if (_el && typeof _el === 'object') {
+			if (event && typeof event === 'string' && ArrayFind(events, event)) {
+				_el.addEventListener(event, fun, {
+					passive: passive || false
+				});
+			}
+		}
+	}
+	/**
+	 * 事件解绑
+	 * __ {el:Document,event:String,fn}
+	 */
+	var unbind = function (_el, event, fun) {
+		if (_el && typeof _el === 'object') {
+			if (event && typeof event === 'string' && ArrayFind(events, event)) {
+				_el.removeEventListener(event, fun);
 			}
 		}
 	}
@@ -87,7 +111,6 @@
 		}
 		return res;
 	}
-
 	function renderNode(name, prop) {
 		if (!name && !prop) {
 			return document.createDocumentFragment();
@@ -124,7 +147,7 @@
 		g_conf = conf,
 		slider = null,
 		page = null,
-		duration = conf &&conf.duration ? conf.duration : 300,
+		duration = conf && conf.duration ? conf.duration : 300,
 		easing = conf && conf.easing ? conf.easing : "ease",
 		isCube = conf ? conf.effect && conf.effect === 'cube' : false,
 		tm = getChild(el, ".swiper-wrapper"),
@@ -177,21 +200,21 @@
 					});
 				}
 				try {
-					window.addEventListener("resize", function () {
+					bind(window, "resize", function () {
 						slider.style.transition = "all 0s";
-					});
+					})
 					if (conf && conf.button) {
 						if (conf.button.prev) {
-							document.querySelector(
+							bind(document.querySelector(
 								(root) + ">" + conf.button["prev"]
-							).addEventListener("click", function () {
+							), "click", function () {
 								_this._prev();
 							});
 						}
 						if (conf && conf.button.next) {
-							document.querySelector(
+							bind(document.querySelector(
 								(root) + ">" + conf.button["next"]
-							).addEventListener(
+							),
 								"click",
 								function () {
 									_this._next();
@@ -218,11 +241,11 @@
 				if (g_conf.autoplay) {
 					th.boot();
 					if (is_mobile()) {
-						con.addEventListener("touchstart", th.stop, true);
-						con.addEventListener("touchend", th.boot, true);
+						bind(con, "touchstart", th.stop, true);
+						bind(con, "touchend", th.boot, true);
 					} else {
-						con.addEventListener("mouseenter", th.stop, false);
-						con.addEventListener("mouseleave", th.boot, false);
+						bind(con, "mouseenter", th.stop, false);
+						bind(con, "mouseleave", th.boot, false);
 					}
 				}
 				if (!conf.disabvarouch) {
@@ -252,13 +275,13 @@
 				if (conf && conf.loop) {
 					this.add(slider.lastElementChild);
 				}
-				window.addEventListener("visibilitychange", function () {
+				bind(window, "visibilitychange", function () {
 					document.visibilityState === "visible" ? th.boot() : th.stop();
 				});
 				this.set_default_position();
 				if (typeof conf.accelerate == 'boolean') {
 					this.accelerate = conf.accelerate;
-				}
+				};				
 				return this;
 			},
 			stop: function () {
@@ -341,9 +364,11 @@
 				var _ = this;
 				_.curIndex = _.index === _.num ? 0 : _.index;
 				var c = slider.childNodes[th.curIndex];
+
 				if (conf.pagination && page && conf.pagination.el) {
 					var pc = page.childNodes;
-					for (var i = 0; i < pc.length; i++) {
+					var i = 0;
+					for (; i < pc.length; i++) {
 						if (i === th.curIndex) {
 							pc[i].classList.add("pagination-items-active");
 						} else {
@@ -389,15 +414,15 @@
 				return _t;
 			},
 			is_horizontal: function () {
-				return !conf.direction || conf.direction.toLowerCase() === 'horizontal'
+				return !conf.direction || conf.direction.toLowerCase() === 'horizontal';
 			},
 			set_default_position: function () {
-				this.goto()
+				this.goto();
 			},
 			goto: function () {
 				var __dis = this.index * (this.is_horizontal() ? this.width : this.height);
 				this.transform(__dis, conf.duration || 300),
-					this.position = __dis
+					this.position = __dis;
 			},
 			transform: function (x, delay) {
 				var t = this;
@@ -427,10 +452,10 @@
 			},
 			touch_init: function () {
 				if (is_mobile()) {
-					slider.addEventListener("touchstart", th.start, !1);
+					bind(slider, "touchstart", th.start, !1);
 				} else {
-					slider.addEventListener("mousedown", th.start, !1);
-					slider.addEventListener("mouseleave", th.stop, !1);
+					bind(slider, "mousedown", th.start, !1);
+					bind(slider, "mouseleave", th.stop, !1);
 				}
 			},
 			link_handler: function (b) {
@@ -455,18 +480,12 @@
 					th.link_handler(false);
 				}
 				if (is_mobile()) {
-					document.addEventListener("touchmove", th.move, {
-						passive: false
-					});
-					document.addEventListener("touchend", th.end, {
-						passive: false
-					});
+					bind(document, "touchmove", th.move, !1);
+					bind(document, "touchend", th.move, !1);
 				} else if (!is_mobile() && e.button === 0) {
 					e.preventDefault();
-					document.addEventListener("mouseup", th.end, true);
-					document.addEventListener("mousemove", th.move, {
-						passive: false
-					});
+					bind(document, "mouseup", th.end, true);
+					bind(document, "mousemove", th.move, false);
 				}
 				th.set_drab(true);
 			},
@@ -508,13 +527,13 @@
 						th.transform(0, 0, 0);
 					} else if (a > 0) {
 						th.position = th.num * __h;
-						th.transform(th.position, 0, 0)
+						th.transform(th.position, 0, 0);
 						th.index = th.num;
 					} else {
-						th.transform(-a, 0)
+						th.transform(-a, 0);
 					}
 				} catch (er) {
-					th.transform(-a, 0)
+					th.transform(-a, 0);
 					void er;
 				}
 			},
@@ -525,10 +544,10 @@
 				th.transform(th.index * (th.is_horizontal() ? th.width : th.height), conf.duration || 300);
 				th.setPosition();
 				th.prevIndex = th.index;
-				document.removeEventListener("touchmove", th.move);
-				document.removeEventListener("touchend", th.end);
-				document.removeEventListener("mousemove", th.move, is_ie);
-				document.removeEventListener("mouseup", th.end);
+				unbind(document, "touchmove", th.move);
+				unbind(document, "touchend", th.end);
+				unbind(document, "mousemove", th.move, false);
+				unbind(document, "mouseup", th.end, true);
 				th.set_drab(false)
 			},
 			min: function (x) {
@@ -538,7 +557,6 @@
 		};
 	var globa_this = null;
 	(function () {
-
 		var _vmNode = undefined;
 		if (arguments.length !== 2) {
 			el = ".simple-swiper-container";
@@ -575,7 +593,7 @@
 				_vmNode.appendChild(_i);
 			}
 		} catch (e) {
-			void (e)
+			void (e);
 		}
 		if (conf.loop) {
 			var _c = _wc[0].cloneNode(true);
@@ -585,17 +603,18 @@
 		_wrap.appendChild(_slider);
 		con.replaceChild(_wrap, tm.wrap);
 		slider = _slider;
-		if (conf.pagination && conf.pagination.el) {
-			var mx = tm.child.length,
-				vo = renderNode();
-			for (var p = 0; p < mx; p++) {
-				var p_el = renderNode("span", {
-					"class": "pagination-items"
-				});
-				vo.appendChild(p_el);
-			}
-			page = document.querySelector(conf.pagination.el);
-			if (page) {
+		page = document.querySelector(conf.pagination.el);
+		if (page) {
+			if (conf.pagination && conf.pagination.el) {
+				var mx = tm.child.length,
+					vo = renderNode(),
+					p = 0;
+				for (; p < mx; p++) {
+					var p_el = renderNode("span", {
+						"class": "pagination-items"
+					});
+					vo.appendChild(p_el);
+				}
 				page.appendChild(vo);
 			}
 		}
