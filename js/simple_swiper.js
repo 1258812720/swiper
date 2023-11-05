@@ -68,7 +68,7 @@
 	var unbind = function (_el, event, fun) {
 		if (_el && typeof _el === 'object') {
 			if (event && typeof event === 'string' && ArrayFind(events, event)) {
-				_el.removeEventListener(event, fun, (/Trident/i.test(navigator.userAgent)));
+				_el.removeEventListener(event, fun, (/Trident/i.test(navigator.userAgent)) || is_mobile());
 			}
 		}
 	}
@@ -129,9 +129,6 @@
 	}
 	var is_mobile = function () {
 		return (/Android|iPhone|iPad|X11/i.test(navigator.userAgent));
-	}
-	var is_ie = function () {
-		return /Trident/i.test(navigator.userAgent);
 	}
 	var object_empty = function (obj) {
 		if (!obj) {
@@ -452,7 +449,7 @@
 			},
 			touch_init: function () {
 				if (is_mobile()) {
-					bind(slider, "touchstart", th.start, !1);
+					bind(slider, "touchstart", th.start, false);
 				} else {
 					bind(slider, "mousedown", th.start, false);
 					bind(slider, "mouseleave", th.stop, false);
@@ -481,7 +478,7 @@
 				}
 				if (is_mobile()) {
 					bind(document, "touchmove", th.move, !1);
-					bind(document, "touchend", th.move, !1);
+					bind(document, "touchend", th.end, !1);
 				} else if (!is_mobile() && e.button === 0) {
 					e.preventDefault();
 					bind(document, "mouseup", th.end, true);
@@ -544,10 +541,10 @@
 				th.transform(th.index * (th.is_horizontal() ? th.width : th.height), conf.duration || 300);
 				th.setPosition();
 				th.prevIndex = th.index;
-				unbind(document, "touchmove", th.move, true);
-				unbind(document, "touchend", th.end, true);
-				unbind(document, "mousemove", th.move, true);
-				unbind(document, "mouseup", th.end, true);
+				unbind(document, "touchmove", th.move);
+				unbind(document, "touchend", th.end);
+				unbind(document, "mousemove", th.move);
+				unbind(document, "mouseup", th.end);
 				th.set_drab(false);
 			},
 			min: function (x) {
