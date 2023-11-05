@@ -68,7 +68,7 @@
 	var unbind = function (_el, event, fun) {
 		if (_el && typeof _el === 'object') {
 			if (event && typeof event === 'string' && ArrayFind(events, event)) {
-				_el.removeEventListener(event, fun);
+				_el.removeEventListener(event, fun, (/Trident/i.test(navigator.userAgent)));
 			}
 		}
 	}
@@ -223,7 +223,7 @@
 							);
 						}
 						if (!is_blank(conf.button.prevKey)) {
-							document.addEventListener("keydown", function (t) {
+							bind(document, "keydown", function (t) {
 								if (conf.button.prevKey === t.key) {
 									t.preventDefault();
 									th._prev()
@@ -281,7 +281,7 @@
 				this.set_default_position();
 				if (typeof conf.accelerate == 'boolean') {
 					this.accelerate = conf.accelerate;
-				};				
+				};
 				return this;
 			},
 			stop: function () {
@@ -454,8 +454,8 @@
 				if (is_mobile()) {
 					bind(slider, "touchstart", th.start, !1);
 				} else {
-					bind(slider, "mousedown", th.start, !1);
-					bind(slider, "mouseleave", th.stop, !1);
+					bind(slider, "mousedown", th.start, false);
+					bind(slider, "mouseleave", th.stop, false);
 				}
 			},
 			link_handler: function (b) {
@@ -544,11 +544,11 @@
 				th.transform(th.index * (th.is_horizontal() ? th.width : th.height), conf.duration || 300);
 				th.setPosition();
 				th.prevIndex = th.index;
-				unbind(document, "touchmove", th.move);
-				unbind(document, "touchend", th.end);
-				unbind(document, "mousemove", th.move, false);
+				unbind(document, "touchmove", th.move, true);
+				unbind(document, "touchend", th.end, true);
+				unbind(document, "mousemove", th.move, true);
 				unbind(document, "mouseup", th.end, true);
-				th.set_drab(false)
+				th.set_drab(false);
 			},
 			min: function (x) {
 				var c = Math.abs(x - this.touchX);
