@@ -397,7 +397,7 @@
 				}
 				setStyle(a, b);
 				if (c && typeof c === 'function') {
-					c()
+					c();
 				}
 			},
 			slide_to: function () {
@@ -464,13 +464,11 @@
 			touch_init: function () {
 				if (is_mobile()) {
 					bind(slider, "touchstart", th.start, false);
+					bind(slider, "touchend", th.end, false);
 				} else {
 					bind(slider, "mousedown", th.start, false);
 					bind(slider, "mouseleave", th.stop, false);
 				}
-				bind(slider, "transitionend", function () {
-					th.is_move = false;
-				});
 			},
 			link_handler: function (b) {
 				var ar = th.children(slider, "a");
@@ -497,8 +495,9 @@
 				return !(Math.floor(n) === -1);
 			},
 			start: function (e) {
-				if (!e || th.is_move) { return }
-				th.touchX = th.is_horizontal() ? e.clientX || e.touches[0].clientX : e.clientY || e.clientY || e.touches[0].clientY;
+				if (!e) { return }
+				th.stop();
+				th.touchX = th.is_horizontal() ? (e.clientX || e.touches[0].clientX) : (e.clientY || e.clientY || e.touches[0].clientY);
 				if (!is_mobile()) {
 					th.link_handler(false);
 				}
@@ -555,13 +554,14 @@
 			},
 			end: function () {
 				th.transform(th.index * (th.is_horizontal() ? th.width : th.height), conf.duration || 300);
-				th.setPosition();
 				th.prevIndex = th.index;
+				th.setPosition();
 				unbind(document, "touchmove", th.move);
 				unbind(document, "touchend", th.end);
 				unbind(document, "mousemove", th.move);
 				unbind(document, "mouseup", th.end);
 				th.set_drab(false);
+				th.boot();
 			},
 			min: function (x) {
 				var c = Math.abs(x - this.touchX);
