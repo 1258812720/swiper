@@ -51,7 +51,7 @@
 	 * 事件绑定
 	 * __ {el:Document,event:String,fn,passive:bool}
 	 */
-	var events = ["visibilitychange", "scroll", "touchstart", "click", "touchmove", "touchend", "mouseup", "mousedown", "mouseleave", "mousemove", "mouseout", "resize", "keydown"];
+	var events = ["visibilitychange", "scroll", "touchstart", "transitionend", "click", "touchmove", "touchend", "mouseup", "mousedown", "mouseleave", "mousemove", "mouseout", "resize", "keydown"];
 	var bind = function (_el, event, fun, passive) {
 		if (_el && typeof _el === 'object') {
 			if (event && typeof event === 'string' && ArrayFind(events, event)) {
@@ -139,6 +139,19 @@
 		} else {
 			return Reflect.ownKeys(obj).length === 0;
 		}
+	};
+	function common(fn, delay = 320, arg) {
+		let time = null;
+		return function () {
+			if (time) {
+				return
+			}
+			time = setTimeout(function () {
+				console.log(arg)
+				fn.apply(null, [arg]);
+				time = null;
+			}, delay | 300)
+		}
 	}
 	var con = document.querySelector(el),
 		g_conf = conf,
@@ -166,6 +179,7 @@
 			prev: null,
 			next: null,
 			accelerate: true,
+			is_move: false,
 			autoplay: function () {
 				var time = typeof g_conf.autoplay === "number" ? g_conf.autoplay : 3500;
 				th.time = setInterval(
@@ -454,6 +468,9 @@
 					bind(slider, "mousedown", th.start, false);
 					bind(slider, "mouseleave", th.stop, false);
 				}
+				bind(slider, "transitionend", function () {
+					th.is_move = false;
+				});
 			},
 			link_handler: function (b) {
 				var ar = th.children(slider, "a");
@@ -471,7 +488,16 @@
 					}
 				}
 			},
+			set_drab: function (b) {
+				setStyle(slider, {
+					cursor: b ? "grab" : "default"
+				});
+			},
+			checked: function (n) {
+				return !(Math.floor(n) === -1);
+			},
 			start: function (e) {
+				if (!e || th.is_move) { return }
 				th.touchX = th.is_horizontal() ? e.clientX || e.touches[0].clientX : e.clientY || e.clientY || e.touches[0].clientY;
 				if (!is_mobile()) {
 					th.link_handler(false);
@@ -485,14 +511,7 @@
 					bind(document, "mousemove", th.move, false);
 				}
 				th.set_drab(true);
-			},
-			set_drab: function (b) {
-				setStyle(slider, {
-					cursor: b ? "grab" : "default"
-				});
-			},
-			checked: function (n) {
-				return !(Math.floor(n) === -1);
+				th.is_move = true;
 			},
 			move: function (e) {
 				try {
@@ -534,9 +553,6 @@
 					void er;
 				}
 			},
-			setPosition: function () {
-				this.position = this.index * (this.is_horizontal() ? this.width : this.height);
-			},
 			end: function () {
 				th.transform(th.index * (th.is_horizontal() ? th.width : th.height), conf.duration || 300);
 				th.setPosition();
@@ -550,7 +566,10 @@
 			min: function (x) {
 				var c = Math.abs(x - this.touchX);
 				return c >= 5;
-			}
+			},
+			setPosition: function () {
+				this.position = this.index * (this.is_horizontal() ? this.width : this.height);
+			},
 		};
 	var globa_this = null;
 	(function () {
