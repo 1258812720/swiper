@@ -18,7 +18,7 @@
 		return;
 	}
 	var fun = function (el) {
-		let _el = null;
+		var _el = null;
 		if (typeof el === 'string') {
 			_el = document.querySelector(el);
 		} else if (el.nodeType) {
@@ -140,19 +140,6 @@
 			return Reflect.ownKeys(obj).length === 0;
 		}
 	};
-	function common(fn, delay = 320, arg) {
-		let time = null;
-		return function () {
-			if (time) {
-				return
-			}
-			time = setTimeout(function () {
-				console.log(arg)
-				fn.apply(null, [arg]);
-				time = null;
-			}, delay | 300)
-		}
-	}
 	var con = document.querySelector(el),
 		g_conf = conf,
 		slider = null,
