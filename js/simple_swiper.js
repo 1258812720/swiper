@@ -489,8 +489,8 @@
 					th.link_handler(false);
 				}
 				if (is_mobile()) {
-					bind(document, "touchmove", th.move, !1);
-					bind(document, "touchend", th.end, !1);
+					bind(slider, "touchmove", th.move, !1);
+					bind(slider, "touchend", th.end, !1);
 				} else if (!is_mobile() && e.button === 0) {
 					e.preventDefault();
 					bind(document, "mouseup", th.end, true);
@@ -535,6 +535,7 @@
 						th.transform(-a, 0);
 					}
 				} catch (er) {
+					console.log(er)
 					th.transform(-a, 0);
 					void er;
 				}
@@ -543,8 +544,8 @@
 				th.transform(th.index * (th.is_horizontal() ? th.width : th.height), conf.duration || 300);
 				th.prevIndex = th.index;
 				th.setPosition();
-				unbind(document, "touchmove", th.move);
-				unbind(document, "touchend", th.end);
+				unbind(slider, "touchmove", th.move);
+				unbind(slider, "touchend", th.end);
 				unbind(document, "mousemove", th.move);
 				unbind(document, "mouseup", th.end);
 				th.set_drab(false);
