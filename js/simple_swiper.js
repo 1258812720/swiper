@@ -358,11 +358,11 @@
 				_.index++;
 				_.slide_to();
 			},
+			timer: null,
 			play: function () {
 				var _ = this;
 				_.curIndex = _.index === _.num ? 0 : _.index;
 				var c = slider.childNodes[th.curIndex];
-
 				if (conf.pagination && page && conf.pagination.el) {
 					var pc = page.childNodes;
 					var i = 0;
@@ -376,6 +376,12 @@
 				}
 				if (conf.lazy) {
 					_.add(c);
+				}
+				if (conf && conf.on && typeof conf.on.change === 'function') {
+					clearTimeout(_.timer);
+					_.timer = setTimeout(() => {
+						conf.on.change(_.curIndex);
+					}, 10);
 				}
 			},
 			css: function (a, b, c) {
@@ -607,7 +613,7 @@
 		_wrap.appendChild(_slider);
 		con.replaceChild(_wrap, tm.wrap);
 		slider = _slider;
-		page = document.querySelector(conf.pagination.el);
+		page = document.querySelector(conf && conf.pagination ? conf.pagination.el : null);
 		if (page) {
 			if (conf.pagination && conf.pagination.el) {
 				var mx = tm.child.length,

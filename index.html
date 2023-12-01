@@ -31,11 +31,13 @@
 							<p>CIGADesign玺佳机械表能量之眼男士手表学生机械镂空腕表夜光款</p>
 						</li>
 						<li>
-							<img data-src="https://gw.alicdn.com/bao/uploaded/i3/1085315961/O1CN01yj6MCS1tuBf9k3LQs_!!0-item_pic.jpg_300x300q90.jpg" alt="">
+							<img data-src="https://gw.alicdn.com/bao/uploaded/i3/1085315961/O1CN01yj6MCS1tuBf9k3LQs_!!0-item_pic.jpg_300x300q90.jpg"
+								alt="">
 							<p>Razer雷蛇Pro Click Mini生产力电脑办公电池无线蓝牙USB静音鼠标</p>
 						</li>
 						<li>
-							<img data-src="https://gw.alicdn.com/imgextra/i1/2244462078/O1CN01vDAmA21RDluxDz7BS_!!2244462078-0-alimamacc.jpg_300x300q90.jpg" alt="">
+							<img data-src="https://gw.alicdn.com/imgextra/i1/2244462078/O1CN01vDAmA21RDluxDz7BS_!!2244462078-0-alimamacc.jpg_300x300q90.jpg"
+								alt="">
 							<p>电脑椅家用舒适久坐护腰办公椅人体工学</p>
 						</li>
 					</div>
@@ -53,11 +55,13 @@
 							<p>《小传说》不插电的8-bit卡牌桌游 零售版</p>
 						</li>
 						<li>
-							<img data-src="https://gw.alicdn.com/bao/uploaded/i3/2197043372/O1CN011Eewho1amQGBkTzfc_!!2197043372.jpg_300x300q90.jpg" alt="">
+							<img data-src="https://gw.alicdn.com/bao/uploaded/i3/2197043372/O1CN011Eewho1amQGBkTzfc_!!2197043372.jpg_300x300q90.jpg"
+								alt="">
 							<p>《荒野大镖客》救赎 2牛仔蓝风衣过膝大衣冬季中长款牛角扣外套男</p>
 						</li>
 						<li>
-							<img data-src="https://gw.alicdn.com/bao/uploaded/i1/2209745626132/O1CN01EWpta41vAVNQYpEyz_!!2209745626132.jpg_300x300q90.jpg" alt="">
+							<img data-src="https://gw.alicdn.com/bao/uploaded/i1/2209745626132/O1CN01EWpta41vAVNQYpEyz_!!2209745626132.jpg_300x300q90.jpg"
+								alt="">
 							<p>适用于罗技无线鼠标充电模块 GPW一二代无线充电 毒蝰转罗技底座</p>
 						</li>
 					</div>
@@ -75,11 +79,13 @@
 							<p>顺丰新疆正宗切糕2斤特色特产美食 现做真空营养健康老人孕妇零食</p>
 						</li>
 						<li>
-							<img data-src="https://gw.alicdn.com/bao/uploaded/i4/2210382183044/O1CN01mGRKk41YMCWb06Lap_!!0-item_pic.jpg_300x300q90.jpg" alt="">
+							<img data-src="https://gw.alicdn.com/bao/uploaded/i4/2210382183044/O1CN01mGRKk41YMCWb06Lap_!!0-item_pic.jpg_300x300q90.jpg"
+								alt="">
 							<p>心动至上~ 纯欲内裤女棉质中腰日系韩版甜美性感舒适女士三角裤头</p>
 						</li>
 						<li>
-							<img data-src="https://gw.alicdn.com/bao/uploaded/i3/77246104/O1CN01gcl8cZ1uxgScDvHIp_!!77246104.jpg_300x300q90.jpg" alt="">
+							<img data-src="https://gw.alicdn.com/bao/uploaded/i3/77246104/O1CN01gcl8cZ1uxgScDvHIp_!!77246104.jpg_300x300q90.jpg"
+								alt="">
 							<p>大型钢琴烤漆回音壁音响4-6喇叭4寸低音丝膜高音苹果接口7公斤多</p>
 						</li>
 					</div>
@@ -87,14 +93,20 @@
 			</div>
 			<div class="pagehelper pagination"></div>
 		</div>
+		<code> 第 <span id="page"></span> 页 </code>
 	</div>
 	<style>
+		code {
+			font-size: 18px;
+		}
+
 		html {
 			height: 100%;
 		}
 
 		body {
 			padding: 0;
+			text-align: center;
 		}
 
 		.card-list {
@@ -118,10 +130,12 @@
 			height: inherit;
 			background-color: rgb(226, 226, 226);
 		}
-		.card-list>li>p{
+
+		.card-list>li>p {
 			font-size: 16px;
 			margin: 0;
 		}
+
 		.swiper-taobao {
 			width: 1300px;
 			height: 372px;
@@ -145,6 +159,7 @@
 		}
 	</style>
 	<script type="text/javascript">
+		const page = document.getElementById("page");
 		var taobao = new SimSwiper(".swiper-taobao", {
 			loop: true,
 			button: {
@@ -155,10 +170,15 @@
 			},
 			autoplay: false,
 			pagination: {
-				el: ".pagehelper",
+				el: ".pagination",
 				click: true
 			},
-			duration:300,
+			on: {
+				change(e) {
+					page.innerText = e + 1;
+				}
+			},
+			duration: 300,
 			lazy: true,
 			direction: 'horizontal',//horizontal
 		});
