@@ -379,7 +379,7 @@
 				}
 				if (conf && conf.on && typeof conf.on.change === 'function') {
 					clearTimeout(_.timer);
-					_.timer = setTimeout(() => {
+					_.timer = setTimeout(function()  {
 						conf.on.change(_.curIndex);
 					}, 10);
 				}
