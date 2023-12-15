@@ -24,7 +24,7 @@
 		} else if (el.nodeType) {
 			_el = el;
 		}
-		_el.getBoundingClientRect().top;
+		getStyle(_el, "top")
 		return;
 	};
 	if (!conf) {
@@ -379,7 +379,7 @@
 				}
 				if (conf && conf.on && typeof conf.on.change === 'function') {
 					clearTimeout(_.timer);
-					_.timer = setTimeout(function()  {
+					_.timer = setTimeout(function () {
 						conf.on.change(_.curIndex);
 					}, 10);
 				}
@@ -541,7 +541,7 @@
 						th.transform(-a, 0);
 					}
 				} catch (er) {
-					console.log(er)
+					console.error(er)
 					th.transform(-a, 0);
 					void er;
 				}
