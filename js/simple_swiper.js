@@ -24,7 +24,7 @@
 		} else if (el.nodeType) {
 			_el = el;
 		}
-		getStyle(_el, "top")
+		getStyle(_el, "top");
 		return;
 	};
 	if (!conf) {
@@ -46,7 +46,7 @@
 			});
 		}
 		return tag;
-	}
+	};
 	/**
 	 * 事件绑定
 	 * __ {el:Document,event:String,fn,passive:bool}
@@ -130,16 +130,6 @@
 	var is_mobile = function () {
 		return (/Android|iPhone|iPad|X11/i.test(navigator.userAgent));
 	}
-	var object_empty = function (obj) {
-		if (!obj) {
-			return false
-		}
-		if (is_ie) {
-			return false;
-		} else {
-			return Reflect.ownKeys(obj).length === 0;
-		}
-	};
 	var con = document.querySelector(el),
 		g_conf = conf,
 		slider = null,
@@ -311,7 +301,7 @@
 				return tagArr;
 			},
 			add: function (img_el) {
-				if (th.loadEnd) {
+				if (th.loadEnd || !g_conf.lazy) {
 					return;
 				}
 				if (!img_el) {
@@ -541,7 +531,6 @@
 						th.transform(-a, 0);
 					}
 				} catch (er) {
-					console.error(er)
 					th.transform(-a, 0);
 					void er;
 				}
@@ -639,9 +628,8 @@
 			for (var key in props) {
 				el.style[key] = props[key];
 			}
-
 		} catch (err) {
-			void (err)
+			void (err);
 		}
 	}
 	function getStyle(el, prop) {
