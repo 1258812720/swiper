@@ -3,12 +3,12 @@ branches: {
   }
 fileChange:
   /js:
-    newFile: !uuid 'f21629eee209a41688e17808ba17e646e9e086a2'
-    oldFile: !uuid 'f22f4465a295ce12d4f56583e148a7d2beebe904'
+    newFile: !uuid '6f9c8bbd3029cba9d255f063878414c3c974c703'
+    oldFile: !uuid 'f21629eee209a41688e17808ba17e646e9e086a2'
   /js/simple_swiper_min.js:
-    newFile: !uuid '456019d102f578e446e90bf874b5ddca4581fab7'
-    oldFile: !uuid '9066820f066ddbb8affb02a5e674a30b7d90174e'
-gitCommitId: !uuid '90ed8cc014187bb35d40fb1fc8ffe0b308f4dcd7'
+    newFile: !uuid '34626687245b75d67310f392a0f336f9eb98c28b'
+    oldFile: !uuid '456019d102f578e446e90bf874b5ddca4581fab7'
+gitCommitId: !uuid '63d66d0355f83cffb8db5606ac0111c152203831'
 renames: {
   }
-revisionId: 68
+revisionId: 69
