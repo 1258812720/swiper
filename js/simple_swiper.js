@@ -445,13 +445,10 @@
 				});
 			},
 			touch_init: function () {
-				if (is_mobile()) {
-					bind(slider, "touchstart", th.start, false);
-					bind(slider, "touchend", th.end, false);
-				} else {
-					bind(slider, "mousedown", th.start, false);
-					bind(slider, "mouseleave", th.stop, false);
-				}
+                bind(slider, "mousedown", th.start, false);
+				bind(slider, "mouseleave", th.stop, false);
+                bind(slider, "touchstart", th.start, false);
+				bind(slider, "touchend", th.end, false);
 			},
 			link_handler: function (b) {
 				var ar = th.children(slider, "a");
