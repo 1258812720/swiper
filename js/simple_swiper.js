@@ -445,9 +445,9 @@
 				});
 			},
 			touch_init: function () {
-                bind(slider, "mousedown", th.start, false);
+				bind(slider, "mousedown", th.start, false);
 				bind(slider, "mouseleave", th.stop, false);
-                bind(slider, "touchstart", th.start, false);
+				bind(slider, "touchstart", th.start, false);
 				bind(slider, "touchend", th.end, false);
 			},
 			link_handler: function (b) {
@@ -477,18 +477,18 @@
 			start: function (e) {
 				if (!e) { return }
 				th.stop();
-				th.touchX = th.is_horizontal() ? (e.clientX || e.touches[0].clientX) : (e.clientY || e.clientY || e.touches[0].clientY);
+				var st = e.touches ? e.touches.length-1 : 0;
+				th.touchX = th.is_horizontal() ? (e.clientX || e.touches[st].clientX) : (e.clientY || e.clientY || e.touches[st].clientY);
 				if (!is_mobile()) {
 					th.link_handler(false);
 				}
-				if (is_mobile()) {
-					bind(slider, "touchmove", th.move, !1);
-					bind(slider, "touchend", th.end, !1);
-				} else if (!is_mobile() && e.button === 0) {
+				else if (!is_mobile() && e.button === 0) {
 					e.preventDefault();
-					bind(document, "mouseup", th.end, true);
-					bind(document, "mousemove", th.move, false);
 				}
+				bind(slider, "touchmove", th.move, !1);
+				bind(slider, "touchend", th.end, !1);
+				bind(document, "mouseup", th.end, true);
+				bind(document, "mousemove", th.move, false);
 				th.set_drab(true);
 				th.is_move = true;
 			},
