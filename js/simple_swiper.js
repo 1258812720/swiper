@@ -438,10 +438,10 @@
 				});
 			},
 			touch_init: function () {
-				bind(slider, "mousedown", th.start, false);
-				bind(slider, "mouseup", th.end, false);
+				bind(slider,"mousedown",th.start,false);
 				bind(slider, "mouseleave", th.stop, false);
 				bind(slider, "touchstart", th.start, false);
+				bind(document, "mouseup", th.end, false);
 				bind(document, "touchend", th.end, false);
 			},
 			link_handler: function (b) {
@@ -481,6 +481,9 @@
 				}
 				else if (!is_mobile() && e.button === 0) {
 					e.preventDefault();
+					
+				}
+				else {
 					bind(slider, "mousemove", th.move, false);
 				}
 				th.set_drab(true);
@@ -531,9 +534,8 @@
 				th.prevIndex = th.index;
 				th.setPosition();
 				unbind(slider, "touchmove", th.move);
-				unbind(slider, "touchend", th.end);
 				unbind(document, "mousemove", th.move);
-				unbind(document, "mouseup", th.end);
+				unbind(slider, "mousemove", th.move);
 				th.set_drab(false);
 				th.boot();
 			},
