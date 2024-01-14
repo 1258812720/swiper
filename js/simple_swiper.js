@@ -156,6 +156,7 @@
 			prev: null,
 			next: null,
 			accelerate: true,
+			timer: null,
 			is_move: false,
 			autoplay: function () {
 				var time = typeof g_conf.autoplay === "number" ? g_conf.autoplay : 3500;
@@ -228,13 +229,6 @@
 				}
 				if (g_conf.autoplay) {
 					th.boot();
-					if (is_mobile()) {
-						bind(con, "touchstart", th.stop, true);
-						bind(con, "touchend", th.boot, true);
-					} else {
-						bind(con, "mouseenter", th.stop, false);
-						bind(con, "mouseleave", th.boot, false);
-					}
 				}
 				if (!conf.disabvarouch) {
 					this.touch_init();
@@ -348,7 +342,6 @@
 				_.index++;
 				_.slide_to();
 			},
-			timer: null,
 			play: function () {
 				var _ = this;
 				_.curIndex = _.index === _.num ? 0 : _.index;
@@ -446,9 +439,10 @@
 			},
 			touch_init: function () {
 				bind(slider, "mousedown", th.start, false);
+				bind(slider, "mouseup", th.end, false);
 				bind(slider, "mouseleave", th.stop, false);
 				bind(slider, "touchstart", th.start, false);
-				bind(slider, "touchend", th.end, false);
+				bind(document, "touchend", th.end, false);
 			},
 			link_handler: function (b) {
 				var ar = th.children(slider, "a");
@@ -477,18 +471,18 @@
 			start: function (e) {
 				if (!e) { return }
 				th.stop();
-				var st = e.touches ? e.touches.length-1 : 0;
+				var st = e.touches ? e.touches.length - 1 : 0;
 				th.touchX = th.is_horizontal() ? (e.clientX || e.touches[st].clientX) : (e.clientY || e.clientY || e.touches[st].clientY);
+				e.preventDefault();
+				bind(slider, "touchmove", th.move, false);
 				if (!is_mobile()) {
 					th.link_handler(false);
+					bind(document, "mousemove", th.move, false);
 				}
 				else if (!is_mobile() && e.button === 0) {
 					e.preventDefault();
+					bind(slider, "mousemove", th.move, false);
 				}
-				bind(slider, "touchmove", th.move, !1);
-				bind(slider, "touchend", th.end, !1);
-				bind(document, "mouseup", th.end, true);
-				bind(document, "mousemove", th.move, false);
 				th.set_drab(true);
 				th.is_move = true;
 			},
