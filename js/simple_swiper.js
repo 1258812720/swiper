@@ -438,7 +438,7 @@
 				});
 			},
 			touch_init: function () {
-				bind(slider,"mousedown",th.start,false);
+				bind(slider, "mousedown", th.start, false);
 				bind(slider, "mouseleave", th.stop, false);
 				bind(slider, "touchstart", th.start, false);
 				bind(document, "mouseup", th.end, false);
@@ -473,7 +473,6 @@
 				th.stop();
 				var st = e.touches ? e.touches.length - 1 : 0;
 				th.touchX = th.is_horizontal() ? (e.clientX || e.touches[st].clientX) : (e.clientY || e.clientY || e.touches[st].clientY);
-				e.preventDefault();
 				bind(slider, "touchmove", th.move, false);
 				if (!is_mobile()) {
 					th.link_handler(false);
@@ -481,7 +480,7 @@
 				}
 				else if (!is_mobile() && e.button === 0) {
 					e.preventDefault();
-					
+
 				}
 				else {
 					bind(slider, "mousemove", th.move, false);
@@ -612,7 +611,6 @@
 		}
 		globa_this = setting.init();
 	})();
-
 	function setStyle(el, props) {
 		try {
 			if (!el || !props) {
