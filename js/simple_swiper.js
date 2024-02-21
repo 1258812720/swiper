@@ -130,6 +130,9 @@
 	var is_mobile = function () {
 		return (/Android|iPhone|iPad|X11/i.test(navigator.userAgent));
 	}
+	var is_firefox = function () {
+		return (/Firefox/i.test(navigator.userAgent));
+	}
 	var con = document.querySelector(el),
 		g_conf = conf,
 		slider = null,
@@ -471,6 +474,7 @@
 			start: function (e) {
 				if (!e) { return }
 				th.stop();
+				if (is_firefox()) { e.preventDefault(); }
 				var st = e.touches ? e.touches.length - 1 : 0;
 				th.touchX = th.is_horizontal() ? (e.clientX || e.touches[st].clientX) : (e.clientY || e.clientY || e.touches[st].clientY);
 				bind(slider, "touchmove", th.move, false);
@@ -480,7 +484,6 @@
 				}
 				else if (!is_mobile() && e.button === 0) {
 					e.preventDefault();
-
 				}
 				else {
 					bind(slider, "mousemove", th.move, false);
