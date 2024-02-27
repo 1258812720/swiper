@@ -273,6 +273,9 @@
 				clearInterval(th.time);
 			},
 			boot: function () {
+				if(g_conf && typeof g_conf.autoplay === 'boolean' && g_conf.autoplay===false){
+					return;
+				}
 				if (th.time !== null) {
 					clearInterval(th.time);
 				}
