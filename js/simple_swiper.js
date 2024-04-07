@@ -475,7 +475,7 @@
 				return !(Math.floor(n) === -1);
 			},
 			start: function (e) {
-				if (!e) { return }
+				if (!e || e.button!==0) { return }
 				th.stop();
 				if (is_firefox()) { e.preventDefault(); }
 				var st = e.touches ? e.touches.length - 1 : 0;
