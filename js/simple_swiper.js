@@ -273,7 +273,7 @@
 				clearInterval(th.time);
 			},
 			boot: function () {
-				if(g_conf && typeof g_conf.autoplay === 'boolean' && g_conf.autoplay===false){
+				if (g_conf && typeof g_conf.autoplay === 'boolean' && g_conf.autoplay === false) {
 					return;
 				}
 				if (th.time !== null) {
@@ -351,15 +351,26 @@
 			play: function () {
 				var _ = this;
 				_.curIndex = _.index === _.num ? 0 : _.index;
-				var c = slider.childNodes[th.curIndex];
+				var a = slider.childNodes;
+				var c = a[th.curIndex];
+				var pc = page.childNodes;
+				var nodes = {
+					curNodes: [],
+					siblings: [],
+					curIndex: _.curIndex
+				};
 				if (conf.pagination && page && conf.pagination.el) {
-					var pc = page.childNodes;
 					var i = 0;
 					for (; i < pc.length; i++) {
 						if (i === th.curIndex) {
+							nodes.curNodes.push(a[_.curIndex]);
+							if (_.curIndex === 0) {
+								nodes.curNodes.push(slider.lastChild)
+							}
 							pc[i].classList.add("pagination-items-active");
 						} else {
 							pc[i].classList.remove("pagination-items-active");
+							nodes.siblings.push(a[i]);
 						}
 					}
 				}
@@ -367,10 +378,10 @@
 					_.add(c);
 				}
 				if (conf && conf.on && typeof conf.on.change === 'function') {
-					clearTimeout(_.timer);
 					_.timer = setTimeout(function () {
-						conf.on.change(_.curIndex);
-					}, 10);
+						conf.on.change(nodes);
+						clearTimeout(_.timer);
+					}, _.duration);
 				}
 			},
 			css: function (a, b, c) {
@@ -439,9 +450,7 @@
 					}
 					_prop[t.is_horizontal() ? 'left' : 'top'] = -x + "px";
 				}
-				t.css(slider, _prop, function () {
-					t.play();
-				});
+				t.css(slider, _prop);
 			},
 			touch_init: function () {
 				bind(slider, "mousedown", th.start, false);
@@ -470,12 +479,13 @@
 				setStyle(slider, {
 					cursor: b ? "grab" : "default"
 				});
+				th.is_move = b;
 			},
 			checked: function (n) {
 				return !(Math.floor(n) === -1);
 			},
 			start: function (e) {
-				if (!e || e.button!==0) { return }
+				if (!e || e.button !== 0) { return }
 				th.stop();
 				if (is_firefox()) { e.preventDefault(); }
 				var st = e.touches ? e.touches.length - 1 : 0;
@@ -542,6 +552,7 @@
 				unbind(document, "mousemove", th.move);
 				unbind(slider, "mousemove", th.move);
 				th.set_drab(false);
+				th.play();
 				th.boot();
 			},
 			min: function (x) {

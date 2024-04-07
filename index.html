@@ -13,15 +13,18 @@
 
 <body>
 	<div class="app">
-		<div class="swiper-taobao simple-swiper-container">
-			<span id="prev2" class="btn btn-prev"></span>
-			<span id="next2" class="btn btn-next"></span>
+		<div class="swiper-taobao simple-swiper-container" style="border: none;">
+			<!-- <span id="prev2" class="btn btn-prev"></span>
+			<span id="next2" class="btn btn-next"></span> -->
 			<div class="swiper-wrapper">
 				<div class="swiper-items">
-					<button onclick="print('测试内容')"> 测试按钮 </button>
+					<img src="https://game.gtimg.cn/images/wmsj/web201908/role-fs.png" alt="">
 				</div>
 				<div class="swiper-items">
-					JavaScript（简称“JS”）是一种具有函数优先的轻量级，解释型或即时编译型的编程语言。虽然它是作为开发Web页面的脚本语言而出名，但是它也被用到了很多非浏览器环境中，JavaScript基于原型编程、多范式的动态脚本语言
+					<img src="https://game.gtimg.cn/images/wmsj/web201908/role-hq.png" alt="">
+				</div>
+				<div class="swiper-items">
+					<img src="https://game.gtimg.cn/images/wmsj/web201908/role-ym.png" alt="">
 				</div>
 			</div>
 			<div class="pagehelper pagination"></div>
@@ -43,20 +46,20 @@
 		}
 
 		.swiper-taobao {
-			height: 640px;
-			width: 800px;
-			margin: auto;
+			height: 1080px;
+			width: 1920px;
+			margin: 0 auto;
 			position: relative;
-			margin-top: 12vh;
 			border-radius: 6px;
 		}
 
 		.swiper-items {
-			display: flex;
-			align-items: center;
-			justify-content: center;
+			text-align: center;
 		}
-
+		.selected > img{
+			transition: all 1s;
+			transform: scale(.72);
+		}
 		.swiper-items>a>img {
 			width: 100%;
 			height: 100%;
@@ -79,14 +82,20 @@
 			},
 			on: {
 				change: function (e) {
-					page.innerText = e + 1;
+					let the_node = e.curNodes;
+					let that_node = e.siblings;
+					for (let a = 0; a < the_node.length; a++) {
+						the_node[a].classList.add("selected");
+					}
+					for (let b = 0; b < that_node.length; b++) {
+						that_node[b].classList.remove("selected");
+					}
 				}
 			},
 			duration: 300,
 			lazy: !0,
 			direction: 'horizontal',//horizontal
 		});
-		taobao.destory();
 	</script>
 </body>
 
