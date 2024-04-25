@@ -14,8 +14,8 @@
 <body>
 	<div class="app">
 		<div class="swiper-taobao simple-swiper-container" style="border: none;">
-			<!-- <span id="prev2" class="btn btn-prev"></span>
-			<span id="next2" class="btn btn-next"></span> -->
+			<span id="prev2" class="btn btn-prev"></span>
+			<span id="next2" class="btn btn-next"></span>
 			<div class="swiper-wrapper">
 				<div class="swiper-items">
 					<img src="https://game.gtimg.cn/images/wmsj/web201908/role-fs.png" alt="">
@@ -46,8 +46,9 @@
 		}
 
 		.swiper-taobao {
-			height: 1080px;
-			width: 1920px;
+			
+			height: 360px;
+			width: 800px;
 			margin: 0 auto;
 			position: relative;
 			border-radius: 6px;
@@ -81,15 +82,8 @@
 				click: true
 			},
 			on: {
-				change: function (e) {
-					let the_node = e.curNodes;
-					let that_node = e.siblings;
-					for (let a = 0; a < the_node.length; a++) {
-						the_node[a].classList.add("selected");
-					}
-					for (let b = 0; b < that_node.length; b++) {
-						that_node[b].classList.remove("selected");
-					}
+				transition(ev){
+					console.log(ev);
 				}
 			},
 			duration: 300,
