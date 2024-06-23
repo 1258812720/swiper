@@ -8,7 +8,7 @@
 	<meta http-equiv="X-UA-Compatible" content="edge" />
 	<link rel="short icon" href="img/logo.ico" />
 	<link rel="stylesheet" type="text/css" href="css/simple_style.css" />
-	<script type="text/javascript" src="js/simple_swiper.js"></script>
+	<script type="text/javascript" src="js/simple_swiper_min.js"></script>
 </head>
 
 <body>
@@ -18,18 +18,30 @@
 			<span id="next2" class="btn btn-next"></span>
 			<div class="swiper-wrapper">
 				<div class="swiper-items">
-					<img src="https://game.gtimg.cn/images/wmsj/web201908/role-fs.png" alt="">
+					<a href="#213213">
+						<img src="https://img.alicdn.com/imgextra/i4/6000000005812/O1CN01vbUWkX1snws9DD0Qh_!!6000000005812-0-octopus.jpg"
+							alt="">
+					</a>
 				</div>
 				<div class="swiper-items">
-					<img src="https://game.gtimg.cn/images/wmsj/web201908/role-hq.png" alt="">
+					<img src="https://img.alicdn.com/imgextra/i4/O1CN01GOlEEW1zidUliI8O7_!!6000000006748-2-tps-846-472.png"
+						alt="">
 				</div>
 				<div class="swiper-items">
-					<img src="https://game.gtimg.cn/images/wmsj/web201908/role-ym.png" alt="">
+					<img src="https://img.alicdn.com/imgextra/i3/O1CN01dmCUT51ns0IrRbXLm_!!6000000005144-0-tps-846-472.jpg"
+						alt="">
+				</div>
+				<div class="swiper-items">
+					<img src="https://img.alicdn.com/imgextra/i4/O1CN01LHWdyp1yvAidcNMDR_!!6000000006640-0-tps-846-472.jpg"
+						alt="">
+				</div>
+				<div class="swiper-items">
+					<img src="https://img.alicdn.com/imgextra/i4/O1CN01aTXsri1my7yg4CMpt_!!6000000005022-0-tps-846-472.jpg"
+						alt="">
 				</div>
 			</div>
 			<div class="pagehelper pagination"></div>
 		</div>
-		<code> 第 <span id="page"></span> 页 </code>
 	</div>
 	<style>
 		code {
@@ -38,36 +50,49 @@
 
 		html {
 			height: 100%;
+			background-color: black;
+			padding: 4px;
+			box-sizing: border-box;
 		}
 
 		body {
-			padding: 0;
+			background-color: white;
+			margin: 0;
+			padding: 14px;
+			box-sizing: border-box;
+			height: 98vh;
+			position: relative;
+			overflow: hidden;
+			border-radius: 8px;
 			text-align: center;
 		}
 
 		.swiper-taobao {
-			
-			height: 360px;
-			width: 800px;
-			margin: 0 auto;
+			height: 480px;
+			width: 860px;
+			margin: 20vh auto 0 auto;
 			position: relative;
 			border-radius: 6px;
 		}
 
 		.swiper-items {
 			text-align: center;
+			height: 100%;
 		}
-		.selected > img{
+
+		.selected>img {
 			transition: all 1s;
 			transform: scale(.72);
 		}
-		.swiper-items>a>img {
+
+		.swiper-items * {
 			width: 100%;
 			height: 100%;
 		}
 	</style>
 	<script type="text/javascript">
 		const page = document.getElementById("page");
+
 		var taobao = new SimSwiper(".swiper-taobao", {
 			loop: true,
 			button: {
@@ -80,11 +105,6 @@
 			pagination: {
 				el: ".pagination",
 				click: true
-			},
-			on: {
-				transition(ev){
-					console.log(ev);
-				}
 			},
 			duration: 300,
 			lazy: !0,
