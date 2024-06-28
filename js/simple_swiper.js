@@ -1,3 +1,9 @@
+/**
+ * @author 刘海斌
+ * @time 2024
+ * @desc 暂无
+ */
+
 (function (e, fn) {
 	"use strict";
 	if (e.__proto__ === undefined) {
@@ -351,6 +357,7 @@
 			},
 			play: function () {
 				var _ = this;
+				if(!page){return}
 				_.curIndex = _.index === _.num ? 0 : _.index;
 				var a = slider.childNodes;
 				var c = a[th.curIndex];
@@ -549,7 +556,7 @@
 				unbind(document, "mousemove", th.move);
 				unbind(slider, "mousemove", th.move);
 				th.set_drab(false);
-				
+
 				th.boot();
 			},
 			min: function (x) {
@@ -608,7 +615,7 @@
 		_wrap.appendChild(_slider);
 		con.replaceChild(_wrap, tm.wrap);
 		slider = _slider;
-		page = document.querySelector(conf && conf.pagination ? conf.pagination.el : null);
+		page = document.querySelector(conf&&conf.pagination?conf.pagination.el:null);
 		if (page) {
 			if (conf.pagination && conf.pagination.el) {
 				var mx = tm.child.length,
