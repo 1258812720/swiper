@@ -8,12 +8,41 @@
 	<meta http-equiv="X-UA-Compatible" content="edge" />
 	<link rel="short icon" href="img/logo.ico" />
 	<link rel="stylesheet" type="text/css" href="css/simple_style.css" />
-	<script type="text/javascript" src="js/simple_swiper.js"></script>
+	<script type="text/javascript" src="js/simple_swiper_min.js"></script>
 </head>
 
 <body>
 	<div class="app">
 		<div class="swiper-taobao simple-swiper-container" style="border: none;">
+			<span id="prev2" class="btn btn-prev"></span>
+			<span id="next2" class="btn btn-next"></span>
+			<div class="swiper-wrapper">
+				<div class="swiper-items">
+					<a href="#213213">
+						<img src="https://img.alicdn.com/imgextra/i4/6000000005812/O1CN01vbUWkX1snws9DD0Qh_!!6000000005812-0-octopus.jpg"
+							alt="">
+					</a>
+				</div>
+				<div class="swiper-items">
+					<img src="https://img.alicdn.com/imgextra/i4/O1CN01GOlEEW1zidUliI8O7_!!6000000006748-2-tps-846-472.png"
+						alt="">
+				</div>
+				<div class="swiper-items">
+					<img src="https://img.alicdn.com/imgextra/i3/O1CN01dmCUT51ns0IrRbXLm_!!6000000005144-0-tps-846-472.jpg"
+						alt="">
+				</div>
+				<div class="swiper-items">
+					<img src="https://img.alicdn.com/imgextra/i4/O1CN01LHWdyp1yvAidcNMDR_!!6000000006640-0-tps-846-472.jpg"
+						alt="">
+				</div>
+				<div class="swiper-items">
+					<img src="https://img.alicdn.com/imgextra/i4/O1CN01aTXsri1my7yg4CMpt_!!6000000005022-0-tps-846-472.jpg"
+						alt="">
+				</div>
+			</div>
+			<div class="pagehelper pagination"></div>
+		</div>
+		<div class="swiper-taobao1 simple-swiper-container" style="border: none;">
 			<span id="prev2" class="btn btn-prev"></span>
 			<span id="next2" class="btn btn-next"></span>
 			<div class="swiper-wrapper">
@@ -67,13 +96,14 @@
 			text-align: center;
 		}
 
-		.swiper-taobao {
-			height: 480px;
-			width: 860px;
-			margin: 20vh auto 0 auto;
+		.swiper-taobao,.swiper-taobao1 {
+			height: 280px;
+			width: 560px;
+			margin:  10px auto;
 			position: relative;
 			border-radius: 6px;
 		}
+
 
 		.swiper-items {
 			text-align: center;
@@ -91,21 +121,28 @@
 		}
 	</style>
 	<script type="text/javascript">
-		const page = document.getElementById("page");
-
 		var taobao = new SimSwiper(".swiper-taobao", {
 			loop: true,
 			button: {
 				prev: "#prev2", // 前进后退按钮
-				next: "#next2",
-				// prevKey: "ArrowRight", // 键盘操作
-				// nextKey: "ArrowLeft"
+				next: "#next2"
 			},
 			autoplay: false,
+			duration: 300,
+			lazy: !0,
+			direction: 'horizontal',//horizontal
 			pagination: {
 				el: ".pagination",
 				click: true
 			},
+		});
+		new SimSwiper(".swiper-taobao1", {
+			loop: true,
+			button: {
+				prev: "#prev", // 前进后退按钮
+				next: "#next",
+			},
+			autoplay: false,
 			duration: 300,
 			lazy: !0,
 			direction: 'horizontal',//horizontal

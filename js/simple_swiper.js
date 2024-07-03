@@ -357,7 +357,7 @@
 			},
 			play: function () {
 				var _ = this;
-				if(!page){return}
+				if (!page) { return }
 				_.curIndex = _.index === _.num ? 0 : _.index;
 				var a = slider.childNodes;
 				var c = a[th.curIndex];
@@ -614,7 +614,7 @@
 		_wrap.appendChild(_slider);
 		con.replaceChild(_wrap, tm.wrap);
 		slider = _slider;
-		page = document.querySelector(conf&&conf.pagination?conf.pagination.el:null);
+		page = document.querySelector(conf && conf.pagination ? conf.pagination.el : null);
 		if (page) {
 			if (conf.pagination && conf.pagination.el) {
 				var mx = tm.child.length,
