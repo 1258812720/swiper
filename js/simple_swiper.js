@@ -500,9 +500,9 @@
 				th.stop();
 				if (is_firefox()) { e.preventDefault(); }
 				var st = e.touches ? e.touches.length - 1 : 0;
-				th.touchX = th.is_horizontal() ? (e.clientX || e.touches[st].clientX) : (e.clientY || e.clientY || e.touches[st].clientY);
+				th.touchX = th.is_horizontal() ? (e.clientX || e.targetTouches[st].clientX) : (e.clientY || e.clientY || e.targetTouches[st].clientY);
 				if (is_mobile()) {
-					bind(slider, "touchmove", th.move, false);
+					bind(this, "touchmove", th.move, false);
 				} else {
 					e.preventDefault();
 					bind(document, "mousemove", th.move, false);
@@ -513,7 +513,7 @@
 			move: function (e) {
 				try {
 					e.preventDefault();
-					var x = th.is_horizontal() ? (e.clientX || (e.touches ? e.touches[0].clientX : 0)) : (e.clientY || (e.touches ? e.touches[0].clientY : 0));
+					var x = th.is_horizontal() ? (e.clientX || (e.touches ? e.targetTouches[0].clientX : 0)) : (e.clientY || (e.touches ? e.targetTouches[0].clientY : 0));
 					var a = x - th.touchX - th.position;
 					var __h = (th.is_horizontal() ? th.width : th.height)
 					var t, per = (x - th.touchX) / __h;
@@ -548,7 +548,7 @@
 					void er;
 				}
 			},
-			end: function (e) {
+			end: function () {
 				th.transform(th.index * (th.is_horizontal() ? th.width : th.height), conf.duration || 300);
 				th.prevIndex = th.index;
 				th.setPosition();
@@ -556,7 +556,6 @@
 				unbind(document, "mousemove", th.move);
 				unbind(slider, "mousemove", th.move);
 				th.set_drab(false);
-
 				th.boot();
 			},
 			min: function (x) {
