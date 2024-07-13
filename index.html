@@ -8,7 +8,7 @@
 	<meta http-equiv="X-UA-Compatible" content="edge" />
 	<link rel="short icon" href="img/logo.ico" />
 	<link rel="stylesheet" type="text/css" href="css/simple_style.css" />
-	<script type="text/javascript" src="js/simple_swiper_min.js"></script>
+	<script type="text/javascript" src="js/simple_swiper.js"></script>
 </head>
 
 <body>
@@ -18,59 +18,43 @@
 			<span id="next2" class="btn btn-next"></span>
 			<div class="swiper-wrapper">
 				<div class="swiper-items">
-					<a href="#213213">
-						<img src="https://img.alicdn.com/imgextra/i4/6000000005812/O1CN01vbUWkX1snws9DD0Qh_!!6000000005812-0-octopus.jpg"
+					<a href="#全">
+						<img data="https://gdp.alicdn.com/imgextra/i1/654519625/O1CN01m7U09Y2KyJ4nSazMx_!!654519625.png"
 							alt="">
 					</a>
 				</div>
 				<div class="swiper-items">
-					<img src="https://img.alicdn.com/imgextra/i4/O1CN01GOlEEW1zidUliI8O7_!!6000000006748-2-tps-846-472.png"
-						alt="">
-				</div>
-				<div class="swiper-items">
-					<img src="https://img.alicdn.com/imgextra/i3/O1CN01dmCUT51ns0IrRbXLm_!!6000000005144-0-tps-846-472.jpg"
-						alt="">
-				</div>
-				<div class="swiper-items">
-					<img src="https://img.alicdn.com/imgextra/i4/O1CN01LHWdyp1yvAidcNMDR_!!6000000006640-0-tps-846-472.jpg"
-						alt="">
-				</div>
-				<div class="swiper-items">
-					<img src="https://img.alicdn.com/imgextra/i4/O1CN01aTXsri1my7yg4CMpt_!!6000000005022-0-tps-846-472.jpg"
-						alt="">
-				</div>
-			</div>
-			<div class="pagehelper pagination"></div>
-		</div>
-		<div class="swiper-taobao1 simple-swiper-container" style="border: none;">
-			<span id="prev2" class="btn btn-prev"></span>
-			<span id="next2" class="btn btn-next"></span>
-			<div class="swiper-wrapper">
-				<div class="swiper-items">
-					<a href="#213213">
-						<img src="https://img.alicdn.com/imgextra/i4/6000000005812/O1CN01vbUWkX1snws9DD0Qh_!!6000000005812-0-octopus.jpg"
+					<a href="#~~">
+						<img data="https://gdp.alicdn.com/imgextra/i1/654519625/O1CN014vGAc02KyJ1Jignx9_!!654519625.jpg"
 							alt="">
 					</a>
 				</div>
 				<div class="swiper-items">
-					<img src="https://img.alicdn.com/imgextra/i4/O1CN01GOlEEW1zidUliI8O7_!!6000000006748-2-tps-846-472.png"
-						alt="">
+					<a href="#民">
+						<img data="https://gdp.alicdn.com/imgextra/i1/654519625/O1CN015cdO5l2KyIzsv95lh_!!654519625.png"
+							alt=""></a>
 				</div>
 				<div class="swiper-items">
-					<img src="https://img.alicdn.com/imgextra/i3/O1CN01dmCUT51ns0IrRbXLm_!!6000000005144-0-tps-846-472.jpg"
-						alt="">
+					<a href="#制">
+						<img data="https://gdp.alicdn.com/imgextra/i4/654519625/O1CN01pSrMRe2KyIzhQlkEB_!!654519625.jpg"
+							alt=""></a>
 				</div>
 				<div class="swiper-items">
-					<img src="https://img.alicdn.com/imgextra/i4/O1CN01LHWdyp1yvAidcNMDR_!!6000000006640-0-tps-846-472.jpg"
-						alt="">
+					<a href="#作">
+						<img data="https://gdp.alicdn.com/imgextra/i1/654519625/O1CN01WjVbkr2KyIwSGNoat_!!654519625.jpg"
+							alt="">
+					</a>
 				</div>
 				<div class="swiper-items">
-					<img src="https://img.alicdn.com/imgextra/i4/O1CN01aTXsri1my7yg4CMpt_!!6000000005022-0-tps-846-472.jpg"
-						alt="">
+					<a href="#人">
+						<img data="https://gdp.alicdn.com/imgextra/i1/654519625/O1CN017IxaIk2KyIxVgssnN_!!654519625.jpg"
+							alt="">
+					</a>
 				</div>
 			</div>
 			<div class="pagehelper pagination"></div>
 		</div>
+	</div>
 	</div>
 	<style>
 		code {
@@ -89,17 +73,16 @@
 			margin: 0;
 			padding: 14px;
 			box-sizing: border-box;
-			height: 98vh;
+			height: auto;
 			position: relative;
-			overflow: hidden;
+			overflow-y: auto;
 			border-radius: 8px;
-			text-align: center;
 		}
 
-		.swiper-taobao,.swiper-taobao1 {
-			height: 280px;
-			width: 560px;
-			margin:  10px auto;
+		.swiper-taobao {
+			height: 750px;
+			width: 100%;
+			margin: 0 auto;
 			position: relative;
 			border-radius: 6px;
 		}
@@ -110,10 +93,6 @@
 			height: 100%;
 		}
 
-		.selected>img {
-			transition: all 1s;
-			transform: scale(.72);
-		}
 
 		.swiper-items * {
 			width: 100%;
@@ -121,31 +100,24 @@
 		}
 	</style>
 	<script type="text/javascript">
-		var taobao = new SimSwiper(".swiper-taobao", {
-			loop: true,
+		new SimSwiper(".swiper-taobao", {
+			loop:true,
 			button: {
 				prev: "#prev2", // 前进后退按钮
 				next: "#next2"
 			},
-			autoplay: false,
-			duration: 300,
-			lazy: !0,
+			disabvarouch: !1,
+			autoplay: true,
+			lazy: {
+				enable: true,
+				prop: "data"
+			},
+			accelerate: true,
 			direction: 'horizontal',//horizontal
 			pagination: {
 				el: ".pagination",
 				click: true
 			},
-		});
-		new SimSwiper(".swiper-taobao1", {
-			loop: true,
-			button: {
-				prev: "#prev", // 前进后退按钮
-				next: "#next",
-			},
-			autoplay: false,
-			duration: 300,
-			lazy: !0,
-			direction: 'horizontal',//horizontal
 		});
 	</script>
 </body>
