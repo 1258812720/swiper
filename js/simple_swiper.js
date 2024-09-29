@@ -640,7 +640,7 @@
 				el.style[key] = props[key];
 			}
 		} catch (err) {
-			void (err);
+			void (err);	
 		}
 	}
 	function getStyle(el, prop) {
