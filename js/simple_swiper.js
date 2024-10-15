@@ -357,40 +357,41 @@
 			},
 			play: function () {
 				var _ = this;
-				if (!page) { return }
-				_.curIndex = _.index === _.num ? 0 : _.index;
-				var a = slider.childNodes;
-				var c = a[th.curIndex];
-				var pc = page.childNodes;
-				var nodes = {
-					curNodes: [],
-					siblings: [],
-					curIndex: _.curIndex
-				};
-				if (conf.pagination && page && conf.pagination.el) {
-					var i = 0;
-					for (; i < pc.length; i++) {
-						if (i === th.curIndex) {
-							nodes.curNodes.push(a[_.curIndex]);
-							if (_.curIndex === 0) {
-								nodes.curNodes.push(slider.lastChild)
-							}
-							pc[i].classList.add("pagination-items-active");
-						} else {
-							pc[i].classList.remove("pagination-items-active");
-							nodes.siblings.push(a[i]);
-						}
-					}
-				}
-				if (conf.lazy) {
-					_.add(c);
-				}
-				if (conf && conf.on && typeof conf.on.change === 'function') {
-					_.timer = setTimeout(function () {
-						conf.on.change(nodes);
-						clearTimeout(_.timer);
-					}, _.duration);
-				}
+                _.curIndex = _.index === _.num ? 0 : _.index;
+                var a = slider.childNodes;
+                var c = a[th.curIndex];
+                var nodes = {
+                    curNodes: [],
+                    siblings: [],
+                    curIndex: _.curIndex
+                };
+                if (page) {
+                    var pc = page.childNodes;
+                    if (conf.pagination && page && conf.pagination.el) {
+                        var i = 0;
+                        for (; i < pc.length; i++) {
+                            if (i === th.curIndex) {
+                                nodes.curNodes.push(a[_.curIndex]);
+                                if (_.curIndex === 0) {
+                                    nodes.curNodes.push(slider.lastChild)
+                                }
+                                pc[i].classList.add("pagination-items-active");
+                            } else {
+                                pc[i].classList.remove("pagination-items-active");
+                                nodes.siblings.push(a[i]);
+                            }
+                        }
+                    }
+                }
+                if (conf.lazy || Object.keys(conf.lazy.length !== 0)) {
+                    _.add(c);
+                }
+                if (conf && conf.on && typeof conf.on.change === 'function') {
+                    _.timer = setTimeout(function () {
+                        conf.on.change(nodes);
+                        clearTimeout(_.timer);
+                    }, _.duration);
+                }
 			},
 			css: function (a, b, c) {
 				if (!a || !b) {
