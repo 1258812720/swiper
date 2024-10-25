@@ -18,38 +18,16 @@
 			<span id="next2" class="btn btn-next"></span>
 			<div class="swiper-wrapper">
 				<div class="swiper-items">
-					<a href="#全">
-						<img data="https://gdp.alicdn.com/imgextra/i1/654519625/O1CN01m7U09Y2KyJ4nSazMx_!!654519625.png"
-							alt="">
-					</a>
+					<div class="ikun_img_wrapper">
+					</div>
 				</div>
 				<div class="swiper-items">
-					<a href="#~~">
-						<img data="https://gdp.alicdn.com/imgextra/i1/654519625/O1CN014vGAc02KyJ1Jignx9_!!654519625.jpg"
-							alt="">
-					</a>
+					<div class="ikun_img_wrapper">
+					</div>
 				</div>
 				<div class="swiper-items">
-					<a href="#民">
-						<img data="https://gdp.alicdn.com/imgextra/i1/654519625/O1CN015cdO5l2KyIzsv95lh_!!654519625.png"
-							alt=""></a>
-				</div>
-				<div class="swiper-items">
-					<a href="#制">
-						<img data="https://gdp.alicdn.com/imgextra/i4/654519625/O1CN01pSrMRe2KyIzhQlkEB_!!654519625.jpg"
-							alt=""></a>
-				</div>
-				<div class="swiper-items">
-					<a href="#作">
-						<img data="https://gdp.alicdn.com/imgextra/i1/654519625/O1CN01WjVbkr2KyIwSGNoat_!!654519625.jpg"
-							alt="">
-					</a>
-				</div>
-				<div class="swiper-items">
-					<a href="#人">
-						<img data="https://gdp.alicdn.com/imgextra/i1/654519625/O1CN017IxaIk2KyIxVgssnN_!!654519625.jpg"
-							alt="">
-					</a>
+					<div class="ikun_img_wrapper">
+					</div>
 				</div>
 			</div>
 			<div class="pagehelper pagination"></div>
@@ -61,28 +39,41 @@
 			font-size: 18px;
 		}
 
-		html {
-			height: 100%;
-			background-color: black;
-			padding: 4px;
-			box-sizing: border-box;
-		}
-
 		body {
-			background-color: white;
+			/* background-color: white; */
 			margin: 0;
-			padding: 14px;
+			padding: 0px;
 			box-sizing: border-box;
 			height: auto;
 			position: relative;
 			overflow-y: auto;
 			border-radius: 8px;
 		}
-
+		.ikun_img_wrapper{
+			display: flex;
+			border:1px solid white;
+			background-color: #2e2e2e;
+			flex-direction: row;
+			flex-wrap: wrap;
+			box-sizing: border-box;
+			height: 100%;
+			justify-content: space-between;
+		}
+		.ikun_img_wrapper::after{
+			content: '';
+			display: block;
+			width: 32%;
+		}
+		.ikun_img_wrapper img{
+			height: 150px;
+			object-fit: contain;
+		}
 		.swiper-taobao {
-			height: 750px;
-			width: 100%;
-			margin: 0 auto;
+			height: 840px;
+			border:1px solid #8f8f8f;
+			width: 640px;
+			margin: 4vh auto;
+			margin-bottom: 0;
 			position: relative;
 			border-radius: 6px;
 		}
@@ -92,14 +83,27 @@
 			text-align: center;
 			height: 100%;
 		}
-
-
-		.swiper-items * {
-			width: 100%;
-			height: 100%;
-		}
 	</style>
 	<script type="text/javascript">
+
+		const wrapp = document.getElementsByClassName("ikun_img_wrapper");
+
+		function render(){
+			let i=1;
+			while(i<=24){
+				const img = document.createElement("img");
+				img.setAttribute("data",'/img/'+i+'.png');
+				if(i<=8){
+					wrapp[0].appendChild(img);
+				}else if(i>8&&i<=16){
+					wrapp[1].appendChild(img);
+				}else{
+					wrapp[2].appendChild(img);
+				}
+				i++;
+			}
+		}
+		render();
 		new SimSwiper(".swiper-taobao", {
 			loop:true,
 			button: {
@@ -107,13 +111,13 @@
 				next: "#next2"
 			},
 			disabvarouch: !1,
-			autoplay: true,
+			autoplay: false,
 			lazy: {
 				enable: true,
 				prop: "data"
 			},
 			accelerate: true,
-			direction: 'horizontal',//horizontal
+			direction: 'v',//horizontal
 			pagination: {
 				el: ".pagination",
 				click: true
