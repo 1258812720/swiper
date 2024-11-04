@@ -8,26 +8,33 @@
 	<meta http-equiv="X-UA-Compatible" content="edge" />
 	<link rel="short icon" href="img/logo.ico" />
 	<link rel="stylesheet" type="text/css" href="css/simple_style.css" />
-	<script type="text/javascript" src="js/simple_swiper.js"></script>
+	<script type="text/javascript" src="js/simple_swiper_min.js"></script>
 </head>
 
 <body>
 	<div class="app">
-		<div class="swiper-taobao simple-swiper-container" style="border: none;">
-			<span id="prev2" class="btn btn-prev"></span>
-			<span id="next2" class="btn btn-next"></span>
+		<div class="heiwukong simple-swiper-container" style="border: none;">
+			<span id="prev2" class="btn btn-prev">
+				<img src="/img/icon-last.png" alt="">
+			</span>
+			<span id="next2" class="btn btn-next">
+				<img src="/img/icon-next.png" alt="">
+			</span>
 			<div class="swiper-wrapper">
 				<div class="swiper-items">
-					<div class="ikun_img_wrapper">
-					</div>
+					<img data="img/swiper01.jpg" alt="">
 				</div>
 				<div class="swiper-items">
-					<div class="ikun_img_wrapper">
-					</div>
+					<img data="img/swiper02.jpg" alt="">
 				</div>
 				<div class="swiper-items">
-					<div class="ikun_img_wrapper">
-					</div>
+					<img data="img/swiper03.jpg" alt="">
+				</div>
+				<div class="swiper-items">
+					<img data="img/swiper04.jpg" alt="">
+				</div>
+				<div class="swiper-items">
+					<img data="img/swiper05.jpg" alt="">
 				</div>
 			</div>
 			<div class="pagehelper pagination"></div>
@@ -35,12 +42,20 @@
 	</div>
 	</div>
 	<style>
-		code {
-			font-size: 18px;
+		.heiwukong .btn {
+			height: 418px;
+			width: 140px;
+			top: 30%;
+			background-image: none;
+		}
+
+		.btn>img {
+			width: 100%;
+			height: 100%;
 		}
 
 		body {
-			/* background-color: white; */
+			background-color: rgb(58, 58, 58);
 			margin: 0;
 			padding: 0px;
 			box-sizing: border-box;
@@ -49,29 +64,11 @@
 			overflow-y: auto;
 			border-radius: 8px;
 		}
-		.ikun_img_wrapper{
-			display: flex;
-			border:1px solid white;
-			background-color: #2e2e2e;
-			flex-direction: row;
-			flex-wrap: wrap;
-			box-sizing: border-box;
-			height: 100%;
-			justify-content: space-between;
-		}
-		.ikun_img_wrapper::after{
-			content: '';
-			display: block;
-			width: 32%;
-		}
-		.ikun_img_wrapper img{
-			height: 150px;
-			object-fit: contain;
-		}
-		.swiper-taobao {
-			height: 840px;
-			border:1px solid #8f8f8f;
-			width: 640px;
+
+		.heiwukong {
+			height: 863px;
+			border: 1px solid #8f8f8f;
+			width: 1538px;
 			margin: 4vh auto;
 			margin-bottom: 0;
 			position: relative;
@@ -83,33 +80,33 @@
 			text-align: center;
 			height: 100%;
 		}
+		.swiper-items img{
+			width: auto;
+			height: 100%;
+		}
+		.heiwukong .pagehelper{
+			text-align: right;
+		}
+		.pagehelper .pagination-items{
+			width: 60px;
+			height: 6px;
+			border-radius: 0;
+			border: none;
+			transition: width .3s;
+		}
+		.heiwukong .pagehelper .pagination-items-active{
+			width: 80px;
+			background-color: none;
+		}
 	</style>
 	<script type="text/javascript">
-
-		const wrapp = document.getElementsByClassName("ikun_img_wrapper");
-
-		function render(){
-			let i=1;
-			while(i<=24){
-				const img = document.createElement("img");
-				img.setAttribute("data",'/img/'+i+'.png');
-				if(i<=8){
-					wrapp[0].appendChild(img);
-				}else if(i>8&&i<=16){
-					wrapp[1].appendChild(img);
-				}else{
-					wrapp[2].appendChild(img);
-				}
-				i++;
-			}
-		}
-		render();
-		new SimSwiper(".swiper-taobao", {
-			loop:true,
+		new SimSwiper(".heiwukong", {
 			button: {
 				prev: "#prev2", // 前进后退按钮
 				next: "#next2"
 			},
+			loop:true,
+			duration: 1200,
 			disabvarouch: !1,
 			autoplay: false,
 			lazy: {
@@ -117,7 +114,7 @@
 				prop: "data"
 			},
 			accelerate: true,
-			direction: 'v',//horizontal
+			direction: 'horizontal',//horizontal
 			pagination: {
 				el: ".pagination",
 				click: true

@@ -153,7 +153,7 @@
             next: null,
             accelerate: true,
             timer: null,
-            is_move: false,
+            turnOff: true,
             autoplay: function () {
                 var time = typeof g_conf.autoplay === "number" ? g_conf.autoplay : 3500;
                 th.time = setInterval(
@@ -332,14 +332,31 @@
                 }
             },
             _prev: function () {
-                var _ = this;
-                _.index--;
-                _.slide_to();
+                if (this.turnOff) {
+                    this.index--;
+                    this.slide_to();
+                    this.thord(this);
+                }
+
             },
             _next: function () {
-                var _ = this;
-                _.index++;
-                _.slide_to();
+                if (this.turnOff) {
+                    this.index++;
+                    this.slide_to();
+                    this.thord(this);
+                }
+            },
+            thord: function (eb) {
+                if (eb) {
+                    if (eb.duration > 300) {
+                        eb.turnOff = false;
+                        var _s = setTimeout(function () {
+                            eb.turnOff = true;
+                            clearTimeout(_s);
+                            _s = null;
+                        }, eb.duration);
+                    }
+                }
             },
             play: function () {
                 var _ = this;
