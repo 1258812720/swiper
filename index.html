@@ -22,10 +22,14 @@
 			</span>
 			<div class="swiper-wrapper">
 				<div class="swiper-items">
-					<img data="img/swiper01.jpg" alt="">
+					<a href="#213123123">
+						<img data="img/swiper01.jpg" alt="">
+					</a>
 				</div>
 				<div class="swiper-items">
-					<img data="img/swiper02.jpg" alt="">
+					<a href="#2132132132131">
+						<img data="img/swiper02.jpg" alt="">
+					</a>
 				</div>
 				<div class="swiper-items">
 					<img data="img/swiper03.jpg" alt="">
@@ -79,22 +83,29 @@
 		.swiper-items {
 			text-align: center;
 			height: 100%;
+			position: relative;
+			overflow: hidden;
 		}
-		.swiper-items img{
+
+		.swiper-items img {
 			width: auto;
 			height: 100%;
 		}
-		.heiwukong .pagehelper{
+
+		.heiwukong .pagehelper {
 			text-align: right;
 		}
-		.pagehelper .pagination-items{
+
+		.pagehelper .pagination-items {
 			width: 60px;
 			height: 6px;
 			border-radius: 0;
 			border: none;
+
 			transition: width .3s;
 		}
-		.heiwukong .pagehelper .pagination-items-active{
+
+		.heiwukong .pagehelper .pagination-items-active {
 			width: 80px;
 			background-color: none;
 		}
@@ -105,8 +116,9 @@
 				prev: "#prev2", // 前进后退按钮
 				next: "#next2"
 			},
-			loop:true,
-			duration: 1200,
+			loop: true,
+			easing: 'ease-in-out',
+			duration: 1456,
 			disabvarouch: !1,
 			autoplay: false,
 			lazy: {

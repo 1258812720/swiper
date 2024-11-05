@@ -8,8 +8,11 @@
     if (!document.querySelector(el)) {
         console.error("找不到父容器", el);
         return;
-    }
+    };
     var fun = function (el) {
+        if (conf && !conf.loop) {
+            return;
+        }
         var _el = null;
         if (typeof el === 'string') {
             _el = document.querySelector(el);
@@ -26,7 +29,7 @@
             autoplay: true,
             easing: "ease"
         }
-    }
+    };
     var ArrayFind = function (arr, element) {
         var tag = false;
         if (arr.length) {
@@ -53,7 +56,7 @@
                 });
             }
         }
-    }
+    };
     /**
      * 事件解绑
      * __ {el:Document,event:String,fn}
@@ -64,7 +67,7 @@
                 _el.removeEventListener(event, fun, (/Trident/i.test(navigator.userAgent)) || is_mobile());
             }
         }
-    }
+    };
     var toArray = function (o) {
         if (!o) {
             return []
@@ -76,7 +79,7 @@
             arrays.push(o[i]);
         }
         return arrays;
-    }
+    };
     var getChild = function (el, name) {
         var res = {
             child: null,
@@ -85,7 +88,7 @@
         };
         if (!res.self) {
             return null;
-        }
+        };
         var c = res.self.children;
         if (res.self) {
             for (var a = 0; a < c.length; a++) {
@@ -103,7 +106,7 @@
             }
         }
         return res;
-    }
+    };
     function renderNode(name, prop) {
         if (!name && !prop) {
             return document.createDocumentFragment();
@@ -115,17 +118,17 @@
             }
         }
         return tag;
-    }
+    };
 
     function is_blank(str) {
         return !str || str.trim() === '';
-    }
+    };
     var is_mobile = function () {
         return (/Android|iPhone|iPad|X11|Mac OS X/i.test(navigator.userAgent));
-    }
+    };
     var is_firefox = function () {
         return (/Firefox/i.test(navigator.userAgent));
-    }
+    };
     var con = document.querySelector(el),
         g_conf = conf,
         slider = null,
@@ -187,7 +190,7 @@
                 try {
                     bind(window, "resize", function () {
                         slider.style.transition = "all 0s";
-                    })
+                    });
                     if (conf && conf.button) {
                         if (conf.button.prev) {
                             bind(document.querySelector(
@@ -195,7 +198,7 @@
                             ), "click", function () {
                                 _this._prev();
                             });
-                        }
+                        };
                         if (conf && conf.button.next) {
                             bind(document.querySelector(
                                 (root) + ">" + conf.button["next"]
@@ -206,29 +209,29 @@
                                 },
                                 false
                             );
-                        }
+                        };
                         if (!is_blank(conf.button.prevKey)) {
                             bind(document, "keydown", function (t) {
                                 if (conf.button.prevKey === t.key) {
                                     t.preventDefault();
-                                    th._prev()
+                                    th._prev();
                                 } else if (!is_blank(conf.button.nextKey) && t.key === conf.button
                                     .nextKey) {
-                                    t.preventDefault()
-                                    th._next()
+                                    t.preventDefault();
+                                    th._next();
                                 }
                             })
-                        }
+                        };
                     }
                 } catch (e) {
                     throw new Error(e);
-                }
+                };
                 if (g_conf.autoplay) {
                     th.boot();
-                }
+                };
                 if (!conf.disabvarouch) {
                     this.touch_init();
-                }
+                };
                 if (g_conf.pagination && page && g_conf.pagination["el"] !== undefined) {
                     page.childNodes[th.curIndex].classList.add("pagination-items-active");
                     if (g_conf.pagination["click"] && g_conf.pagination["click"] !== false) {
@@ -242,17 +245,17 @@
                             };
                         }
                     }
-                }
+                };
                 if (conf.init !== undefined && typeof conf.init === "function") {
                     conf.init({
                         el: slider.childNodes[th.curIndex],
                         index: th.curIndex
                     });
-                }
+                };
                 this.add(slider.firstElementChild);
                 if (conf && conf.loop) {
                     this.add(slider.lastElementChild);
-                }
+                };
                 bind(window, "visibilitychange", function () {
                     document.visibilityState === "visible" ? th.boot() : th.stop();
                 });
@@ -276,7 +279,7 @@
             },
             children: function (parent, name) {
                 if (!parent) {
-                    return
+                    return;
                 }
                 var tagArr = [];
                 function deep(_p) {
@@ -289,7 +292,7 @@
                             deep(ea);
                         }
                     }
-                }
+                };
                 deep();
                 return tagArr;
             },
@@ -321,14 +324,14 @@
                                     void (e)
                                 }
                             }
-                            img_el.classList.remove('lazy')
+                            img_el.classList.remove('lazy');
                             var path = root + ">.swiper-wrapper .lazy";
                             var y = document.querySelectorAll(path).length;
                             if (y <= 0) {
                                 th.loadEnd = true;
                             }
                         }
-                    }, Math.min((conf.duration || 0), 100))
+                    }, Math.min((conf.duration || 0), 100));
                 }
             },
             _prev: function () {
@@ -337,7 +340,6 @@
                     this.slide_to();
                     this.thord(this);
                 }
-
             },
             _next: function () {
                 if (this.turnOff) {
@@ -376,7 +378,7 @@
                             if (i === th.curIndex) {
                                 nodes.curNodes.push(a[_.curIndex]);
                                 if (_.curIndex === 0) {
-                                    nodes.curNodes.push(slider.lastChild)
+                                    nodes.curNodes.push(slider.lastChild);
                                 }
                                 pc[i].classList.add("pagination-items-active");
                             } else {
@@ -398,7 +400,7 @@
             },
             css: function (a, b, c) {
                 if (!a || !b) {
-                    return
+                    return;
                 }
                 setStyle(a, b);
                 if (c && typeof c === 'function') {
@@ -408,23 +410,21 @@
             slide_to: function () {
                 var _t = this;
                 var val;
-                if (_t.index === _t.num + 1) {
-                    if (conf.loop) {
-                        val = 0;
-                        _t.transform(val, 0)
-                    }
-                    _t.index = 1;
-                    fun(root)
+                if (conf.loop ? (_t.index > _t.num) : (_t.index > _t.num - 1)) {
+                    val = 0;
+                    _t.transform(val, 0);
+                    _t.index = conf.loop ? 1 : 0;
+                    fun(root);
                 } else if (_t.index < 0) {
                     if (conf.loop) {
-                        val = _t.is_horizontal() ? _t.num * _t.width : _t.num * _t.height
-                        _t.transform(val, 0)
+                        val = _t.is_horizontal() ? _t.num * _t.width : _t.num * _t.height;
+                        _t.transform(val, 0);
                     }
                     _t.index = _t.num - 1;
                     fun(root);
                 }
                 _t.duration = duration;
-                val = _t.is_horizontal() ? _t.index * _t.width : _t.index * _t.height
+                val = _t.is_horizontal() ? _t.index * _t.width : _t.index * _t.height;
                 _t.transform(val, _t.duration);
                 th.setPosition();
                 return _t;
@@ -444,7 +444,7 @@
                 var t = this;
                 var _prop = null;
                 if (t.accelerate) {
-                    var ts = t.is_horizontal() ? "translate3d(" + (-x) + "px,0px,0px)" : "translate3d(0px," + (-x) + "px,0px)"
+                    var ts = t.is_horizontal() ? "translate3d(" + (-x) + "px,0px,0px)" : "translate3d(0px," + (-x) + "px,0px)";
                     _prop = {
                         transform: ts,
                         position: 'absolute',
@@ -452,16 +452,16 @@
                         top: 0,
                         backfaceVisibility: 'hidden',
                         transition: "all " + delay + "ms " + easing,
-                    }
+                    };
                 } else {
                     _prop = {
                         transform: "translate3d(0px,0px,0px)",
                         position: 'absolute',
                         backfaceVisibility: 'hidden',
                         transition: "all " + delay + "ms " + easing,
-                    }
+                    };
                     _prop[t.is_horizontal() ? 'left' : 'top'] = -x + "px";
-                }
+                };
                 t.css(slider, _prop);
                 t.play();
             },
@@ -481,11 +481,11 @@
                     if (typeof ar[key] === "object") {
                         if (b) {
                             ar[key].onclick = function (e) {
-                                e.preventDefault()
+                                e.preventDefault();
                             }
                         } else {
                             ar[key].onclick = function () {
-                                return void (undefined)
+                                return void (undefined);
                             }
                         }
                     }
@@ -500,7 +500,7 @@
                 return !(Math.floor(n) === -1);
             },
             start: function (e) {
-                if (!e) { return }
+                if (!e) { return; }
                 th.stop();
                 if (is_firefox()) { e.preventDefault(); }
                 var st = e.touches ? e.touches.length - 1 : 0;
@@ -508,18 +508,21 @@
                 if (is_mobile()) {
                     bind(this, "touchmove", th.move, false);
                 } else {
-                    e.preventDefault();
-                    bind(document, "mousemove", th.move, false);
-                    th.link_handler(false); // true阻止连接跳转
+                    if (e.which === 1) {
+                        e.preventDefault();
+                        bind(document, "mousemove", th.move, false);
+                        th.link_handler(false); // true阻止连接跳转
+                        th.set_drab(true);
+                    }
                 }
-                th.set_drab(true);
             },
             move: function (e) {
+                var __loop = conf.loop;
                 try {
                     e.preventDefault();
                     var x = th.is_horizontal() ? (e.clientX || (e.touches ? e.targetTouches[0].clientX : 0)) : (e.clientY || (e.touches ? e.targetTouches[0].clientY : 0));
                     var a = x - th.touchX - th.position;
-                    var __h = (th.is_horizontal() ? th.width : th.height)
+                    var __h = (th.is_horizontal() ? th.width : th.height);
                     var t, per = (x - th.touchX) / __h;
                     if (th.checked(per)) {
                         t = -__h / 10;
@@ -535,18 +538,25 @@
                         }
                         th.link_handler(true);
                     }
-                    var p = Math.abs(a) >= th.num * __h;
-                    if (p) {
-                        th.position = 0;
-                        th.index = 0;
-                        th.transform(0, 0, 0);
-                    } else if (a > 0) {
-                        th.position = th.num * __h;
-                        th.transform(th.position, 0, 0);
-                        th.index = th.num;
+                    var p = Math.abs(a) >= (__loop ? th.num : th.num - 1) * __h;
+                    if (__loop) {
+                        if (p) {
+                            var _val = 0;
+                            th.position = _val;
+                            th.index = _val;
+                            th.transform(_val, 0, 0);
+                        } else if (a > 0) {
+                            th.position = th.num * __h;
+                            th.transform(th.position, 0, 0);
+                            th.index = th.num;
+                        } else {
+                            th.transform(-a, 0);
+                        }
                     } else {
-                        th.transform(-a, 0);
-                    }
+                        if (p) {
+                            th.index = th.num - 1;
+                        } th.transform(-a, 0);
+                    };
                 } catch (er) {
                     th.transform(-a, 0);
                     void er;
@@ -587,7 +597,7 @@
             }),
             _ew = getStyle(con, 'width');
         if (!_wc) {
-            return
+            return;
         }
         try {
             for (var s in _wc) {
