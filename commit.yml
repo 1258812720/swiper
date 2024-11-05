@@ -2,115 +2,19 @@
 branches: {
   }
 fileChange:
-  /img:
-    newFile: !uuid '76df44b242ba1e69911b7cc5b01a2c6b737f6aba'
-    oldFile: !uuid 'f67f89dcbbb1585543cc4aacd13f871a5de6ca90'
-  /img/1.png:
-    newFile: null
-    oldFile: !uuid '61e408dbaa5d51927668e17656ca46399cb7f6f2'
-  /img/10.png:
-    newFile: null
-    oldFile: !uuid 'dd466d77aaf888aeff52b2307eb5c9527cb6fca9'
-  /img/11.png:
-    newFile: null
-    oldFile: !uuid '3985878b7969745da1f03640ec783165822ae4b4'
-  /img/12.png:
-    newFile: null
-    oldFile: !uuid '08afb7b1194445e0994f80f565d8451832322102'
-  /img/13.png:
-    newFile: null
-    oldFile: !uuid '7de4600ae9ddce160193d8d6d729a98a6d3cf07e'
-  /img/14.png:
-    newFile: null
-    oldFile: !uuid '9550a02266604d737bc6ea3b700a9780d2b8f309'
-  /img/15.png:
-    newFile: null
-    oldFile: !uuid 'f050b897b685e66a216b457ccc8544f47dc41476'
-  /img/16.png:
-    newFile: null
-    oldFile: !uuid '27aaaeb4c5cb39613fbb377e0f113590c0648561'
-  /img/17.png:
-    newFile: null
-    oldFile: !uuid '47b2fb560dabd9885666fcffbf621206896e3774'
-  /img/18.png:
-    newFile: null
-    oldFile: !uuid '045ca6b6897f308016a399125de10c4d58aae115'
-  /img/19.png:
-    newFile: null
-    oldFile: !uuid '43daf3b87632151f4736a63ecc46a48fa60192a4'
-  /img/2.png:
-    newFile: null
-    oldFile: !uuid '6388989714791b463cf2dc4b3ad49ad3e2ea78de'
-  /img/20.png:
-    newFile: null
-    oldFile: !uuid '7d963567a2f6d6062a975415aaf6f01a12e81ee2'
-  /img/21.png:
-    newFile: null
-    oldFile: !uuid '07e74057f07abd9e294c0625af1e0b909b62788f'
-  /img/22.png:
-    newFile: null
-    oldFile: !uuid '6c091a027992ef33ced599f570c57ac07d5113f4'
-  /img/23.png:
-    newFile: null
-    oldFile: !uuid 'd0077c97a543018dad275141a0f26796a23312df'
-  /img/24.png:
-    newFile: null
-    oldFile: !uuid 'a48b8d483644a34f2588d3d601b6447dacda263b'
-  /img/3.png:
-    newFile: null
-    oldFile: !uuid 'b98c7ade5017aabf0f4bd68303d1eb52f3a262f9'
-  /img/4.png:
-    newFile: null
-    oldFile: !uuid 'd6f5d368db33b7246a82d80a69de05bbe6cf0528'
-  /img/5.png:
-    newFile: null
-    oldFile: !uuid 'b98c7ade5017aabf0f4bd68303d1eb52f3a262f9'
-  /img/6.png:
-    newFile: null
-    oldFile: !uuid '5794b4e5502ba96e5df94f29cb7d663639ae4800'
-  /img/7.png:
-    newFile: null
-    oldFile: !uuid '6c091a027992ef33ced599f570c57ac07d5113f4'
-  /img/8.png:
-    newFile: null
-    oldFile: !uuid 'f8718a0c687effd5ee12e2718bf6a872c03abe46'
-  /img/9.png:
-    newFile: null
-    oldFile: !uuid 'fcc2533640d93212e1262b2f20431394ab5b0077'
-  /img/icon-last.png:
-    newFile: !uuid '5b53e325b79af23c7493678295af18f009f8080a'
-    oldFile: null
-  /img/icon-next.png:
-    newFile: !uuid 'fcdb94b54379587ac728cc4664d3b372ab29985a'
-    oldFile: null
-  /img/swiper01.jpg:
-    newFile: !uuid '0ad44bc4f64c694beaab200fd5ebd723d6c5b72a'
-    oldFile: null
-  /img/swiper02.jpg:
-    newFile: !uuid 'cc0f3b915748a3dce039d58e6feacefa06e71650'
-    oldFile: null
-  /img/swiper03.jpg:
-    newFile: !uuid '65d4d6c68045ade29565a45600e221bb45987fee'
-    oldFile: null
-  /img/swiper04.jpg:
-    newFile: !uuid 'fba06e1efd088fc4f31cdcd93a9da4436afa1586'
-    oldFile: null
-  /img/swiper05.jpg:
-    newFile: !uuid 'd973d52a02a90d9bf904e7ef73461d7acb09d623'
-    oldFile: null
   /index.html:
-    newFile: !uuid 'd83bffadbce945d7fd8844cd974454030397c62c'
-    oldFile: !uuid '1d5a3b45988fc6729b15e125cd83a0f0de5e488f'
+    newFile: !uuid '61fc216b004ebedfc220eb7cea041b28d2fd3b9f'
+    oldFile: !uuid 'd83bffadbce945d7fd8844cd974454030397c62c'
   /js:
-    newFile: !uuid '0ea92592a582dab2972485c43e69417eafbd6f8c'
-    oldFile: !uuid 'd90cefa10db1d2494f4532dd4adda85055dd8286'
+    newFile: !uuid 'c9e98dcee9c9086e1f81c12b62ebeed65c43a2bd'
+    oldFile: !uuid '0ea92592a582dab2972485c43e69417eafbd6f8c'
   /js/simple_swiper.js:
-    newFile: !uuid '87a9662800ef9742c68d912c896188f940120683'
-    oldFile: !uuid '3b8a779227779db5db8dd76423ac3cadc5a2795e'
+    newFile: !uuid 'fe713cb9ef09bb073289c5cfd590d8ec3c686a48'
+    oldFile: !uuid '87a9662800ef9742c68d912c896188f940120683'
   /js/simple_swiper_min.js:
-    newFile: !uuid 'e4f72286426b836bafad8164384ba43ce2f3ea6e'
-    oldFile: !uuid '25767840ec5cc7c437e49653c4b58d5fc519f834'
-gitCommitId: !uuid '15d831724e2aec7556728891a7683890ce90dd00'
+    newFile: !uuid '66d08618822c645459c34bd8618b712891240e1c'
+    oldFile: !uuid 'e4f72286426b836bafad8164384ba43ce2f3ea6e'
+gitCommitId: !uuid '96113b61453be0934f033f4d0f0c24029db780ed'
 renames: {
   }
-revisionId: 91
+revisionId: 92
