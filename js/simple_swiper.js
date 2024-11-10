@@ -388,7 +388,7 @@
                         }
                     }
                 }
-                if (conf.lazy || Object.keys(conf.lazy.length !== 0)) {
+                if (conf.lazy && Object.keys(conf.lazy.length !== 0)) {
                     _.add(c);
                 }
                 if (conf && conf.on && typeof conf.on.change === 'function') {
