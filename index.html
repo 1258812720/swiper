@@ -8,37 +8,24 @@
 	<meta http-equiv="X-UA-Compatible" content="edge" />
 	<link rel="short icon" href="img/logo.ico" />
 	<link rel="stylesheet" type="text/css" href="css/simple_style.css" />
-	<script type="text/javascript" src="js/simple_swiper_min.js"></script>
+	<script type="text/javascript" src="js/simple_swiper.js"></script>
 </head>
 
 <body>
 	<div class="app">
 		<div class="heiwukong simple-swiper-container" style="border: none;">
 			<span id="prev2" class="btn btn-prev">
-				<img src="/img/icon-last.png" alt="">
+				
 			</span>
 			<span id="next2" class="btn btn-next">
-				<img src="/img/icon-next.png" alt="">
+				
 			</span>
 			<div class="swiper-wrapper">
 				<div class="swiper-items">
-					<a href="#213123123">
-						<img data="img/swiper01.jpg" alt="">
-					</a>
+					<span class="swiper-text">默认显示文本</span>
 				</div>
 				<div class="swiper-items">
-					<a href="#2132132132131">
-						<img data="img/swiper02.jpg" alt="">
-					</a>
-				</div>
-				<div class="swiper-items">
-					<img data="img/swiper03.jpg" alt="">
-				</div>
-				<div class="swiper-items">
-					<img data="img/swiper04.jpg" alt="">
-				</div>
-				<div class="swiper-items">
-					<img data="img/swiper05.jpg" alt="">
+					<span class="swiper-text">默认显示文本一</span>
 				</div>
 			</div>
 			<div class="pagehelper pagination"></div>
@@ -46,18 +33,6 @@
 	</div>
 	</div>
 	<style>
-		.heiwukong .btn {
-			height: 418px;
-			width: 140px;
-			top: 30%;
-			background-image: none;
-		}
-
-		.btn>img {
-			width: 100%;
-			height: 100%;
-		}
-
 		body {
 			background-color: rgb(58, 58, 58);
 			margin: 0;
@@ -70,21 +45,29 @@
 		}
 
 		.heiwukong {
-			height: 863px;
+			height: 120px;
 			border: 1px solid #8f8f8f;
-			width: 1538px;
-			margin: 4vh auto;
+			width: 540px;
+			background-color: white;
+			margin: 45vh auto;
 			margin-bottom: 0;
 			position: relative;
 			border-radius: 6px;
 		}
 
-
+		.swiper-text{
+			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 36px;
+		}
 		.swiper-items {
 			text-align: center;
 			height: 100%;
 			position: relative;
 			overflow: hidden;
+			background-color: #8f8f8f;
 		}
 
 		.swiper-items img {
@@ -117,14 +100,10 @@
 				next: "#next2"
 			},
 			loop: true,
-			easing: 'ease-in-out',
-			duration: 1456,
-			disabvarouch: !1,
+			duration: 300,
+			disabvarouch: !1, // 是否关闭触摸
 			autoplay: false,
-			lazy: {
-				enable: true,
-				prop: "data"
-			},
+			gap:10, //间隔 number or string
 			accelerate: true,
 			direction: 'horizontal',//horizontal
 			pagination: {

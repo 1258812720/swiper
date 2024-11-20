@@ -168,15 +168,15 @@
             },
             init: function () {
                 var _this = this;
-                this.prev = this._prev;
-                this.next = this._next;
-                this.lastNode = slider.lastChild;
-                th = this;
+                _this.prev = this._prev;
+                _this.next = this._next;
+                _this.lastNode = slider.lastChild;
+                th = _this;
                 th.duration = duration;
                 th.num = _wc.length;
                 th.width = getStyle(con, "width");
                 th.height = getStyle(con, "height");
-                if (th.is_horizontal()) {
+                if (th.is_horizontal) {
                     setStyle(slider, {
                         width: isCube ? '100%' : this.width * ((conf && conf.loop) ? _wc.length + 1 : _wc.length) +
                             "px"
@@ -263,6 +263,7 @@
                 if (typeof conf.accelerate == 'boolean') {
                     this.accelerate = conf.accelerate;
                 };
+
                 return this;
             },
             stop: function () {
@@ -417,26 +418,26 @@
                     fun(root);
                 } else if (_t.index < 0) {
                     if (conf.loop) {
-                        val = _t.is_horizontal() ? _t.num * _t.width : _t.num * _t.height;
+                        val = _t.is_horizontal ? _t.num * _t.width : _t.num * _t.height;
                         _t.transform(val, 0);
                     }
                     _t.index = _t.num - 1;
                     fun(root);
                 }
                 _t.duration = duration;
-                val = _t.is_horizontal() ? _t.index * _t.width : _t.index * _t.height;
+                val = _t.is_horizontal ? _t.index * _t.width : _t.index * _t.height;
                 _t.transform(val, _t.duration);
                 th.setPosition();
                 return _t;
             },
             is_horizontal: function () {
-                return !conf.direction || conf.direction.toLowerCase() === 'horizontal';
+                this.is_horizontal = !conf.direction || conf.direction.toLowerCase() === 'horizontal';
             },
             set_default_position: function () {
                 this.goto();
             },
             goto: function () {
-                var __dis = this.index * (this.is_horizontal() ? this.width : this.height);
+                var __dis = this.index * (this.is_horizontal ? this.width : this.height);
                 this.transform(__dis, conf.duration || 300),
                     this.position = __dis;
             },
@@ -444,7 +445,7 @@
                 var t = this;
                 var _prop = null;
                 if (t.accelerate) {
-                    var ts = t.is_horizontal() ? "translate3d(" + (-x) + "px,0px,0px)" : "translate3d(0px," + (-x) + "px,0px)";
+                    var ts = t.is_horizontal ? "translate3d(" + (-x) + "px,0px,0px)" : "translate3d(0px," + (-x) + "px,0px)";
                     _prop = {
                         transform: ts,
                         position: 'absolute',
@@ -460,7 +461,7 @@
                         backfaceVisibility: 'hidden',
                         transition: "all " + delay + "ms " + easing,
                     };
-                    _prop[t.is_horizontal() ? 'left' : 'top'] = -x + "px";
+                    _prop[t.is_horizontal ? 'left' : 'top'] = -x + "px";
                 };
                 t.css(slider, _prop);
                 t.play();
@@ -504,7 +505,7 @@
                 th.stop();
                 if (is_firefox()) { e.preventDefault(); }
                 var st = e.touches ? e.touches.length - 1 : 0;
-                th.touchX = th.is_horizontal() ? (e.clientX || e.targetTouches[st].clientX) : (e.clientY || e.clientY || e.targetTouches[st].clientY);
+                th.touchX = th.is_horizontal ? (e.clientX || e.targetTouches[st].clientX) : (e.clientY || e.clientY || e.targetTouches[st].clientY);
                 if (is_mobile()) {
                     bind(this, "touchmove", th.move, false);
                 } else {
@@ -520,9 +521,9 @@
                 var __loop = conf.loop;
                 try {
                     e.preventDefault();
-                    var x = th.is_horizontal() ? (e.clientX || (e.touches ? e.targetTouches[0].clientX : 0)) : (e.clientY || (e.touches ? e.targetTouches[0].clientY : 0));
+                    var x = th.is_horizontal ? (e.clientX || (e.touches ? e.targetTouches[0].clientX : 0)) : (e.clientY || (e.touches ? e.targetTouches[0].clientY : 0));
                     var a = x - th.touchX - th.position;
-                    var __h = (th.is_horizontal() ? th.width : th.height);
+                    var __h = (th.is_horizontal ? th.width : th.height);
                     var t, per = (x - th.touchX) / __h;
                     if (th.checked(per)) {
                         t = -__h / 10;
@@ -563,7 +564,7 @@
                 }
             },
             end: function () {
-                th.transform(th.index * (th.is_horizontal() ? th.width : th.height), conf.duration || 300);
+                th.transform(th.index * (th.is_horizontal ? th.width : th.height), conf.duration || 300);
                 th.prevIndex = th.index;
                 th.setPosition();
                 unbind(slider, "touchmove", th.move);
@@ -577,12 +578,15 @@
                 return c >= 5;
             },
             setPosition: function () {
-                this.position = this.index * (this.is_horizontal() ? this.width : this.height);
+                this.position = this.index * (this.is_horizontal ? this.width : this.height);
             },
         };
     var globa_this = null;
+
     (function () {
+        var swiper_gab = parseFloat(conf.gap ?? 0);
         var _vmNode = undefined;
+        setting.is_horizontal();
         if (arguments.length !== 2) {
             el = ".simple-swiper-container";
         } else {
@@ -600,18 +604,23 @@
             return;
         }
         try {
+            var offsetVal = swiper_gab;
             for (var s in _wc) {
                 var _i = _wc[s];
-                if (setting.is_horizontal()) {
+                if (setting.is_horizontal) {
                     setStyle(_i, {
-                        width: _ew + 'px',
+                        width: (_ew - swiper_gab * 2) + 'px',
                         height: '100%',
-                        float: 'left'
+                        float: 'left',
+                        marginLeft: offsetVal + "px",
+                        marginRight: offsetVal + "px"
                     });
                 } else {
                     setStyle(_i, {
                         width: _ew + 'px',
-                        height: getStyle(con, 'height') + 'px',
+                        height: Math.max((getStyle(con, 'height') - swiper_gab * 2), 0) + 'px',
+                        marginTop: offsetVal/2 + "px",
+                        marginBottom: offsetVal/2 + "px"
                     });
                 }
                 _i.classList.add('lazy');
