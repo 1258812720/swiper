@@ -389,7 +389,7 @@
                         }
                     }
                 }
-                if (conf.lazy && Object.keys(conf.lazy.length !== 0)) {
+                if (conf.lazy && Object.keys(conf.lazy).length !== 0) {
                     _.add(c);
                 }
                 if (conf && conf.on && typeof conf.on.change === 'function') {
@@ -619,8 +619,8 @@
                     setStyle(_i, {
                         width: _ew + 'px',
                         height: Math.max((getStyle(con, 'height') - swiper_gab * 2), 0) + 'px',
-                        marginTop: offsetVal/2 + "px",
-                        marginBottom: offsetVal/2 + "px"
+                        marginTop: offsetVal / 2 + "px",
+                        marginBottom: offsetVal / 2 + "px"
                     });
                 }
                 _i.classList.add('lazy');
