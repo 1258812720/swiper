@@ -584,7 +584,7 @@
     var globa_this = null;
 
     (function () {
-        var swiper_gab = parseFloat(conf.gap ?? 0);
+        var swiper_gab = parseFloat(conf.gap || 0);
         var _vmNode = undefined;
         setting.is_horizontal();
         if (arguments.length !== 2) {
