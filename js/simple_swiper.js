@@ -9,6 +9,36 @@
         console.error("找不到父容器", el);
         return;
     };
+    function set_child_size(nodeList, rootEl, swiperGab = 0, isInsert = false) {
+        var __vm = document.createDocumentFragment();
+        for (var s in nodeList) {
+            var _i = nodeList[s];
+            if (setting.is_horizontal) {
+                setStyle(_i, {
+                    width: Math.max((getStyle(rootEl, 'width') - swiperGab * 2), 0) + 'px',
+                    height: '100%',
+                    float: 'left',
+                    marginLeft: swiperGab + "px",
+                    marginRight: swiperGab + "px"
+                });
+            } else {
+                setStyle(_i, {
+                    width: rootWidth + 'px',
+                    height: Math.max((getStyle(rootEl, 'height') - swiperGab * 2), 0) + 'px',
+                    marginTop: swiperGab / 2 + "px",
+                    marginBottom: swiperGab / 2 + "px"
+                });
+            }
+            if (isInsert) {
+                _i.classList.add('lazy');
+                __vm.appendChild(_i);
+
+            }
+        }
+        if (isInsert) {
+            return __vm;
+        }
+    }
     var fun = function (el) {
         if (conf && !conf.loop) {
             return;
@@ -83,20 +113,24 @@
     var getChild = function (el, name) {
         var res = {
             child: null,
-            self: typeof el === 'string' ? document.querySelector(el) : el,
+            self: null,
             wrap: null
         };
-        if (!res.self) {
-            return null;
-        };
-        var c = res.self.children;
+        if (el && typeof el === 'string') {
+            var CLASS = /^./g.test(el);
+            var ID = /^#/g.test(el);
+            res.self = ID ? document.getElementById(el.replace(/#/, "")) : CLASS ? document.getElementsByClassName(el.replace(/./, ""))[0] : document.getElementsByTagName(el);
+        } else {
+            res.self = el;
+        }
         if (res.self) {
+            var c = res.self.children;
             for (var a = 0; a < c.length; a++) {
                 var i = c[a];
                 if (i.className === name.replace(".", "")) {
                     var children = i.children;
                     if (Array.from === undefined) {
-                        res.child = toArray(children)
+                        res.child = toArray(children);
                     } else {
                         res.child = Array.from(children);
                     }
@@ -174,22 +208,33 @@
                 th = _this;
                 th.duration = duration;
                 th.num = _wc.length;
-                th.width = getStyle(con, "width");
-                th.height = getStyle(con, "height");
-                if (th.is_horizontal) {
-                    setStyle(slider, {
-                        width: isCube ? '100%' : this.width * ((conf && conf.loop) ? _wc.length + 1 : _wc.length) +
-                            "px"
-                    });
-                } else {
-                    setStyle(slider, {
-                        height: this.height * (conf && conf.loop ? _wc.length + 1 : _wc.length) +
-                            "px"
-                    });
+                function _set_size() {
+                    var refresh_child = slider.children;
+                    if (_this.is_horizontal) {
+                        _this.width = getStyle(con, "width");
+                        setStyle(slider, {
+                            width: isCube ? '100%' : _this.width * ((conf && conf.loop) ? _wc.length + 1 : _wc.length) +
+                                "px"
+                        });
+                        set_child_size(refresh_child, con, conf.gap, false);
+                        _this.set_default_position(false);
+                    } else {
+                        _this.height = getStyle(con, "height");
+                        setStyle(slider, {
+                            height: _this.height * (conf && conf.loop ? _wc.length + 1 : _wc.length) +
+                                "px"
+                        });
+                        set_child_size(refresh_child, con, conf.gap, false);
+                        _this.set_default_position(false);
+                    }
                 }
+                _set_size();
                 try {
                     bind(window, "resize", function () {
-                        slider.style.transition = "all 0s";
+                        setStyle(slider, {
+                            transition: "all 0s",
+                        });
+                        _set_size();
                     });
                     if (conf && conf.button) {
                         if (conf.button.prev) {
@@ -433,12 +478,16 @@
             is_horizontal: function () {
                 this.is_horizontal = !conf.direction || conf.direction.toLowerCase() === 'horizontal';
             },
-            set_default_position: function () {
-                this.goto();
+            set_default_position: function (transition = true) {
+                let time = conf.duration || 300;
+                if (!transition) {
+                    time = 0;
+                }
+                this.goto(time);
             },
-            goto: function () {
+            goto: function (time) {
                 var __dis = this.index * (this.is_horizontal ? this.width : this.height);
-                this.transform(__dis, conf.duration || 300),
+                this.transform(__dis, time),
                     this.position = __dis;
             },
             transform: function (x, delay) {
@@ -598,34 +647,14 @@
             _vmNode = renderNode(),
             _slider = renderNode("div", {
                 "class": "swiper-slider"
-            }),
-            _ew = getStyle(con, 'width');
+            });
         if (!_wc) {
             return;
         }
         try {
             var offsetVal = swiper_gab;
-            for (var s in _wc) {
-                var _i = _wc[s];
-                if (setting.is_horizontal) {
-                    setStyle(_i, {
-                        width: (_ew - swiper_gab * 2) + 'px',
-                        height: '100%',
-                        float: 'left',
-                        marginLeft: offsetVal + "px",
-                        marginRight: offsetVal + "px"
-                    });
-                } else {
-                    setStyle(_i, {
-                        width: _ew + 'px',
-                        height: Math.max((getStyle(con, 'height') - swiper_gab * 2), 0) + 'px',
-                        marginTop: offsetVal / 2 + "px",
-                        marginBottom: offsetVal / 2 + "px"
-                    });
-                }
-                _i.classList.add('lazy');
-                _vmNode.appendChild(_i);
-            }
+            var vm_nodes = set_child_size(_wc, con, offsetVal, true);
+            _vmNode.appendChild(vm_nodes);
         } catch (e) {
             void (e);
         }
