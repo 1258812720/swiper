@@ -624,7 +624,7 @@
             },
             min: function (x) {
                 var c = Math.abs(x - this.touchX);
-                return c >= 5;
+                return (c / th.width) >= 0.1;
             },
             setPosition: function () {
                 this.position = this.index * (this.is_horizontal ? this.width : this.height);
