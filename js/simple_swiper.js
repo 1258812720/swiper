@@ -76,7 +76,7 @@
      * 事件绑定
      * __ {el:Document,event:String,fn,passive:bool}
      */
-    var events = ["visibilitychange", "scroll", "touchstart", "transitionend", "click", "touchmove", "touchend", "mouseup", "mousedown", "mouseleave", "mousemove", "mouseout", "resize", "keydown"];
+    var events = ["visibilitychange", "scroll", "touchstart", "pointerup", "pointermove", "pointerleave", "pointerdown", "transitionend", "click", "touchmove", "touchend", "mouseup", "mousedown", "mouseleave", "mousemove", "mouseout", "resize", "keydown"];
     var bind = function (_el, event, fun, passive) {
         if (_el && typeof _el === 'object') {
             if (event && typeof event === 'string' && ArrayFind(events, event)) {
@@ -343,16 +343,18 @@
                 return tagArr;
             },
             add: function (img_el) {
-                if (th.loadEnd) {
+                if (!img_el) { 
                     return;
                 }
-                if (!img_el) {
+                else if (th.loadEnd) {
                     return;
-                } else {
+                }
+                else {
                     var t = null;
                     clearTimeout(t);
                     t = setTimeout(function () {
                         var img = th.children(img_el, "img");
+                        
                         if (img) {
                             for (var i = 0; i < img.length; i++) {
                                 var _img = img[i];
@@ -408,6 +410,9 @@
             },
             play: function () {
                 var _ = this;
+                if (!slider) { 
+                    return;
+                }
                 _.curIndex = _.index === _.num ? 0 : _.index;
                 var a = slider.childNodes;
                 var c = a[th.curIndex];
@@ -485,7 +490,7 @@
                 }
                 this.goto(time);
             },
-            goto: function (time) {
+            goto: function (time, target) {
                 var __dis = this.index * (this.is_horizontal ? this.width : this.height);
                 this.transform(__dis, time),
                     this.position = __dis;
@@ -517,12 +522,12 @@
             },
             touch_init: function () {
                 if (is_mobile()) {
-                    bind(slider, "touchstart", th.start, false);
+                    bind(con, "touchstart", th.start, false);
                     bind(document, "touchend", th.end, false);
                 } else {
-                    bind(slider, "mousedown", th.start, false);
-                    bind(slider, "mouseleave", th.stop, false);
-                    bind(document, "mouseup", th.end, false);
+                    bind(con, "pointerdown", th.start, false);
+                    bind(con, "pointerleave", th.stop, false);
+                    bind(document, "pointerup", th.end, false);
                 }
             },
             link_handler: function (b) {
@@ -552,6 +557,7 @@
             start: function (e) {
                 if (!e) { return; }
                 th.stop();
+                e.stopPropagation();
                 if (is_firefox()) { e.preventDefault(); }
                 var st = e.touches ? e.touches.length - 1 : 0;
                 th.touchX = th.is_horizontal ? (e.clientX || e.targetTouches[st].clientX) : (e.clientY || e.clientY || e.targetTouches[st].clientY);
@@ -560,13 +566,14 @@
                 } else {
                     if (e.which === 1) {
                         e.preventDefault();
-                        bind(document, "mousemove", th.move, false);
+                        bind(document, "pointermove", th.move, false);
                         th.link_handler(false); // true阻止连接跳转
                         th.set_drab(true);
                     }
                 }
             },
             move: function (e) {
+                e.stopPropagation();
                 var __loop = conf.loop;
                 try {
                     e.preventDefault();
@@ -589,6 +596,7 @@
                         th.link_handler(true);
                     }
                     var p = Math.abs(a) >= (__loop ? th.num : th.num - 1) * __h;
+                    var tar = e.target;
                     if (__loop) {
                         if (p) {
                             var _val = 0;
@@ -612,13 +620,14 @@
                     void er;
                 }
             },
-            end: function () {
+            end: function (e) {
+                e.stopPropagation();
                 th.transform(th.index * (th.is_horizontal ? th.width : th.height), conf.duration || 300);
                 th.prevIndex = th.index;
                 th.setPosition();
-                unbind(slider, "touchmove", th.move);
-                unbind(document, "mousemove", th.move);
-                unbind(slider, "mousemove", th.move);
+                unbind(con, "touchmove", th.move);
+                unbind(document, "pointermove", th.move);
+                unbind(con, "pointermove", th.move);
                 th.set_drab(false);
                 th.boot();
             },
