@@ -8,15 +8,9 @@
 	<meta http-equiv="X-UA-Compatible" content="edge" />
 	<link rel="short icon" href="img/logo.ico" />
 	<link rel="stylesheet" type="text/css" href="css/simple_style.css" />
-	<script type="text/javascript" src="js/simple_swiper.js"></script>
+	<script type="text/javascript" src="js/simple_swiper_dev.js"></script>
 </head>
 <style>
-	.heiwukong .btn {
-		height: 418px;
-		width: 140px;
-		background-image: none;
-		user-select: none;
-	}
 
 	.btn>img {
 		width: 100%;
@@ -29,17 +23,20 @@
 		margin: 0;
 		padding: 0px;
 		box-sizing: border-box;
-		height: auto;
+		height: 100%;
 		position: relative;
 		overflow-y: auto;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		border-radius: 8px;
 	}
 
 	.heiwukong,
 	.heiwukong1 {
-		width: 1334px;
-		height: 750px;
-		margin: 4vh auto;
+		width: 564px;
+		height: 315px;
+		
 		margin-bottom: 0;
 		position: relative;
 		border-radius: 6px;
@@ -54,7 +51,7 @@
 
 	.swiper-items img {
 		width: 100%;
-		height: 100%;
+		height: auto;
 	}
 
 	.heiwukong .pagehelper {
@@ -62,46 +59,46 @@
 	}
 
 	.pagehelper .pagination-items {
-		width: 60px;
+		width: 10px;
 		height: 6px;
 		border-radius: 0;
 		border: none;
-		transition: width .3s;
+		transition: width .18s;
 	}
 
 	.heiwukong .pagehelper .pagination-items-active {
-		width: 80px;
+		width: 14px;
 		background-color: none;
 	}
-</style>
+	</style>
 <body>
 	<div class="app">
 		<div class="heiwukong simple-swiper-container" style="border: none;">
 			<span id="prev" class="btn btn-prev">
-				<img src="/img/icon-last.png" alt="">
+				
 			</span>
 			<span id="next" class="btn btn-next">
-				<img src="/img/icon-next.png" alt="">
+				
 			</span>
 			<div class="swiper-wrapper">
 				<div class="swiper-items">
 					<a href="#213123123">
-						<img data="img/swiper01.jpg" alt="">
+						<img data="https://img.alicdn.com/imgextra/i3/O1CN01Sf6dER1zbJ3uVQ0lE_!!6000000006732-0-tps-846-472.jpg" alt="">
 					</a>
 				</div>
 				<div class="swiper-items">
 					<a href="#2132132132131">
-						<img data="img/swiper02.jpg" alt="">
+						<img data="https://img.alicdn.com/imgextra/i2/O1CN01XZC8Dd1IUs179sweg_!!6000000000897-2-tps-846-472.png" alt="">
 					</a>
 				</div>
 				<div class="swiper-items">
-					<img data="img/swiper03.jpg" alt="">
+					<img data="https://img.alicdn.com/imgextra/i3/O1CN01RbnhFd1wBFigMUNYq_!!6000000006269-2-tps-846-472.png" alt="">
 				</div>
 				<div class="swiper-items">
-					<img data="img/swiper04.jpg" alt="">
+					<img data="https://img.alicdn.com/imgextra/i1/O1CN01YGUXOM1k5VKBPo5J3_!!6000000004632-2-tps-846-472.png" alt="">
 				</div>
 				<div class="swiper-items">
-					<img data="img/swiper05.jpg" alt="">
+					<img data="https://gw.alicdn.com/imgextra/i4/O1CN01a71ilU1T2RCTvUXDY_!!6000000002324-0-tps-846-472.jpg" alt="">
 				</div>
 			</div>
 			<div class="pagehelper pagination" id="pagination"></div>
@@ -110,28 +107,31 @@
 	</div>
 	
 	<script type="text/javascript">
-		new SimSwiper(".heiwukong", {
-			button: {
-				prev: "#prev", // 前进后退按钮
-				next: "#next"
-			},
-			
-			loop: true,
-			easing: 'ease',
-			duration: 300,
-			disabvarouch: false, // 关闭触摸滑动 def false
-			autoplay: true,
-			lazy: {
-				enable: true,
-				prop: "data"
-			},
-			accelerate: true,
-			direction: 'horizontal',//horizontal
-			pagination: {
-				el: "#pagination",
-				click: true
-			},
-		});
+		window.onload = function(){
+			document.documentElement.style.height=this.innerHeight+"px"
+		}
+		new SimSwiper(".heiwukong");
+		// , {
+		// 	button: {
+		// 		prev: "#prev", // 前进后退按钮
+		// 		next: "#next"
+		// 	},
+		// 	loop: true,
+		// 	easing: 'ease',
+		// 	duration: 300,
+		// 	disabvarouch: false, // 关闭触摸滑动 def false
+		// 	autoplay: true,
+		// 	lazy: {
+		// 		enable: true,
+		// 		prop: "data"
+		// 	},
+		// 	accelerate: true,
+		// 	// direction: '',//def:horizontal | vertical
+		// 	pagination: {
+		// 		el: "#pagination",
+		// 		click: true
+		// 	},
+		// }
 	</script>
 </body>
 

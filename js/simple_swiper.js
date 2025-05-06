@@ -23,7 +23,7 @@
                 });
             } else {
                 setStyle(_i, {
-                    width: rootWidth + 'px',
+                    width: '100%',
                     height: Math.max((getStyle(rootEl, 'height') - swiperGab * 2), 0) + 'px',
                     marginTop: swiperGab / 2 + "px",
                     marginBottom: swiperGab / 2 + "px"
@@ -477,7 +477,7 @@
                 _t.duration = duration;
                 val = _t.is_horizontal ? _t.index * _t.width : _t.index * _t.height;
                 _t.transform(val, _t.duration);
-                th.setPosition();
+                th.set_position();
                 return _t;
             },
             is_horizontal: function () {
@@ -624,7 +624,7 @@
                 e.stopPropagation();
                 th.transform(th.index * (th.is_horizontal ? th.width : th.height), conf.duration || 300);
                 th.prevIndex = th.index;
-                th.setPosition();
+                th.set_position();
                 unbind(con, "touchmove", th.move);
                 unbind(document, "pointermove", th.move);
                 unbind(con, "pointermove", th.move);
@@ -635,7 +635,7 @@
                 var c = Math.abs(x - this.touchX);
                 return (c / th.width) >= 0.1;
             },
-            setPosition: function () {
+            set_position: function () {
                 this.position = this.index * (this.is_horizontal ? this.width : this.height);
             },
         };
