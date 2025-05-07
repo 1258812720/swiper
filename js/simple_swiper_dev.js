@@ -44,6 +44,7 @@
         }
         return {
             $el: _el,
+            $children: [],
             attr: function (prop) {
                 if (is_object(prop, true)) {
                     set_props(this.$el, prop, function (e, k, v) {
@@ -91,9 +92,28 @@
                 return this.$el.cloneNode();
             },
             children: function (name) {
-                var _find = function(){
-
+                console.log("搜索子节点", name);
+                let first_floor_child = this.$el.children;
+                if (!name) {
+                    return first_floor_child;
                 }
+
+                let len = first_floor_child.length;
+                let i = len;
+                var _find = function (node) {
+                    for (; i > 0; --i) {
+                        var every_node = node[i];
+                        try {
+                            if (every_node.children && every_node.children.length > 0) { 
+                                _find(every_node);
+                                console.log(every_node); 
+                            }
+                        } catch (err) {
+                            void(err);
+                        }
+                    }
+                }
+                _find(first_floor_child);
             }
         };
     }
@@ -123,8 +143,8 @@
         })();
         Object.freeze(def_config); // 冻结配置
 
-        console.log($(".heiwukong>.swiper-items"))
-        
+        console.log($(".heiwukong").children(".swiper-items"))
+
     }
     return;
 });

@@ -191,6 +191,7 @@
             accelerate: true,
             timer: null,
             turnOff: true,
+            moveX:0,
             autoplay: function () {
                 var time = typeof g_conf.autoplay === "number" ? g_conf.autoplay : 3500;
                 th.time = setInterval(
@@ -560,7 +561,7 @@
                 e.stopPropagation();
                 if (is_firefox()) { e.preventDefault(); }
                 var st = e.touches ? e.touches.length - 1 : 0;
-                th.touchX = th.is_horizontal ? (e.clientX || e.targetTouches[st].clientX) : (e.clientY || e.clientY || e.targetTouches[st].clientY);
+                th.touchX = (th.is_horizontal ? (e.clientX || e.targetTouches[st].clientX) : (e.clientY || e.clientY || e.targetTouches[st].clientY));
                 if (is_mobile()) {
                     bind(this, "touchmove", th.move, false);
                 } else {
@@ -578,6 +579,7 @@
                 try {
                     e.preventDefault();
                     var x = th.is_horizontal ? (e.clientX || (e.touches ? e.targetTouches[0].clientX : 0)) : (e.clientY || (e.touches ? e.targetTouches[0].clientY : 0));
+                    
                     var a = x - th.touchX - th.position;
                     var __h = (th.is_horizontal ? th.width : th.height);
                     var t, per = (x - th.touchX) / __h;
