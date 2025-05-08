@@ -138,3 +138,8 @@
     width: 100%;
     background-color: white;
 }
+
+.horizontal  .swiper-items{
+    float: left;
+    clear: right;
+}

@@ -17,10 +17,10 @@
         return copy;
     }
     var set_props = function (el, props, call) {
-        if (!el || !is_array(el, true)) {
+        if (!el) {
             return;
         }
-        else if (el && props && call && typeof call === "function") {
+        else if (call && typeof call === "function") {
             for (const key in props) {
                 if (Object.prototype.hasOwnProperty.call(props, key)) {
                     const element = props[key];
@@ -38,20 +38,25 @@
     var is_array = function (arr, check_blank = false) {
         return arr && typeof arr === "object" && (check_blank ? array_not_empty(arr) : arr.length !== undefined)
     }
+    var is_function = function(f){
+        return typeof f === "function";
+    }
     var get_style = function (el, prop) {
+        var _el = undefined;
         if (!el) {
             return prop;
         }
-        else if (!prop) {
-            return el.getBoundingClientRect();
+        else if (!(el instanceof Element)) {
+            _el = el.$el;
+        } else {
+            _el = el;
+        }
+        if (!prop) {
+            return _el.getBoundingClientRect();
         } else if (prop && typeof prop === "string") {
-            el.getBoundingClientRect()[prop];
+            _el.getBoundingClientRect()[prop];
         }
     }
-
-    console.log(get_style(document.getElementsByClassName("btn")[0])); // 写到这里了
-
-
 
     var $ = function (str_id) {
         var _el = undefined;
@@ -81,15 +86,27 @@
         }
         return {
             $el: _el,
+            add_attr: function (node, k, v, is_class = false) {
+                if (node && node instanceof Element) {
+                    if (is_class) {
+                        node.classList.add(v);
+                    } else {
+                        node.setAttribute(k, v);
+                    }
+                }
+                return undefined;
+            },
             attr: function (prop) {
+                var t = this;
                 if (is_object(prop, true)) {
                     set_props(this.$el, prop, function (e, k, v) {
+                        var is_class = k === "class";
                         if (is_array(e, true)) {
                             Array.from(e).forEach(function (item) {
-                                item.setAttribute = v;
+                                t.add_attr(item, k, v, is_class);
                             });
                         } else {
-                            e.setAttribute = v;
+                            t.add_attr(e, k, v, is_class)
                         }
                     });
                 }
@@ -170,6 +187,15 @@
                     return this.$el.cloneNode(copy_child);
                 }
             },
+            size: function () {
+                if (!this.$el) {
+                    return 0;
+                } else if (is_array(this.$el)) {
+                    return this.$el.length;
+                } else {
+                    return 1;
+                }
+            },
             children: function (name) {
                 var list = [];
                 var first_floor_child = this.$el.children;
@@ -219,10 +245,47 @@
                     this.$el = this.$el[idx];
                 }
                 return this;
+            },
+            on: function (event, func) {
+                this.bind_event(-2,this.$el,function(e){
+                    e.addEventListener(event,func);
+                })
+                return this;
+            },
+            bind_event:function(number,el,call){
+                if(number !==-2){
+                    throw new Error("禁止访问");
+                }
+                if (!el) {
+                    return;
+                }
+                else if (el instanceof Element) {
+                    if(is_function(call)){
+                        call(el);
+                    }
+                } else if (is_array(el, true)) {
+                    for (var ev in el) {
+                        var _el = el[ev];
+                        if (_el instanceof Element) {
+                            if(is_function(call)){
+                                call(el[ev]);
+                            }
+                        }
+                    }
+                }
+            },
+            off: function (event) {
+                this.bind_event(-2,this.$el,function(e){
+                    console.log(e);// 需要解决一下解绑后的句柄
+                    // e.removeEventListener(event);
+                });
+                return this;
             }
         };
     }
-
+    $(".btn").on("click", () => {
+        console.log("点击了")
+    }).off("click");
     if (!(el)) {
         console.error("找不到父容器", el);
         return;
@@ -259,8 +322,29 @@
                 var last = swiper_items.get(0).clone();
                 clone_swipers.push(last);
             }
-            slider.add(clone_swipers);
+            var root_size = get_style($(el));
+            var size = swiper_items.size();
+            // 判断方向
+            var style_config = {
+                height: undefined,
+                width: undefined
+            }
+            if (def_config.direction === "vertical") {
+                style_config.width = root_size.width + "px";
+                style_config.height = (root_size.height * size) + "px";
+                $(el).attr({ class: "vertical" })
+            }
+            else {
+                style_config.height = root_size.height + "px";
+                style_config.width = (root_size.width * size) + "px";
+                $(el).attr({ class: "horizontal" })
+            }
+            slider.css(style_config).add(clone_swipers);
             $(el).children(".swiper-wrapper").add(slider); // 删除原来的
+            $(el).children(".swiper-items").css({
+                width: root_size.width + "px",
+                height: root_size.height + "px"
+            });
         })();
     }
     return;
