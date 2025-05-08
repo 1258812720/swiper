@@ -3,6 +3,19 @@
     if (t) { void 0 === t.__proto__ ? (t.SimSwiper = e, SimSwiper) : "undefined" != typeof module ? module.exports = e : t.__proto__.SimSwiper = e } else { JSwiper = e; }
 })(this, function (el, conf) {
     "use strict";
+    var deep_copy = function (obj) {
+        if (obj === null || typeof obj !== "object") {
+            return obj;
+        }
+        let copy = Array.isArray(obj) ? [] : {};
+
+        for (let key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                copy[key] = deepClone(obj[key]);
+            }
+        }
+        return copy;
+    }
     var set_props = function (el, props, call) {
         if (!el || !is_array(el, true)) {
             return;
@@ -25,6 +38,20 @@
     var is_array = function (arr, check_blank = false) {
         return arr && typeof arr === "object" && (check_blank ? array_not_empty(arr) : arr.length !== undefined)
     }
+    var get_style = function (el, prop) {
+        if (!el) {
+            return prop;
+        }
+        else if (!prop) {
+            return el.getBoundingClientRect();
+        } else if (prop && typeof prop === "string") {
+            el.getBoundingClientRect()[prop];
+        }
+    }
+
+    console.log(get_style(document.getElementsByClassName("btn")[0])); // 写到这里了
+
+
 
     var $ = function (str_id) {
         var _el = undefined;
@@ -79,25 +106,43 @@
                             e.style[k] = v;
                         }
                     });
+                } else {
+                    void (0);
                 }
                 return this;
             },
             add: function (node) {
+                var _el = this.$el;
+                var tag = is_array(_el, true);
+                function _push(element, insert_content) {
+                    if (!insert_content) {
+                        return;
+                    }
+                    if (tag) {
+                        var i = 0,
+                            len = element.length;
+                        for (; i < len; i++) {
+                            element[i].appendChild(insert_content);
+                        }
+                    } else {
+                        element.appendChild(insert_content);
+                    }
+                }
+
                 if (is_array(node, true)) {
                     var vm = $();
-                    console.log(this.$el,node);
                     node.forEach(function (e) {
                         vm.add(e);
                     });
-                    this.$el.appendChild(vm.$el);
+                    _push(this.$el, vm.$el);
                 }
                 else if (node instanceof Element) {
-                    this.$el.appendChild(node);
-                } else if (is_object(node)) {
-                    void (0)
+                    _push(this.$el, node);
+                } else if (is_object(node) && node.$el !== undefined) {
+                    _push(this.$el, node.$el);
                 }
                 else {
-                    this.$el.appendChild(node.$el);
+                    void (0)
                 }
                 return this;
             },
@@ -154,9 +199,7 @@
                     }
                 }
                 _find(first_floor_child);
-                
                 this.$el = list;
-                // console.log(this.$el);
                 return this;
             },
             each: function (call) {
@@ -214,11 +257,10 @@
             var clone_swipers = swiper_items.clone(); // 最终复制的节点
             if (!def_config.loop) {
                 var last = swiper_items.get(0).clone();
-                clone_swipers.push(last)
+                clone_swipers.push(last);
             }
             slider.add(clone_swipers);
-            // 删除原来的
-            $(el).children(".swiper-wrapper").add(slider);
+            $(el).children(".swiper-wrapper").add(slider); // 删除原来的
         })();
     }
     return;
