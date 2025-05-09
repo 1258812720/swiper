@@ -13,7 +13,7 @@
 
         for (let key in obj) {
             if (obj.hasOwnProperty(key)) {
-                copy[key] = deepClone(obj[key]);
+                copy[key] = deep_copy(obj[key]);
             }
         }
         return copy;
@@ -90,7 +90,7 @@
             $el: _el,
             events: [],
             add_attr: function (node, k, v, is_class = false, id) {
-                if (id !== ID_VERSION) { 
+                if (id !== ID_VERSION) {
                     throw new Error();
                 }
                 if (node && node instanceof Element) {
@@ -173,7 +173,7 @@
                 var this_el = this.$el;
                 if (is_array(this_el, true)) {
                     var parent = this_el[0].parentNode;
-                    this_el.forEach((item, index) => {
+                    this_el.forEach((item) => {
                         if (item) {
                             parent.removeChild(item);
                         }
@@ -287,7 +287,6 @@
                     return;
                 }
                 this.bind_event(ID_VERSION, this.$el, function (el) {// 需要解决一下解绑后的句柄
-                    console.log("移除事件", el);
                     _events.forEach(function (fc, index) {
                         el.removeEventListener(event, fc, false);
                         _events.splice(index, 1);
@@ -321,9 +320,12 @@
             return (/Android|iPhone|iPad|X11|Mac OS X/i.test(navigator.userAgent));
         })();
         Object.freeze(def_config); // 冻结配置
-
+        var el_map = {
+            slider: null
+        };
         (function () {
             var slider = $("<div class='swiper-slider'></div>");
+            el_map.slider = slider;
             var swiper_items = root.children(".swiper-items");
             swiper_items.remove()
             var clone_swipers = swiper_items.clone(); // 最终复制的节点
@@ -332,8 +334,7 @@
                 clone_swipers.push(last);
             }
             var root_size = get_style($(el));
-            var size = clone_swipers.length;
-            // 判断方向
+            var size = clone_swipers.length;// 判断方向
             var style_config = {
                 height: undefined,
                 width: undefined
@@ -354,40 +355,60 @@
                 width: root_size.width + "px",
                 height: root_size.height + "px"
             });
-            /*** 初始化结构 */
-            var slide = $(el).children(".swiper-slider");
-            var u = 0;
-            var t1 = $("#next").on("click", () => {
-                u++;
-                if (u > size - 1) {
-                    u = 0;
-                    slide.css({
-                        transition: "all 0s ease",
-                        transform: `translate3d(0,0,0)`
-                    });
-                    get_style(slide.get(0));
-                    u = 1;
-                    slide.css({
-                        transition: "all .3s ease",
-                        transform: `translate3d(-${u * root_size.width}px,0,0)`
-                    });
-                } else {
-                    slide.css({
-                        transition: "all .3s ease",
-                        transform: `translate3d(-${u * root_size.width}px,0,0)`
-                    });
-                }
-            }).off("click");
+            /* 初始化结构 */
 
-            var t2 = $("#prev").on("click", () => {
-                u--;
-                slide.css({
-                    transition: "all .3s ease",
-                    transform: `translate3d(-${u * root_size.width}px,0,0)`
-                })
-            });
-            console.log(t1, t2);
+            var u = 0;
+            // $("#next").on("click", () => {
+            //     u++;
+            //     if (u > size - 1) {
+            //         u = 0;
+            //         slide.css({
+            //             transition: "all 0s ease",
+            //             transform: `translate3d(${u},0,0)`
+            //         });
+            //         get_style(slide.get(0));
+            //         u = 1;
+            //         slide.css({
+            //             transition: "all .3s ease",
+            //             transform: `translate3d(${-u * root_size.width}px,0,0)`
+            //         });
+            //     } else {
+            //         slide.css({
+            //             transition: "all .3s ease",
+            //             transform: `translate3d(-${u * root_size.width}px,0,0)`
+            //         });
+            //     }
+            // });
+
+            // $("#prev").on("click", () => {
+            //     u--;
+            //     if (u < 0) {
+            //         u = size - 1;
+            //         slide.css({
+            //             transition: "all 0s ease",
+            //             transform: `translate3d(${-u * root_size.width}px,0,0)`
+            //         });
+            //         get_style(slide.get(0));
+            //         u = size - 2;
+            //         slide.css({
+            //             transition: "all .3s ease",
+            //             transform: `translate3d(${-u * root_size.width}px,0,0)`
+            //         });
+            //     } else {
+            //         slide.css({
+            //             transition: "all .3s ease",
+            //             transform: `translate3d(${-u * root_size.width}px,0,0)`
+            //         })
+            //     }
+            // });
         })();
+        
+        function init_swiper (base_config){
+            if(new.target){
+                console.log(base_config);
+            }
+        }
+        new init_swiper(el_map);
     }
     return;
 });
