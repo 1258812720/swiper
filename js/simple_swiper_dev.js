@@ -3,6 +3,8 @@
     if (t) { void 0 === t.__proto__ ? (t.SimSwiper = e, SimSwiper) : "undefined" != typeof module ? module.exports = e : t.__proto__.SimSwiper = e } else { JSwiper = e; }
 })(this, function (el, conf) {
     "use strict";
+
+    var ID_VERSION = "ID.VERSION." + new Date().getMilliseconds() + "" + parseInt(Math.random() * 10000);
     var deep_copy = function (obj) {
         if (obj === null || typeof obj !== "object") {
             return obj;
@@ -38,7 +40,7 @@
     var is_array = function (arr, check_blank = false) {
         return arr && typeof arr === "object" && (check_blank ? array_not_empty(arr) : arr.length !== undefined)
     }
-    var is_function = function(f){
+    var is_function = function (f) {
         return typeof f === "function";
     }
     var get_style = function (el, prop) {
@@ -86,7 +88,11 @@
         }
         return {
             $el: _el,
-            add_attr: function (node, k, v, is_class = false) {
+            events: [],
+            add_attr: function (node, k, v, is_class = false, id) {
+                if (id !== ID_VERSION) { 
+                    throw new Error();
+                }
                 if (node && node instanceof Element) {
                     if (is_class) {
                         node.classList.add(v);
@@ -103,10 +109,10 @@
                         var is_class = k === "class";
                         if (is_array(e, true)) {
                             Array.from(e).forEach(function (item) {
-                                t.add_attr(item, k, v, is_class);
+                                t.add_attr(item, k, v, is_class, ID_VERSION);
                             });
                         } else {
-                            t.add_attr(e, k, v, is_class)
+                            t.add_attr(e, k, v, is_class, ID_VERSION)
                         }
                     });
                 }
@@ -119,7 +125,7 @@
                             Array.from(e).forEach(function (item) {
                                 item.style[k] = v;
                             });
-                        } else {
+                        } else if (e instanceof Element) {
                             e.style[k] = v;
                         }
                     });
@@ -247,27 +253,28 @@
                 return this;
             },
             on: function (event, func) {
-                this.bind_event(-2,this.$el,function(e){
-                    e.addEventListener(event,func);
+                this.events.push(func);
+                this.bind_event(ID_VERSION, this.$el, function (e) {
+                    e.addEventListener(event, func);
                 })
                 return this;
             },
-            bind_event:function(number,el,call){
-                if(number !==-2){
+            bind_event: function (number, el, call) {
+                if (number !== ID_VERSION) {
                     throw new Error("禁止访问");
                 }
                 if (!el) {
                     return;
                 }
                 else if (el instanceof Element) {
-                    if(is_function(call)){
+                    if (is_function(call)) {
                         call(el);
                     }
                 } else if (is_array(el, true)) {
                     for (var ev in el) {
                         var _el = el[ev];
                         if (_el instanceof Element) {
-                            if(is_function(call)){
+                            if (is_function(call)) {
                                 call(el[ev]);
                             }
                         }
@@ -275,17 +282,21 @@
                 }
             },
             off: function (event) {
-                this.bind_event(-2,this.$el,function(e){
-                    console.log(e);// 需要解决一下解绑后的句柄
-                    // e.removeEventListener(event);
+                var _events = this.events;
+                if (_events.length === 0) {
+                    return;
+                }
+                this.bind_event(ID_VERSION, this.$el, function (el) {// 需要解决一下解绑后的句柄
+                    console.log("移除事件", el);
+                    _events.forEach(function (fc, index) {
+                        el.removeEventListener(event, fc, false);
+                        _events.splice(index, 1);
+                    })
                 });
                 return this;
             }
         };
     }
-    $(".btn").on("click", () => {
-        console.log("点击了")
-    }).off("click");
     if (!(el)) {
         console.error("找不到父容器", el);
         return;
@@ -311,19 +322,17 @@
         })();
         Object.freeze(def_config); // 冻结配置
 
-        /*** 初始化结构 */
-
         (function () {
             var slider = $("<div class='swiper-slider'></div>");
             var swiper_items = root.children(".swiper-items");
             swiper_items.remove()
             var clone_swipers = swiper_items.clone(); // 最终复制的节点
-            if (!def_config.loop) {
+            if (def_config.loop) {
                 var last = swiper_items.get(0).clone();
                 clone_swipers.push(last);
             }
             var root_size = get_style($(el));
-            var size = swiper_items.size();
+            var size = clone_swipers.length;
             // 判断方向
             var style_config = {
                 height: undefined,
@@ -345,6 +354,39 @@
                 width: root_size.width + "px",
                 height: root_size.height + "px"
             });
+            /*** 初始化结构 */
+            var slide = $(el).children(".swiper-slider");
+            var u = 0;
+            var t1 = $("#next").on("click", () => {
+                u++;
+                if (u > size - 1) {
+                    u = 0;
+                    slide.css({
+                        transition: "all 0s ease",
+                        transform: `translate3d(0,0,0)`
+                    });
+                    get_style(slide.get(0));
+                    u = 1;
+                    slide.css({
+                        transition: "all .3s ease",
+                        transform: `translate3d(-${u * root_size.width}px,0,0)`
+                    });
+                } else {
+                    slide.css({
+                        transition: "all .3s ease",
+                        transform: `translate3d(-${u * root_size.width}px,0,0)`
+                    });
+                }
+            }).off("click");
+
+            var t2 = $("#prev").on("click", () => {
+                u--;
+                slide.css({
+                    transition: "all .3s ease",
+                    transform: `translate3d(-${u * root_size.width}px,0,0)`
+                })
+            });
+            console.log(t1, t2);
         })();
     }
     return;
