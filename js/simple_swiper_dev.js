@@ -2,42 +2,68 @@
     "use strict";
     if (t) { void 0 === t.__proto__ ? (t.SimSwiper = e, SimSwiper) : "undefined" != typeof module ? module.exports = e : t.__proto__.SimSwiper = e } else { JSwiper = e; }
 })(this, function (el, conf) {
-    "use strict";
-
     var ID_VERSION = "ID.VERSION." + new Date().getMilliseconds() + "" + parseInt(Math.random() * 10000);
     var deep_copy = function (obj) {
         if (obj === null || typeof obj !== "object") {
             return obj;
         }
-        let copy = Array.isArray(obj) ? [] : {};
-
-        for (let key in obj) {
+        var copy = Array.isArray(obj) ? [] : {};
+        for (var key in obj) {
             if (obj.hasOwnProperty(key)) {
                 copy[key] = deep_copy(obj[key]);
             }
         }
         return copy;
     }
+    var object_contains = function (obj, key) {
+
+        if (!obj || !key) {
+            return false;
+        }
+        else {
+            if (is_object(obj)) {
+                return obj[key] !== undefined;
+            } else {
+                return false;
+            }
+        }
+    }
     var set_props = function (el, props, call) {
         if (!el) {
             return;
         }
         else if (call && typeof call === "function") {
-            for (const key in props) {
+            for (var key in props) {
                 if (Object.prototype.hasOwnProperty.call(props, key)) {
-                    const element = props[key];
+                    var element = props[key];
                     call(el, key, element);
                 }
             }
         }
     }
-    var is_object = function (obj, check_blank = false) {
-        return obj && typeof obj === "object" && Reflect.ownKeys(obj).length >= (check_blank ? 1 : 0);
+    var is_object = function (obj, check_blank) {
+        if (undefined === check_blank) { check_blank = false }
+        try {
+            return obj && typeof obj === "object" && Reflect.ownKeys(obj).length >= (check_blank ? 1 : 0);
+        } catch (err) {
+            if (err.number === -2146823279) {
+                var t = false;
+                for (var o in obj) {
+                    t = true;
+                    break;
+                }
+                return t;
+            } else {
+                return false;
+            }
+        }
+
     }
     var array_not_empty = function (arr) {
         return (arr && arr.length > 0);
     }
-    var is_array = function (arr, check_blank = false) {
+    var is_array = function (arr, check_blank) {
+        if (undefined === check_blank) { check_blank = false }
         return arr && typeof arr === "object" && (check_blank ? array_not_empty(arr) : arr.length !== undefined)
     }
     var is_function = function (f) {
@@ -62,7 +88,7 @@
 
     var $ = function (str_id) {
         var _el = undefined;
-        if (!str_id) {
+        if (str_id === undefined) {
             _el = document.createDocumentFragment();
         }
         else if (typeof str_id === "string") {
@@ -89,7 +115,10 @@
         return {
             $el: _el,
             events: [],
-            add_attr: function (node, k, v, is_class = false, id) {
+            add_attr: function (node, k, v, is_class, id) {
+                if (is_class === undefined) {
+                    is_class = false;
+                }
                 if (id !== ID_VERSION) {
                     throw new Error();
                 }
@@ -108,7 +137,7 @@
                     set_props(this.$el, prop, function (e, k, v) {
                         var is_class = k === "class";
                         if (is_array(e, true)) {
-                            Array.from(e).forEach(function (item) {
+                            e.forEach(function (item) {
                                 t.add_attr(item, k, v, is_class, ID_VERSION);
                             });
                         } else {
@@ -122,7 +151,7 @@
                 if (is_object(prop, true)) {
                     set_props(this.$el, prop, function (e, k, v) {
                         if (is_array(e, true)) {
-                            Array.from(e).forEach(function (item) {
+                            e.forEach(function (item) {
                                 item.style[k] = v;
                             });
                         } else if (e instanceof Element) {
@@ -173,7 +202,7 @@
                 var this_el = this.$el;
                 if (is_array(this_el, true)) {
                     var parent = this_el[0].parentNode;
-                    this_el.forEach((item) => {
+                    this_el.forEach(function (item) {
                         if (item) {
                             parent.removeChild(item);
                         }
@@ -183,7 +212,10 @@
                 }
                 return this;
             },
-            clone: function (copy_child = true) {
+            clone: function (copy_child) {
+                if (undefined === copy_child) {
+                    copy_child = true;
+                }
                 if (is_array(this.$el, true)) {
                     var arr = []; this.$el.forEach(function (e) {
                         arr.push(e.cloneNode(copy_child));
@@ -246,25 +278,23 @@
                 }
                 return this;
             },
-            get: function (idx = 0,) {
+            get: function (idx) {
+                if (undefined === idx) { idx = 0; }
                 if (this.$el && this.$el.length) {
                     this.$el = this.$el[idx];
                 }
                 return this;
             },
             on: function (event, func) {
-                this.events.push(func);
                 this.bind_event(ID_VERSION, this.$el, function (e) {
                     e.addEventListener(event, func);
-                })
+                });
+                this.events.push(func);
                 return this;
             },
             bind_event: function (number, el, call) {
                 if (number !== ID_VERSION) {
                     throw new Error("禁止访问");
-                }
-                if (!el) {
-                    return;
                 }
                 else if (el instanceof Element) {
                     if (is_function(call)) {
@@ -302,30 +332,47 @@
     } else {
         var root = $(el),
             def_config = {
-                accelerate: false,
-                direction: "horizontal",
-                ease: "ease",
-                disabvarouch: false,
-                autoplay: true,
-                lazy: undefined,
-                loop: true,
-                pagination: undefined,
-                gap: 0
+                accelerate: false, //禁用硬件加速
+                direction: "horizontal", // 播放方向
+                ease: "ease", // 过渡动画
+                disabvarouch: false, // 关闭触摸
+                autoplay: true, // 自动播放
+                lazy: undefined, // 懒加载 {prop:xx,enable:boolean}
+                loop: true,// 无限循环
+                pagination: undefined,// 指示点
+                gap: 0, // 间隔
+                slide: null, // 滑块
+                num: 0,// 子滑块数量
+                width: 0, // 父容器宽度
+                height: 0,// 父容器高度
+                duration: 300,// 过渡时间
+                parent: root,// 父容器
+                defaultIndex: 0 // 默认滑块显示下标
+
             }
         if (conf && typeof conf === "object" && Object.keys(conf).length > 0) {
-            Object.assign(def_config, conf);
+            if (undefined === Object.assign) {
+                var result = {};
+                Object.keys(def_config).forEach(function (key) {
+                    result[key] = def_config[key];
+                });
+                Object.keys(conf).forEach(function (key) {
+                    result[key] = conf[key];
+                });
+                def_config = result;
+            } else {
+                Object.assign(def_config, conf);
+            }
+
         }
         conf = null;
         def_config.is_mobile = (function () {
             return (/Android|iPhone|iPad|X11|Mac OS X/i.test(navigator.userAgent));
         })();
-        Object.freeze(def_config); // 冻结配置
-        var el_map = {
-            slider: null
-        };
+
         (function () {
             var slider = $("<div class='swiper-slider'></div>");
-            el_map.slider = slider;
+            def_config.slide = slider;
             var swiper_items = root.children(".swiper-items");
             swiper_items.remove()
             var clone_swipers = swiper_items.clone(); // 最终复制的节点
@@ -334,12 +381,12 @@
                 clone_swipers.push(last);
             }
             var root_size = get_style($(el));
-            var size = clone_swipers.length;// 判断方向
+            var size = clone_swipers.length;
             var style_config = {
                 height: undefined,
                 width: undefined
             }
-            if (def_config.direction === "vertical") {
+            if (def_config.direction === "vertical") {// 判断方向
                 style_config.width = root_size.width + "px";
                 style_config.height = (root_size.height * size) + "px";
                 $(el).attr({ class: "vertical" })
@@ -355,10 +402,10 @@
                 width: root_size.width + "px",
                 height: root_size.height + "px"
             });
-            /* 初始化结构 */
-
-            var u = 0;
-            // $("#next").on("click", () => {
+            def_config.width = root_size.width;
+            def_config.height = root_size.height;
+            def_config.num = size;
+            /** 空间 */
             //     u++;
             //     if (u > size - 1) {
             //         u = 0;
@@ -402,13 +449,61 @@
             //     }
             // });
         })();
-        
-        function init_swiper (base_config){
-            if(new.target){
-                console.log(base_config);
+
+        function init_swiper() {
+            var index = def_config.defaultIndex;
+            function prev() {
+                index--;
+                if (index < 0) {
+                    index = def_config.num - 1;
+                    animate(index * def_config.width, 0);
+                    get_style(def_config.slide.get(0));
+                    index = def_config.num - 2;
+                    animate(index * def_config.width, def_config.duration);
+                } else {
+                    animate(index * def_config.width, def_config.duration);
+                }
             }
+            function next() {
+                index++;
+                if (index > def_config.num - 1) {
+                    index = 0;
+                    animate(index * def_config.width, 0);
+                    get_style(def_config.slide.get(0));
+                    index = 1;
+                    animate(index * def_config.width, def_config.duration);
+                } else {
+                    animate(index * def_config.width, def_config.duration);
+                }
+            }
+            function __init__() {
+                animate(index * def_config.width, def_config.duration);
+            }
+            function animate(dis, duration, ease) {
+                if (undefined === ease) {
+                    ease = "ease"
+                }
+                def_config.slide.css({
+                    transition: "transform " + duration + "ms " + ease,
+                    transform: "translate3d(" + -(dis) + "px,0,0)"
+                })
+            }
+
+            function init_nav() {
+                if (object_contains(def_config, "navigator")) {
+                    if (object_contains(def_config.navigator, "next")) {
+                        $(def_config.navigator.next).on("click", next);
+                    }
+                    if (object_contains(def_config.navigator, "prev")) {
+                        $(def_config.navigator.prev).on("click", prev);
+                    }
+                }
+            }
+            __init__();
+            init_nav();
         }
-        new init_swiper(el_map);
+        new init_swiper(def_config);
+        Object.freeze(def_config);
     }
     return;
 });

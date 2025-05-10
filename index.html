@@ -110,7 +110,13 @@
 		window.onload = function(){
 			document.documentElement.style.height=this.innerHeight+"px"
 		}
-		new SimSwiper(".heiwukong");
+		new SimSwiper(".heiwukong",{
+			navigator:{
+				prev:"#prev",
+				next:"#next"
+			},
+			defaultIndex:2
+		});
 		// , {
 		// 	button: {
 		// 		prev: "#prev", // 前进后退按钮
