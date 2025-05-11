@@ -16,7 +16,6 @@
         return copy;
     }
     var object_contains = function (obj, key) {
-
         if (!obj || !key) {
             return false;
         }
@@ -27,6 +26,9 @@
                 return false;
             }
         }
+    }
+    var is_document = function (el) {
+        return el && (el instanceof Element || el instanceof Document);
     }
     var set_props = function (el, props, call) {
         if (!el) {
@@ -74,7 +76,7 @@
         if (!el) {
             return prop;
         }
-        else if (!(el instanceof Element)) {
+        else if (!is_document(el)) {
             _el = el.$el;
         } else {
             _el = el;
@@ -85,11 +87,16 @@
             _el.getBoundingClientRect()[prop];
         }
     }
+    var has_class = function (el, class_name) {
+        return el.classList.contains(class_name);
+    }
 
     var $ = function (str_id) {
         var _el = undefined;
         if (str_id === undefined) {
             _el = document.createDocumentFragment();
+        } else if (is_document(str_id)) {
+            _el = str_id;
         }
         else if (typeof str_id === "string") {
             var CLASS = /^[.]/g.test(str_id);
@@ -122,7 +129,7 @@
                 if (id !== ID_VERSION) {
                     throw new Error();
                 }
-                if (node && node instanceof Element) {
+                if (is_document(node)) {
                     if (is_class) {
                         node.classList.add(v);
                     } else {
@@ -147,6 +154,51 @@
                 }
                 return this;
             },
+            className: function (id, name, add) {
+                if (ID_VERSION !== id) {
+                    throw new Error("禁止访问");
+                }
+                if (!name || typeof name !== "string" || name === "") {
+                    return;
+                }
+                if (is_array(this.$el, true)) {
+                    this.$el.forEach(function (item) {
+                        if (add) {
+                            this.$el.classList.add(name);
+                        } else {
+                            item.classList.remove(name);
+                        }
+                    })
+                } else if (is_document(this.$el)) {
+                    if (add) {
+                        this.$el.classList.add(name);
+                    } else {
+                        this.$el.classList.remove(name);
+                    }
+                }
+            },
+            removeClass: function (name) {
+                this.className(ID_VERSION, name, false);
+                return this;
+            },
+            addClass: function (name) {
+                this.className(ID_VERSION, name, true);
+                return this;
+            },
+            delay: function (time, call) {
+                if (time < 0) {
+                    return this;
+                }
+                var _t = this.$el;
+                if (is_function(call)) {
+                    var t = setTimeout(function () {
+                        clearTimeout(t);
+                        call.call(_t);
+                        t = null;
+                    }, time);
+                }
+                return this;
+            },
             css: function (prop) {
                 if (is_object(prop, true)) {
                     set_props(this.$el, prop, function (e, k, v) {
@@ -154,7 +206,7 @@
                             e.forEach(function (item) {
                                 item.style[k] = v;
                             });
-                        } else if (e instanceof Element) {
+                        } else if (is_document(e)) {
                             e.style[k] = v;
                         }
                     });
@@ -180,7 +232,6 @@
                         element.appendChild(insert_content);
                     }
                 }
-
                 if (is_array(node, true)) {
                     var vm = $();
                     node.forEach(function (e) {
@@ -188,7 +239,7 @@
                     });
                     _push(this.$el, vm.$el);
                 }
-                else if (node instanceof Element) {
+                else if (is_document(node)) {
                     _push(this.$el, node);
                 } else if (is_object(node) && node.$el !== undefined) {
                     _push(this.$el, node.$el);
@@ -278,6 +329,43 @@
                 }
                 return this;
             },
+            toggleClassName: function (name) {
+                var t = this;
+                var temp_list = [];
+                if (is_array(t.$el, true)) {
+                    t.$el.forEach(function (item) {
+                        temp_list.push(item);
+                    });
+                } else if (is_document(t.$el)) {
+                    temp_list.push(t.$el);
+                } else {
+                    temp_list = null;
+                }
+                if (temp_list && temp_list.length > 0) {
+                    temp_list.forEach(function (item) {
+                        if (has_class(item, name)) {
+                            t.removeClass(name);
+                        } else {
+                            t.addClass(name);
+                        }
+                    })
+                }
+                return this;
+            },
+            text: function (val) {
+                if (is_document(this.$el)) {
+                    if (val) {
+                        this.$el.innerText = val;
+                    } else {
+                        return this.$el.innerText;
+                    }
+                } else if (is_array(this.$el, true) && val) {
+                    this.$el.forEach(function (item) {
+                        item.innerText = val;
+                    });
+                }
+                return this;
+            },
             get: function (idx) {
                 if (undefined === idx) { idx = 0; }
                 if (this.$el && this.$el.length) {
@@ -286,8 +374,14 @@
                 return this;
             },
             on: function (event, func) {
-                this.bind_event(ID_VERSION, this.$el, function (e) {
-                    e.addEventListener(event, func);
+                var el = this.$el;
+                this.bind_event(ID_VERSION, el, function (e) {
+                    e.addEventListener(event, function (e) {
+                        func.call(el, e);
+                    }, {
+                        passive: false,
+                        capture: true
+                    });
                 });
                 this.events.push(func);
                 return this;
@@ -296,29 +390,25 @@
                 if (number !== ID_VERSION) {
                     throw new Error("禁止访问");
                 }
-                else if (el instanceof Element) {
-                    if (is_function(call)) {
-                        call(el);
-                    }
+                else if (is_document(el) && is_function(call)) {
+                    call(el);
                 } else if (is_array(el, true)) {
                     for (var ev in el) {
                         var _el = el[ev];
-                        if (_el instanceof Element) {
-                            if (is_function(call)) {
-                                call(el[ev]);
-                            }
+                        if (is_document(_el) && is_function(call)) {
+                            call(el[ev]);
                         }
                     }
                 }
             },
-            off: function (event) {
+            off: function (event, fun) {
                 var _events = this.events;
                 if (_events.length === 0) {
                     return;
                 }
                 this.bind_event(ID_VERSION, this.$el, function (el) {// 需要解决一下解绑后的句柄
-                    _events.forEach(function (fc, index) {
-                        el.removeEventListener(event, fc, false);
+                    _events.forEach(function (func, index) {
+                        el.removeEventListener(event, fun, true);
                         _events.splice(index, 1);
                     })
                 });
@@ -389,12 +479,12 @@
             if (def_config.direction === "vertical") {// 判断方向
                 style_config.width = root_size.width + "px";
                 style_config.height = (root_size.height * size) + "px";
-                $(el).attr({ class: "vertical" })
+                $(el).attr({ class: "vertical" });
             }
             else {
                 style_config.height = root_size.height + "px";
                 style_config.width = (root_size.width * size) + "px";
-                $(el).attr({ class: "horizontal" })
+                $(el).attr({ class: "horizontal" }).addClass("你干嘛");
             }
             slider.css(style_config).add(clone_swipers);
             $(el).children(".swiper-wrapper").add(slider); // 删除原来的
@@ -406,48 +496,6 @@
             def_config.height = root_size.height;
             def_config.num = size;
             /** 空间 */
-            //     u++;
-            //     if (u > size - 1) {
-            //         u = 0;
-            //         slide.css({
-            //             transition: "all 0s ease",
-            //             transform: `translate3d(${u},0,0)`
-            //         });
-            //         get_style(slide.get(0));
-            //         u = 1;
-            //         slide.css({
-            //             transition: "all .3s ease",
-            //             transform: `translate3d(${-u * root_size.width}px,0,0)`
-            //         });
-            //     } else {
-            //         slide.css({
-            //             transition: "all .3s ease",
-            //             transform: `translate3d(-${u * root_size.width}px,0,0)`
-            //         });
-            //     }
-            // });
-
-            // $("#prev").on("click", () => {
-            //     u--;
-            //     if (u < 0) {
-            //         u = size - 1;
-            //         slide.css({
-            //             transition: "all 0s ease",
-            //             transform: `translate3d(${-u * root_size.width}px,0,0)`
-            //         });
-            //         get_style(slide.get(0));
-            //         u = size - 2;
-            //         slide.css({
-            //             transition: "all .3s ease",
-            //             transform: `translate3d(${-u * root_size.width}px,0,0)`
-            //         });
-            //     } else {
-            //         slide.css({
-            //             transition: "all .3s ease",
-            //             transform: `translate3d(${-u * root_size.width}px,0,0)`
-            //         })
-            //     }
-            // });
         })();
 
         function init_swiper() {
@@ -476,7 +524,8 @@
                     animate(index * def_config.width, def_config.duration);
                 }
             }
-            function __init__() {
+            /** 初始化布局 */
+            function __init__layout() {
                 animate(index * def_config.width, def_config.duration);
             }
             function animate(dis, duration, ease) {
@@ -488,7 +537,7 @@
                     transform: "translate3d(" + -(dis) + "px,0,0)"
                 })
             }
-
+            /** 初始化前后切换按钮 */
             function init_nav() {
                 if (object_contains(def_config, "navigator")) {
                     if (object_contains(def_config.navigator, "next")) {
@@ -499,8 +548,56 @@
                     }
                 }
             }
-            __init__();
+
+            /** 触摸 */
+            var is_press = false;
+            var point_x = 0;
+            var point_xm = 0;
+            function compute_index(dis) {
+                var val = Math.abs(dis);
+                var i = parseInt(val / def_config.width);
+                return i;
+            }
+            function touch_start(e) {
+                e.preventDefault();
+                point_x = e.clientX + point_xm;
+                is_press = true;
+                $(document).on("pointermove", function (e) { touch_move(e) });
+            }
+            function touch_move(e) {
+                e.preventDefault();
+                if (is_press) {
+                    var x = -(e.clientX - point_x);
+                    point_xm = x;
+                    animate(x, 0);
+                }
+                else {
+                    return false;
+                }
+            }
+            function touch_end(e) {
+                e.preventDefault();
+                var idx = compute_index(point_xm);
+                animate(idx * def_config.width, def_config.duration);
+                $(this).off("pointermove", touch_move); is_press = false;
+            }
+
+            function __init__touch() {
+                if (true === def_config.disabvarouch) {
+                    return;
+                } else {
+                    $(el).on("pointerdown", touch_start);
+                    $(document).on("pointerup", touch_end);
+                }
+            }
+
+
+            __init__layout();
             init_nav();
+            __init__touch();
+            return {
+
+            }
         }
         new init_swiper(def_config);
         Object.freeze(def_config);
