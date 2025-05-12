@@ -497,27 +497,31 @@
             def_config.num = size;
             /** 空间 */
         })();
-
+        function refresh_layout() {
+            get_style(def_config.slide.get(0));
+        }
         function init_swiper() {
+
             var index = def_config.defaultIndex;
             function prev() {
                 index--;
                 if (index < 0) {
                     index = def_config.num - 1;
                     animate(index * def_config.width, 0);
-                    get_style(def_config.slide.get(0));
+                    refresh_layout()
                     index = def_config.num - 2;
                     animate(index * def_config.width, def_config.duration);
                 } else {
                     animate(index * def_config.width, def_config.duration);
                 }
             }
+
             function next() {
                 index++;
                 if (index > def_config.num - 1) {
                     index = 0;
                     animate(index * def_config.width, 0);
-                    get_style(def_config.slide.get(0));
+                    refresh_layout()
                     index = 1;
                     animate(index * def_config.width, def_config.duration);
                 } else {
@@ -534,7 +538,8 @@
                 }
                 def_config.slide.css({
                     transition: "transform " + duration + "ms " + ease,
-                    transform: "translate3d(" + -(dis) + "px,0,0)"
+                    transform: "translate3d(" + -(dis) + "px,0,0)",
+                    backfaceVisibility: "hidden"
                 })
             }
             /** 初始化前后切换按钮 */
@@ -567,9 +572,22 @@
             function touch_move(e) {
                 e.preventDefault();
                 if (is_press) {
-                    var x = -(e.clientX - point_x);
-                    point_xm = x;
-                    animate(x, 0);
+                    var x = (e.clientX - point_x - point_xm);
+                    point_xm = -x;
+                    var du = x >= 3000;
+                    if (def_config.loop) {
+                        if (du) {
+                            var dis = 0;
+                            point_xm = dis;
+                            index = 0;
+                            animate(dis, 0);
+                        } else {
+                            animate(-point_xm, 0);
+                        }
+
+                    } else {
+                        animate(-point_xm, 0);
+                    }
                 }
                 else {
                     return false;
@@ -578,7 +596,7 @@
             function touch_end(e) {
                 e.preventDefault();
                 var idx = compute_index(point_xm);
-                animate(idx * def_config.width, def_config.duration);
+                // animate(idx * def_config.width, def_config.duration);
                 $(this).off("pointermove", touch_move); is_press = false;
             }
 

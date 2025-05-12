@@ -1,7 +1,7 @@
 .simple-swiper-container {
     width: 1600px;
     height: 350px;
-    overflow: hidden;
+    /* overflow: hidden; */
     position: relative;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
