@@ -604,7 +604,7 @@
                 if (true === def_config.disabvarouch) {
                     return;
                 } else {
-                    $(el).on("pointerdown", touch_start);
+                    $(el).children(".swiper-wrapper").on("pointerdown", touch_start);
                     $(document).on("pointerup", touch_end);
                 }
             }
