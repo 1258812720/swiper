@@ -295,11 +295,12 @@
                 var list = [];
                 var first_floor_child = this.$el.children;
                 if (!name) {
-                    return first_floor_child;
+                    this.$el = first_floor_child;
+                    return this;
                 }
                 var _find = function (node) {
                     if (!node) {
-                        return;
+                        return this;
                     }
                     var len = node.length;
                     var i = 0;
@@ -617,7 +618,6 @@
                     $(document).on("pointerup", touch_end);
                 }
             }
-
 
             __init__layout();
             init_nav();
