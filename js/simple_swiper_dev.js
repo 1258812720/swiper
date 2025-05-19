@@ -1,5 +1,6 @@
 (function (t, e) {
     "use strict";
+    var p = 22000;
     if (t) { void 0 === t.__proto__ ? (t.SimSwiper = e, SimSwiper) : "undefined" != typeof module ? module.exports = e : t.__proto__.SimSwiper = e } else { JSwiper = e; }
 })(this, function (el, conf) {
     var ID_VERSION = "ID.VERSION." + new Date().getMilliseconds() + "" + parseInt(Math.random() * 10000);
@@ -112,8 +113,13 @@
                 } catch (err) {
                     console.error("dom 解析失败", err);
                 }
-            } else {
-                console.error("dom find error");
+            }
+            else {
+                var els = document.querySelectorAll(str_id);
+                if (els) {
+                    var len = els.length;
+                    _el = len === 1 ? els[0] : els;
+                }
             }
         }
         else {
@@ -329,7 +335,7 @@
                 }
                 return this;
             },
-            toggleClassName: function (name) {
+            toggleClass: function (name) {
                 var t = this;
                 var temp_list = [];
                 if (is_array(t.$el, true)) {
@@ -374,16 +380,21 @@
                 return this;
             },
             on: function (event, func) {
-                var el = this.$el;
-                this.bind_event(ID_VERSION, el, function (e) {
+                if (!event || !func || typeof func !== "function") {
+                    console.error("params error");
+                    return;
+                }
+                var t = this;
+                var el = t.$el;
+                t.bind_event(ID_VERSION, el, function (e) {
                     e.addEventListener(event, function (e) {
                         func.call(el, e);
                     }, {
                         passive: false,
                         capture: true
                     });
+                    t.events.push(func);
                 });
-                this.events.push(func);
                 return this;
             },
             bind_event: function (number, el, call) {
@@ -418,7 +429,6 @@
     }
     if (!(el)) {
         console.error("找不到父容器", el);
-        return;
     } else {
         var root = $(el),
             def_config = {
@@ -553,7 +563,6 @@
                     }
                 }
             }
-
             /** 触摸 */
             var is_press = false;
             var point_x = 0;
@@ -620,5 +629,8 @@
         new init_swiper(def_config);
         Object.freeze(def_config);
     }
-    return;
+    return {
+        $,
+        ID_VERSION
+    };
 });
