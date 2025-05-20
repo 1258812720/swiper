@@ -495,7 +495,7 @@
             else {
                 style_config.height = root_size.height + "px";
                 style_config.width = (root_size.width * size) + "px";
-                $(el).attr({ class: "horizontal" }).addClass("你干嘛");
+                $(el).attr({ class: "horizontal" });
             }
             slider.css(style_config).add(clone_swipers);
             $(el).children(".swiper-wrapper").add(slider); // 删除原来的
@@ -548,7 +548,7 @@
                     ease = "ease"
                 }
                 def_config.slide.css({
-                    transition: "transform " + duration + "ms " + ease,
+                    transition: "transform " + duration + "ms " + def_config.ease,
                     transform: "translate3d(" + -(dis) + "px,0,0)",
                     backfaceVisibility: "hidden"
                 })
@@ -566,8 +566,9 @@
             }
             /** 触摸 */
             var is_press = false;
-            var point_x = 0;
-            var point_xm = 0;
+            var startx = 0;
+            var movex = 0;
+            var endx = 0;
             function compute_index(dis) {
                 var val = Math.abs(dis);
                 var i = parseInt(val / def_config.width);
@@ -575,29 +576,16 @@
             }
             function touch_start(e) {
                 e.preventDefault();
-                point_x = e.clientX + point_xm;
+                startx = e.clientX;
                 is_press = true;
                 $(document).on("pointermove", function (e) { touch_move(e) });
             }
             function touch_move(e) {
                 e.preventDefault();
                 if (is_press) {
-                    var x = (e.clientX - point_x - point_xm);
-                    point_xm = -x;
-                    var du = x >= 3000;
-                    if (def_config.loop) {
-                        if (du) {
-                            var dis = 0;
-                            point_xm = dis;
-                            index = 0;
-                            animate(dis, 0);
-                        } else {
-                            animate(-point_xm, 0);
-                        }
-
-                    } else {
-                        animate(-point_xm, 0);
-                    }
+                    var x = e.clientX - startx + movex;
+                    animate(-x, 0);
+                    endx = -x;
                 }
                 else {
                     return false;
@@ -605,7 +593,8 @@
             }
             function touch_end(e) {
                 e.preventDefault();
-                var idx = compute_index(point_xm);
+                // animate()
+                // var idx = compute_index(point_xm);
                 // animate(idx * def_config.width, def_config.duration);
                 $(this).off("pointermove", touch_move); is_press = false;
             }
