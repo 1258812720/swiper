@@ -50,6 +50,7 @@
 
 			</span>
 		</div>
+		<p> 画江湖 </p>
 	</div>
 	</div>
 
@@ -57,19 +58,25 @@
 		window.onload = function () {
 			document.documentElement.style.height = this.innerHeight + "px"
 		}
-		new SimSwiper(".heiwukong", {
+		var $ = new SimSwiper(".heiwukong", {
 			navigator: {
 				prev: "#prev",// 前进后退按钮
 				next: "#next"
 			},
 			loop: true,
 			defaultIndex: 0,
-			on:{
-				init(){
-					
+			on: {
+				init() {
+
 				}
 			}
-		});
+		}).$;
+		// 获取所有div
+		$("p").text("你干嘛").delay(function () {
+			$(this).css({
+				color: "white"
+			});
+		},1000);
 	</script>
 </body>
 

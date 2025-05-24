@@ -60,7 +60,12 @@
                 return false;
             }
         }
-
+    }
+    var str_is_empty = function (str) {
+        if (!str || typeof str !== "string") {
+            return true;
+        }
+        return str.trim().length === 0;
     }
     var array_not_empty = function (arr) {
         return (arr && arr.length > 0);
@@ -191,8 +196,9 @@
                 this.className(ID_VERSION, name, true);
                 return this;
             },
-            delay: function (time, call) {
+            delay: function (call,time) {
                 if (time < 0) {
+                    call();
                     return this;
                 }
                 var _t = this.$el;
@@ -360,18 +366,29 @@
                 return this;
             },
             text: function (val) {
+                var str_empty = str_is_empty(val);
                 if (is_document(this.$el)) {
-                    if (val) {
-                        this.$el.innerText = val;
-                    } else {
+                    if (str_empty) {
                         return this.$el.innerText;
+                    } else {
+                        this.$el.innerText = val;
+                        return this;
                     }
-                } else if (is_array(this.$el, true) && val) {
+                } else if (is_array(this.$el, true)) {
+                    var contentText = "";
                     this.$el.forEach(function (item) {
-                        item.innerText = val;
+                        if (str_empty) {
+                            contentText = contentText + item.innerText;
+                        } else {
+                            item.innerText = val;
+                        }
                     });
+                    if (str_empty) {
+                        return contentText;
+                    } else {
+                        return this;
+                    }
                 }
-                return this;
             },
             get: function (idx) {
                 if (undefined === idx) { idx = 0; }
