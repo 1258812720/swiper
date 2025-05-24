@@ -448,8 +448,8 @@
                 height: 0,// 父容器高度
                 duration: 300,// 过渡时间
                 parent: root,// 父容器
-                defaultIndex: 0 // 默认滑块显示下标
-
+                defaultIndex: 0, // 默认滑块显示下标
+                on: null
             }
         if (conf && typeof conf === "object" && Object.keys(conf).length > 0) {
             if (undefined === Object.assign) {
@@ -511,15 +511,15 @@
         function refresh_layout() {
             get_style(def_config.slide.get(0));
         }
-        function init_swiper() {
 
-            var index = def_config.defaultIndex;
+        function init_swiper() {
+            var index = def_config.defaultIndex > def_config.num ? def_config.defaultIndex : def_config.num - 1;
             function prev() {
                 index--;
                 if (index < 0) {
                     index = def_config.num - 1;
                     animate(index * def_config.width, 0);
-                    refresh_layout()
+                    refresh_layout();
                     index = def_config.num - 2;
                     animate(index * def_config.width, def_config.duration);
                 } else {
@@ -532,7 +532,7 @@
                 if (index > def_config.num - 1) {
                     index = 0;
                     animate(index * def_config.width, 0);
-                    refresh_layout()
+                    refresh_layout();
                     index = 1;
                     animate(index * def_config.width, def_config.duration);
                 } else {
@@ -545,7 +545,7 @@
             }
             function animate(dis, duration, ease) {
                 if (undefined === ease) {
-                    ease = "ease"
+                    ease = "ease";
                 }
                 def_config.slide.css({
                     transition: "transform " + duration + "ms " + def_config.ease,
@@ -571,11 +571,12 @@
             var endx = 0;
             function compute_index(dis) {
                 var val = Math.abs(dis);
-                var i = parseInt(val / def_config.width);
+                var i = Math.round(val / def_config.width);
                 return i;
             }
             function touch_start(e) {
                 e.preventDefault();
+                endx = -index * def_config.width;
                 startx = e.clientX;
                 is_press = true;
                 $(document).on("pointermove", function (e) { touch_move(e) });
@@ -583,9 +584,15 @@
             function touch_move(e) {
                 e.preventDefault();
                 if (is_press) {
-                    var x = e.clientX - startx + movex;
-                    animate(-x, 0);
-                    endx = -x;
+                    var x = e.clientX;
+                    movex = x - startx + endx;
+                    if (Math.abs(movex) >= def_config.width * (def_config.num - 1)) {
+                        movex = 0;
+                    } else if (movex >= 0) {
+                        movex = -(def_config.width * (def_config.num - 1));
+                    }
+                    animate(-movex, 0);
+                    index = compute_index(movex);
                 }
                 else {
                     return false;
@@ -593,9 +600,9 @@
             }
             function touch_end(e) {
                 e.preventDefault();
-                // animate()
-                // var idx = compute_index(point_xm);
-                // animate(idx * def_config.width, def_config.duration);
+                endx = movex;
+                endx = -index * def_config.width;
+                animate(index * def_config.width, def_config.duration);
                 $(this).off("pointermove", touch_move); is_press = false;
             }
 
@@ -610,7 +617,10 @@
 
             __init__layout();
             init_nav();
-            __init__touch();
+            if (false === def_config.disabvarouch) {
+                __init__touch();
+            }
+
             return {
 
             }

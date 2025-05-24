@@ -8,74 +8,10 @@
 	<meta http-equiv="X-UA-Compatible" content="edge" />
 	<link rel="short icon" href="img/logo.ico" />
 	<link rel="stylesheet" type="text/css" href="css/simple_style.css" />
-	<script type="text/javascript" src="js/simple_swiper_min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script type="text/javascript" src="js/simple_swiper_dev.js"></script>
 </head>
-<style>
-	.has {
-		color: red;
-	}
 
-	.btn>img {
-		width: 100%;
-		height: 100%;
-		user-select: none;
-	}
-
-	body {
-		background-color: rgb(58, 58, 58);
-		margin: 0;
-		padding: 0px;
-		box-sizing: border-box;
-		height: 100%;
-		height: 100%;
-		position: relative;
-		overflow-y: auto;
-		display: flex;
-		align-items: center;
-		width: 100%;
-		justify-content: center;
-		border-radius: 8px;
-	}
-
-	.heiwukong,
-	.heiwukong1 {
-		width: 564px;
-		height: 315px;
-
-		margin-bottom: 0;
-		position: relative;
-		border-radius: 6px;
-	}
-
-	.swiper-items {
-		text-align: center;
-		height: 100%;
-		position: relative;
-		overflow: hidden;
-	}
-
-	.swiper-items img {
-		width: 100%;
-		height: auto;
-	}
-
-	.heiwukong .pagehelper {
-		text-align: right;
-	}
-
-	.pagehelper .pagination-items {
-		width: 10px;
-		height: 6px;
-		border-radius: 0;
-		border: none;
-		transition: width .18s;
-	}
-
-	.heiwukong .pagehelper .pagination-items-active {
-		width: 14px;
-		background-color: none;
-	}
-</style>
 
 <body>
 	<div class="app">
@@ -123,37 +59,17 @@
 		}
 		new SimSwiper(".heiwukong", {
 			navigator: {
-				prev: "#prev",
+				prev: "#prev",// 前进后退按钮
 				next: "#next"
 			},
 			loop: true,
-			button: {
-				prev: "#prev", // 前进后退按钮
-				next: "#next"
-			},
-			defaultIndex: 0
+			defaultIndex: 0,
+			on:{
+				init(){
+					
+				}
+			}
 		});
-		// {
-		// 	button: {
-		// 		prev: "#prev", // 前进后退按钮
-		// 		next: "#next"
-		// 	},
-		// 	loop: true,
-		// 	easing: 'ease',
-		// 	duration: 300,
-		// 	disabvarouch: false, // 关闭触摸滑动 def false
-		// 	autoplay: true,
-		// 	lazy: {
-		// 		enable: true,
-		// 		prop: "data"
-		// 	},
-		// 	accelerate: true,
-		// 	// direction: '',//def:horizontal | vertical
-		// 	pagination: {
-		// 		el: "#pagination",
-		// 		click: true
-		// 	},
-		// }
 	</script>
 </body>
 
