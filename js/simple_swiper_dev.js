@@ -196,7 +196,7 @@
                 this.className(ID_VERSION, name, true);
                 return this;
             },
-            delay: function (call,time) {
+            delay: function (call, time) {
                 if (time < 0) {
                     call();
                     return this;
@@ -530,7 +530,7 @@
         }
 
         function init_swiper() {
-            var index = def_config.defaultIndex > def_config.num ? def_config.defaultIndex : def_config.num - 1;
+            var index = def_config.defaultIndex > def_config.num ? def_config.num - 1 : def_config.defaultIndex;
             function prev() {
                 index--;
                 if (index < 0) {
@@ -603,10 +603,16 @@
                 if (is_press) {
                     var x = e.clientX;
                     movex = x - startx + endx;
-                    if (Math.abs(movex) >= def_config.width * (def_config.num - 1)) {
+                    var max_translate = def_config.width * (def_config.num - 1);
+                    var bound = Math.abs(movex) > max_translate;
+                    if (bound) {
                         movex = 0;
+                        // console.log("分支1");
                     } else if (movex >= 0) {
-                        movex = -(def_config.width * (def_config.num - 1));
+                        // console.log("分支2");
+                        movex = -max_translate;
+                    } else {
+                        // console.log("分支3", movex);
                     }
                     animate(-movex, 0);
                     index = compute_index(movex);
