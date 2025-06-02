@@ -4,18 +4,7 @@
     if (t) { void 0 === t.__proto__ ? (t.SimSwiper = e, SimSwiper) : "undefined" != typeof module ? module.exports = e : t.__proto__.SimSwiper = e } else { JSwiper = e; }
 })(this, function (el, conf) {
     var ID_VERSION = "ID.VERSION." + new Date().getMilliseconds() + "" + parseInt(Math.random() * 10000);
-    var deep_copy = function (obj) {
-        if (obj === null || typeof obj !== "object") {
-            return obj;
-        }
-        var copy = Array.isArray(obj) ? [] : {};
-        for (var key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                copy[key] = deep_copy(obj[key]);
-            }
-        }
-        return copy;
-    }
+    
     var object_contains = function (obj, key) {
         if (!obj || !key) {
             return false;
@@ -29,7 +18,7 @@
         }
     }
     var is_document = function (el) {
-        return el && (el instanceof Element || el instanceof Document);
+        return el && (el instanceof Element || el instanceof Document || el instanceof DocumentFragment);
     }
     var set_props = function (el, props, call) {
         if (!el) {
@@ -44,10 +33,18 @@
             }
         }
     }
+    var is_json = function (o) {
+        try {
+            JSON.stringify(o);
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
     var is_object = function (obj, check_blank) {
         if (undefined === check_blank) { check_blank = false }
         try {
-            return obj && typeof obj === "object" && Reflect.ownKeys(obj).length >= (check_blank ? 1 : 0);
+            return obj && is_json(obj) && typeof obj === "object" && Reflect.ownKeys(obj).length >= (check_blank ? 1 : 0);
         } catch (err) {
             if (err.number === -2146823279) {
                 var t = false;
@@ -75,7 +72,7 @@
         return arr && typeof arr === "object" && (check_blank ? array_not_empty(arr) : arr.length !== undefined)
     }
     var is_function = function (f) {
-        return typeof f === "function";
+        return f && typeof f === "function";
     }
     var get_style = function (el, prop) {
         var _el = undefined;
@@ -96,43 +93,95 @@
     var has_class = function (el, class_name) {
         return el.classList.contains(class_name);
     }
+    var is_window = function (e) {
+        return e && e === window;
+    }
 
-    var $ = function (str_id) {
-        var _el = undefined;
-        if (str_id === undefined) {
-            _el = document.createDocumentFragment();
-        } else if (is_document(str_id)) {
-            _el = str_id;
+    /**声明响应式 */
+    var to_ref = function (obj) {
+        if (Object.keys(obj).length > 0) {
+            return new Proxy(obj, {
+                set(t, k, v) {
+                    t[k] = v;
+                    for (var k1 in t) {
+                        // console.log(k1, t);
+                        r(t, k1);
+                    }
+                },
+                get(k, t, r) {
+                    return k[t];
+                }
+            });
         }
-        else if (typeof str_id === "string") {
-            var CLASS = /^[.]/g.test(str_id);
-            var ID = /^[#]/g.test(str_id);
+    }
+    /**解除响应式 */
+    var to_raw = function (target, handler) {
+        Proxy.revocable(target, handler);
+    }
+    var parseHtml = function () {
+
+    }
+    var $ = function (o, parent) {
+        if (parent) {
+            root = parent;
+            ctx = root.text();
+        }
+        var _el = undefined;
+        if (o === undefined) {
+            _el = document.createDocumentFragment();
+        } else if (is_document(o)) {
+            _el = o;
+        } else if (!str_is_empty(o)) {
+            var CLASS = /^[.]/g.test(o);
+            var ID = /^[#]/g.test(o);
             if (CLASS || ID) {
-                var els = document.querySelectorAll(str_id),
+                var els = document.querySelectorAll(o),
                     len = els.length;
                 _el = len === 1 ? els[0] : els;
-            } else if (/<[a-z]+[1-6]?\b[^>]*>(.*?)|<\/[a-z]+[1-6]?>/g.test(str_id)) {
+            } else if (/<[a-z]+[1-6]?\b[^>]*>(.*?)|<\/[a-z]+[1-6]?>/g.test(o)) {
                 try {
-                    var parse = new DOMParser().parseFromString(str_id, "text/html");
+                    var parse = new DOMParser().parseFromString(o, "text/html");
                     _el = parse.body.firstChild;
                 } catch (err) {
                     console.error("dom 解析失败", err);
                 }
             }
             else {
-                var els = document.querySelectorAll(str_id);
+                var els = document.querySelectorAll(o);
                 if (els) {
                     var len = els.length;
                     _el = len === 1 ? els[0] : els;
                 }
             }
         }
-        else {
-            _el = str_id;
+        else if (is_object(o)) {
+            return to_ref(o);
         }
-        return {
+        else {
+            _el = o;
+        }
+        var g = {
+            enableReactModel: false,
             $el: _el,
             events: [],
+            ready: function (call) {
+                if (is_function(call)) {
+                    if (is_window(this.$el)) {
+                        this.$el.onload = function () {
+                            call(this.$el);
+                        }
+                    } else if (is_document(this.$el)) {
+                        try {
+                            this.$el.addEventListener("DOMContentLoaded", function () {
+                                call(this.$el);
+                            });
+                        } catch (err) {
+                            void (err);
+                        }
+                    }
+                }
+                return undefined;
+            },
             add_attr: function (node, k, v, is_class, id) {
                 if (is_class === undefined) {
                     is_class = false;
@@ -240,7 +289,7 @@
                         for (; i < len; i++) {
                             element[i].appendChild(insert_content);
                         }
-                    } else {
+                    } else if (is_document(_el)) {
                         element.appendChild(insert_content);
                     }
                 }
@@ -257,7 +306,7 @@
                     _push(this.$el, node.$el);
                 }
                 else {
-                    void (0)
+                    void (0);
                 }
                 return this;
             },
@@ -442,8 +491,26 @@
                     })
                 });
                 return this;
+            },
+            hover: function (func, func2) {
+                if (is_function(func)) {
+                    this.on("mouseenter", func);
+                }
+                if (is_function(func2)) {
+                    this.on("mouseleave", func2);
+                }
+                return this;
+            },
+            press: function (func, func2) {
+                if (is_function(func)) {
+                    this.on("mousedown", func);
+                }
+                if (is_function(func2)) {
+                    this.on("mouseup", func2);
+                }
             }
         };
+        return g;
     }
     if (!(el)) {
         console.error("找不到父容器", el);
@@ -487,17 +554,18 @@
         def_config.is_mobile = (function () {
             return (/Android|iPhone|iPad|X11|Mac OS X/i.test(navigator.userAgent));
         })();
-
         (function () {
             var slider = $("<div class='swiper-slider'></div>");
             def_config.slide = slider;
             var swiper_items = root.children(".swiper-items");
-            swiper_items.remove()
+            swiper_items.remove();
             var clone_swipers = swiper_items.clone(); // 最终复制的节点
+            
             if (def_config.loop) {
                 var last = swiper_items.get(0).clone();
                 clone_swipers.push(last);
             }
+            
             var root_size = get_style($(el));
             var size = clone_swipers.length;
             var style_config = {
@@ -642,10 +710,6 @@
             init_nav();
             if (false === def_config.disabvarouch) {
                 __init__touch();
-            }
-
-            return {
-
             }
         }
         new init_swiper(def_config);
