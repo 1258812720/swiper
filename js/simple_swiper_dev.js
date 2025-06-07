@@ -4,7 +4,7 @@
     if (t) { void 0 === t.__proto__ ? (t.SimSwiper = e, SimSwiper) : "undefined" != typeof module ? module.exports = e : t.__proto__.SimSwiper = e } else { JSwiper = e; }
 })(this, function (el, conf) {
     var ID_VERSION = "ID.VERSION." + new Date().getMilliseconds() + "" + parseInt(Math.random() * 10000);
-    
+
     var object_contains = function (obj, key) {
         if (!obj || !key) {
             return false;
@@ -251,10 +251,18 @@
                     return this;
                 }
                 var _t = this.$el;
+                var node_list = [];
+                if (is_document(_t)) {
+                    node_list.push(_t);
+                } else if (is_array(_t)) {
+                    node_list = _t;
+                }
                 if (is_function(call)) {
                     var t = setTimeout(function () {
                         clearTimeout(t);
-                        call.call(_t);
+                        node_list.forEach(function (item) {
+                            call.call(item);
+                        });
                         t = null;
                     }, time);
                 }
@@ -272,6 +280,7 @@
                         }
                     });
                 } else {
+                    console.error('set stylesheet error');
                     void (0);
                 }
                 return this;
@@ -312,13 +321,15 @@
             },
             remove: function () {
                 var this_el = this.$el;
-                if (is_array(this_el, true)) {
-                    var parent = this_el[0].parentNode;
-                    this_el.forEach(function (item) {
-                        if (item) {
-                            parent.removeChild(item);
-                        }
-                    });
+                if (is_array(this_el, false)) {
+                    if (this_el.length > 0) {
+                        var parent = this_el[0].parentNode;
+                        this_el.forEach(function (item) {
+                            if (item) {
+                                parent.removeChild(item);
+                            }
+                        });
+                    }
                 } else {
                     this_el.parentNode.removeChild(this_el);
                 }
@@ -533,7 +544,8 @@
                 duration: 300,// 过渡时间
                 parent: root,// 父容器
                 defaultIndex: 0, // 默认滑块显示下标
-                on: null
+                on: null,
+                realIndex: 0
             }
         if (conf && typeof conf === "object" && Object.keys(conf).length > 0) {
             if (undefined === Object.assign) {
@@ -548,7 +560,6 @@
             } else {
                 Object.assign(def_config, conf);
             }
-
         }
         conf = null;
         def_config.is_mobile = (function () {
@@ -560,12 +571,10 @@
             var swiper_items = root.children(".swiper-items");
             swiper_items.remove();
             var clone_swipers = swiper_items.clone(); // 最终复制的节点
-            
             if (def_config.loop) {
                 var last = swiper_items.get(0).clone();
                 clone_swipers.push(last);
             }
-            
             var root_size = get_style($(el));
             var size = clone_swipers.length;
             var style_config = {
@@ -604,12 +613,14 @@
                 if (index < 0) {
                     index = def_config.num - 1;
                     animate(index * def_config.width, 0);
+
                     refresh_layout();
                     index = def_config.num - 2;
                     animate(index * def_config.width, def_config.duration);
                 } else {
                     animate(index * def_config.width, def_config.duration);
                 }
+
             }
 
             function next() {
@@ -623,21 +634,27 @@
                 } else {
                     animate(index * def_config.width, def_config.duration);
                 }
+                set_postion();
             }
             /** 初始化布局 */
             function __init__layout() {
                 animate(index * def_config.width, def_config.duration);
-            }
-            function animate(dis, duration, ease) {
-                if (undefined === ease) {
-                    ease = "ease";
+                if (object_contains(def_config.on, "init")) {
+                    def_config.on.init(this);
                 }
-                def_config.slide.css({
-                    transition: "transform " + duration + "ms " + def_config.ease,
-                    transform: "translate3d(" + -(dis) + "px,0,0)",
-                    backfaceVisibility: "hidden"
-                })
             }
+            function set_postion() {
+                endx = index * def_config.width;
+            }
+
+            Object.defineProperty(def_config, 'realIndex', {
+                set: function (a, b, c) {
+                    if (object_contains(def_config.on, "change") && is_function(def_config.on.change)) {
+                        def_config.on.change(def_config);
+                    }
+                }
+            })
+
             /** 初始化前后切换按钮 */
             function init_nav() {
                 if (object_contains(def_config, "navigator")) {
@@ -652,48 +669,65 @@
             /** 触摸 */
             var is_press = false;
             var startx = 0;
-            var movex = 0;
             var endx = 0;
+            var is_left = false;
+            function animate(dis, duration, ease, call) {
+                if (undefined === ease) {
+                    ease = "ease";
+                }
+                def_config.slide.css({
+                    transition: "transform " + duration + "ms " + def_config.ease,
+                    transform: "translate3d(" + -(dis) + "px,0,0)",
+                    backfaceVisibility: "hidden"
+                });
+                if (is_function(call)) {
+                    call();
+                }
+            }
             function compute_index(dis) {
-                var val = Math.abs(dis);
-                var i = Math.round(val / def_config.width);
+                var thold = is_left ? 0.34 : -0.34;
+                var val = Math.abs(dis) / def_config.width;
+                var i = Math.round(val + thold);
                 return i;
             }
+
             function touch_start(e) {
                 e.preventDefault();
-                endx = -index * def_config.width;
                 startx = e.clientX;
                 is_press = true;
                 $(document).on("pointermove", function (e) { touch_move(e) });
             }
+
             function touch_move(e) {
                 e.preventDefault();
-                if (is_press) {
-                    var x = e.clientX;
-                    movex = x - startx + endx;
-                    var max_translate = def_config.width * (def_config.num - 1);
-                    var bound = Math.abs(movex) > max_translate;
-                    if (bound) {
-                        movex = 0;
-                        // console.log("分支1");
-                    } else if (movex >= 0) {
-                        // console.log("分支2");
-                        movex = -max_translate;
-                    } else {
-                        // console.log("分支3", movex);
-                    }
+                if (!is_press) {
+                    return;
+                }
+                var x = e.clientX;
+                movex = x - startx - endx;
+                is_left = (x - startx) < 0;
+                var max_translate = def_config.width * (def_config.num - 1);
+                var bound = Math.abs(movex) >= max_translate;
+                if (bound) {
+                    var v = 0;
+                    index = v;
+                    endx = v;
+                    animate(v, 0);
+                } else if (movex >= 0) {
+                    index = def_config.num - 1;
+                    endx = max_translate;
+                    animate(-movex, 0);
+                }
+                else {
                     animate(-movex, 0);
                     index = compute_index(movex);
                 }
-                else {
-                    return false;
-                }
             }
             function touch_end(e) {
+                e.stopPropagation();
                 e.preventDefault();
-                endx = movex;
-                endx = -index * def_config.width;
                 animate(index * def_config.width, def_config.duration);
+                set_postion();
                 $(this).off("pointermove", touch_move); is_press = false;
             }
 
@@ -713,7 +747,6 @@
             }
         }
         new init_swiper(def_config);
-        Object.freeze(def_config);
     }
     return {
         $,

@@ -50,7 +50,6 @@
 
 			</span>
 		</div>
-		<p> 画江湖 </p>
 	</div>
 	</div>
 
@@ -64,23 +63,8 @@
 				next: "#next"
 			},
 			loop: true,
-			defaultIndex: 0,
-			on: {
-				init() {
-
-				}
-			}
+			defaultIndex: 0
 		}).$;
-		// 获取所有div
-		$("p").text("你干嘛").delay(function () {
-			$(this).css({
-				color: "white"
-			});
-		},1000).hover(()=>{
-			$(this).css({
-				fontSize:"23px"
-			})
-		});
 	</script>
 </body>
 
