@@ -26,8 +26,8 @@ body {
 
 .heiwukong,
 .heiwukong1 {
-    width: 564px;
-    height: 315px;
+    width: 1266px;
+    height: 530px;
 
     margin-bottom: 0;
     position: relative;
@@ -43,7 +43,7 @@ body {
 
 .swiper-items img {
     width: 100%;
-    height: auto;
+    height: 100%;
 }
 
 .heiwukong .pagehelper {
