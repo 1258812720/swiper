@@ -42,10 +42,6 @@
 				<div class="swiper-items">
 					<img src="https://storage.360buyimg.com/component-libray/images/pc/pc_banner_snacks.png" alt="">
 				</div>
-				<div class="swiper-items">
-					<img src="https://storage.360buyimg.com/component-libray/images/pc/pc_banner_home_appliances.png"
-						alt="">
-				</div>
 			</div>
 			<div class="pagehelper pagination" id="pagination"></div>
 			<span id="prev" class="btn btn-prev">
@@ -68,7 +64,11 @@
 				next: "#next"
 			},
 			loop: true,
-			defaultIndex: 0
+			defaultIndex: 0,
+			lazy: {
+				enable: true,
+				prop: "data"
+			}
 		}).$;
 	</script>
 </body>

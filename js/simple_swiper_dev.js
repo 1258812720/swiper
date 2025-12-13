@@ -545,7 +545,8 @@
                 parent: root,// 父容器
                 defaultIndex: 0, // 默认滑块显示下标
                 on: null,
-                realIndex: 0
+                realIndex: 0,
+                lazy: false
             }
         if (conf && typeof conf === "object" && Object.keys(conf).length > 0) {
             if (undefined === Object.assign) {
