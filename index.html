@@ -45,26 +45,31 @@
 			</div>
 			<div class="pagehelper pagination" id="pagination"></div>
 			<span id="prev" class="btn btn-prev">
-
 			</span>
-			<span id="next" class="btn btn-next">
-
-			</span>
+			<span id="next" class="btn btn-next"> </span>
 		</div>
 	</div>
 	</div>
 
 	<script type="text/javascript">
 		window.onload = function () {
-			document.documentElement.style.height = this.innerHeight + "px"
+			document.documentElement.style.height = this.innerHeight + "px";
+			this.addEventListener("resize", () => {
+				document.documentElement.style.height = this.innerHeight + "px";
+			})
 		}
 		var $ = new SimSwiper(".heiwukong", {
 			navigator: {
 				prev: "#prev",// 前进后退按钮
 				next: "#next"
 			},
+			pagination: {
+				click: true,
+				el: ".pagehelper"
+			}, autoplay: true,
 			loop: true,
-			defaultIndex: 0,
+			defaultIndex: 2,
+			disabvarouch: false, // 关闭触摸
 			lazy: {
 				enable: true,
 				prop: "data"

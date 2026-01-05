@@ -4,7 +4,6 @@
     if (t) { void 0 === t.__proto__ ? (t.SimSwiper = e, SimSwiper) : "undefined" != typeof module ? module.exports = e : t.__proto__.SimSwiper = e } else { JSwiper = e; }
 })(this, function (el, conf) {
     var ID_VERSION = "ID.VERSION." + new Date().getMilliseconds() + "" + parseInt(Math.random() * 10000);
-
     var object_contains = function (obj, key) {
         if (!obj || !key) {
             return false;
@@ -98,28 +97,14 @@
     }
 
     /**声明响应式 */
-    var to_ref = function (obj) {
-        if (Object.keys(obj).length > 0) {
-            return new Proxy(obj, {
-                set(t, k, v) {
-                    t[k] = v;
-                    for (var k1 in t) {
-                        // console.log(k1, t);
-                        r(t, k1);
-                    }
-                },
-                get(k, t, r) {
-                    return k[t];
-                }
-            });
+    var to_ref = function (target, key, callback) {
+        if (!target || !key || typeof key !== "string" || !target[key]) {
+            return;
         }
-    }
-    /**解除响应式 */
-    var to_raw = function (target, handler) {
-        Proxy.revocable(target, handler);
-    }
-    var parseHtml = function () {
+        Object.defineProperty(target, key, {
+            writable: true,
 
+        })
     }
     var $ = function (o, parent) {
         if (parent) {
@@ -153,9 +138,6 @@
                     _el = len === 1 ? els[0] : els;
                 }
             }
-        }
-        else if (is_object(o)) {
-            return to_ref(o);
         }
         else {
             _el = o;
@@ -566,6 +548,12 @@
         def_config.is_mobile = (function () {
             return (/Android|iPhone|iPad|X11|Mac OS X/i.test(navigator.userAgent));
         })();
+        var TOUCH_EVENT = {
+            "down": def_config.is_mobile ? "touchstart" : "pointerdown",
+            "move": def_config.is_mobile ? "touchmove" : "pointermove",
+            "up": def_config.is_mobile ? "touchend" : "pointerup"
+        };
+
         (function () {
             var slider = $("<div class='swiper-slider'></div>");
             def_config.slide = slider;
@@ -614,13 +602,14 @@
                 if (index < 0) {
                     index = def_config.num - 1;
                     animate(index * def_config.width, 0);
-
                     refresh_layout();
                     index = def_config.num - 2;
                     animate(index * def_config.width, def_config.duration);
                 } else {
                     animate(index * def_config.width, def_config.duration);
                 }
+            }
+            function setPage() {
 
             }
 
@@ -654,7 +643,7 @@
                         def_config.on.change(def_config);
                     }
                 }
-            })
+            });
 
             /** 初始化前后切换按钮 */
             function init_nav() {
@@ -691,12 +680,11 @@
                 var i = Math.round(val + thold);
                 return i;
             }
-
             function touch_start(e) {
                 e.preventDefault();
                 startx = e.clientX;
                 is_press = true;
-                $(document).on("pointermove", function (e) { touch_move(e) });
+                $(document).on(TOUCH_EVENT["move"], function (e) { touch_move(e) });
             }
 
             function touch_move(e) {
@@ -729,24 +717,25 @@
                 e.preventDefault();
                 animate(index * def_config.width, def_config.duration);
                 set_postion();
-                $(this).off("pointermove", touch_move); is_press = false;
+                $(this).off(TOUCH_EVENT["move"], touch_move); is_press = false;
             }
-
             function __init__touch() {
                 if (true === def_config.disabvarouch) {
                     return;
-                } else {
+                }
+                else {
+
                     $(el).children(".swiper-wrapper").on("pointerdown", touch_start);
-                    $(document).on("pointerup", touch_end);
+                    $(document).on(TOUCH_EVENT["up"], touch_end);
                 }
             }
-
             __init__layout();
             init_nav();
             if (false === def_config.disabvarouch) {
                 __init__touch();
             }
         }
+
         new init_swiper(def_config);
     }
     return {
