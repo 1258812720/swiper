@@ -73,6 +73,13 @@
     var is_function = function (f) {
         return f && typeof f === "function";
     }
+    var is_str = function (str = null) {
+        if (str_is_empty(str)) {
+            return false;
+        } else {
+            return Object.prototype.toString.call(str) === '[object String]'
+        }
+    }
     var get_style = function (el, prop) {
         var _el = undefined;
         if (!el) {
@@ -98,12 +105,15 @@
 
     /**声明响应式 */
     var to_ref = function (target, key, callback) {
-        if (!target || !key || typeof key !== "string" || !target[key]) {
+        if (!target && !key && typeof key !== "string" && !target[key]) {
             return;
         }
         Object.defineProperty(target, key, {
-            writable: true,
-
+            set: function (newValue) {
+                if (is_function(callback)) {
+                    callback.call(target, [newValue])
+                }
+            }
         })
     }
     var $ = function (o, parent) {
@@ -164,6 +174,29 @@
                 }
                 return undefined;
             },
+            has: function (func1, func2) {
+                // 判断当前元素是否存在
+                if (is_function(func1)) {
+                    if (is_array(this.$el)) {
+                        if (this.$el.length > 0) {
+                            func1.call(this.$el, []);
+                        } else {
+                            if (func2 && is_function(func2)) {
+                                func2.call(this, []);
+                            }
+                        }
+                    } else {
+                        if (this.$el) {
+                            func1.call(this.$el, []);
+                        } else {
+                            if (func2 && is_function(func2)) {
+                                func2.call(this, []);
+                            }
+                        }
+                    }
+                }
+
+            },
             add_attr: function (node, k, v, is_class, id) {
                 if (is_class === undefined) {
                     is_class = false;
@@ -179,6 +212,14 @@
                     }
                 }
                 return undefined;
+            },
+            eq: function (index = -1) {
+                if (index < 0) {
+                    return this;
+                } else {
+                    this.$el = this.$el[index];
+                }
+                return this;
             },
             attr: function (prop) {
                 var t = this;
@@ -373,10 +414,13 @@
                 return this;
             },
             each: function (call) {
-                if (call && typeof call === "function") {
-                    if (this.$el && this.$el.length) {
+                if (is_function(call) && this.$el) {
+                    if (this.$el.length > 0) {
                         for (var key in this.$el) {
-                            call(key, this.$el[key]);
+                            var item = this.$el[key];
+                            if (is_document(item)) {
+                                call.call(key, item);
+                            }
                         }
                     } else {
                         console.error("当前集合不可迭代", this.$el);
@@ -520,7 +564,8 @@
                 pagination: undefined,// 指示点
                 gap: 0, // 间隔
                 slide: null, // 滑块
-                num: 0,// 子滑块数量
+                num: 0,// 子滑块数量 包含复制的
+                realNum: 0,// 视觉滑块数量，不包含循环复制的
                 width: 0, // 父容器宽度
                 height: 0,// 父容器高度
                 duration: 300,// 过渡时间
@@ -588,7 +633,11 @@
             });
             def_config.width = root_size.width;
             def_config.height = root_size.height;
-            def_config.num = size;
+            if (def_config.loop) {
+                def_config.num = size - 1;
+            } else {
+                def_config.num = size;
+            }
             /** 空间 */
         })();
         function refresh_layout() {
@@ -596,8 +645,13 @@
         }
 
         function init_swiper() {
+            var _target = {
+                index: 0,
+            }
             var index = def_config.defaultIndex > def_config.num ? def_config.num - 1 : def_config.defaultIndex;
-            function prev() {
+            function prev(e) {
+                e.stopPropagation();
+                e.preventDefault();
                 index--;
                 if (index < 0) {
                     index = def_config.num - 1;
@@ -608,12 +662,60 @@
                 } else {
                     animate(index * def_config.width, def_config.duration);
                 }
+                set_postion();
             }
+            // 设置页码
             function setPage() {
+                var b = def_config.pagination;
+                var _el = undefined;
+                var clickable = true;
+                if (b && is_str(b)) {
+                    _el = b;
+                }
+                else if (object_contains(b, "el")) {
+                    _el = b.el;
+                    clickable = b.click;
+                }
+                if (_el) {
+                    $(_el).has(function () {
+                        var idx = 0,
+                            len = def_config.num,
+                            _vm = $(),
+                            _this = $(this),
+                            active = "pagination-items-active";
+                        var click_item;
+                        while (idx < len) {
+                            if (idx === index) {
+                                click_item = $("<span class='pagination-items " + active + "'></span>");
+                            } else {
+                                click_item = $("<span class='pagination-items'></span>");
+                            }
+                            _vm.add(click_item);
+                            idx += 1;
+                        }
+                        _this.add(_vm);
+                        var children = _this.children();
+                        // 监听索引变化
+                        to_ref(_target, "index", function (e) {
+                            var _ridx = e[0];
+                            console.log(_ridx);
+                            var i = 0;
+                            for (; i < len; i++) {
+                                if (i === _ridx) {
+                                    children.$el[_ridx].classList.add(active);
+                                } else {
+                                    children.$el[i].classList.remove(active);
+                                }
+                            }
 
+                        });
+                    });
+                }
             }
 
-            function next() {
+            function next(e) {
+                e.preventDefault();
+                e.stopPropagation();
                 index++;
                 if (index > def_config.num - 1) {
                     index = 0;
@@ -625,6 +727,7 @@
                     animate(index * def_config.width, def_config.duration);
                 }
                 set_postion();
+
             }
             /** 初始化布局 */
             function __init__layout() {
@@ -632,18 +735,26 @@
                 if (object_contains(def_config.on, "init")) {
                     def_config.on.init(this);
                 }
+                setPage();
+                /*
+                $(window).on("click", function () {
+                    console.log("重置尺寸");
+                    def_config.slide.css({
+                        transition: "all 0ms"
+                    })
+                });*/
             }
             function set_postion() {
                 endx = index * def_config.width;
+                _target.index = index;
             }
-
-            Object.defineProperty(def_config, 'realIndex', {
-                set: function (a, b, c) {
-                    if (object_contains(def_config.on, "change") && is_function(def_config.on.change)) {
-                        def_config.on.change(def_config);
+            if (object_contains(def_config.on, "change") && is_function(def_config.on.change)) {
+                Object.defineProperty(def_config, 'realIndex', {
+                    set: function (a, b, c) {
+                        def_config.on.change(def_config, a, b, c);
                     }
-                }
-            });
+                });
+            }
 
             /** 初始化前后切换按钮 */
             function init_nav() {
@@ -682,6 +793,7 @@
             }
             function touch_start(e) {
                 e.preventDefault();
+                e.stopPropagation();
                 startx = e.clientX;
                 is_press = true;
                 $(document).on(TOUCH_EVENT["move"], function (e) { touch_move(e) });
@@ -689,6 +801,7 @@
 
             function touch_move(e) {
                 e.preventDefault();
+                e.stopPropagation();
                 if (!is_press) {
                     return;
                 }
@@ -715,27 +828,31 @@
             function touch_end(e) {
                 e.stopPropagation();
                 e.preventDefault();
-                animate(index * def_config.width, def_config.duration);
-                set_postion();
-                $(this).off(TOUCH_EVENT["move"], touch_move); is_press = false;
+                let id = "#" + e.target.id;
+                if (id !== def_config.prev || id !== def_config.next) {
+                    animate(index * def_config.width, def_config.duration);
+                    $(this).off(TOUCH_EVENT["move"], touch_move); is_press = false;
+                    set_postion();
+                }
+
+
             }
             function __init__touch() {
                 if (true === def_config.disabvarouch) {
                     return;
                 }
                 else {
-
                     $(el).children(".swiper-wrapper").on("pointerdown", touch_start);
                     $(document).on(TOUCH_EVENT["up"], touch_end);
                 }
             }
             __init__layout();
             init_nav();
+            $(window).on("resize", () => alert(1))
             if (false === def_config.disabvarouch) {
                 __init__touch();
             }
         }
-
         new init_swiper(def_config);
     }
     return {
