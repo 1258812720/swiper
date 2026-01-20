@@ -191,7 +191,7 @@
             accelerate: true,
             timer: null,
             turnOff: true,
-            moveX:0,
+            moveX: 0,
             autoplay: function () {
                 var time = typeof g_conf.autoplay === "number" ? g_conf.autoplay : 3500;
                 th.time = setInterval(
@@ -344,7 +344,7 @@
                 return tagArr;
             },
             add: function (img_el) {
-                if (!img_el) { 
+                if (!img_el) {
                     return;
                 }
                 else if (th.loadEnd) {
@@ -355,7 +355,6 @@
                     clearTimeout(t);
                     t = setTimeout(function () {
                         var img = th.children(img_el, "img");
-                        
                         if (img) {
                             for (var i = 0; i < img.length; i++) {
                                 var _img = img[i];
@@ -411,7 +410,7 @@
             },
             play: function () {
                 var _ = this;
-                if (!slider) { 
+                if (!slider) {
                     return;
                 }
                 _.curIndex = _.index === _.num ? 0 : _.index;
@@ -579,7 +578,7 @@
                 try {
                     e.preventDefault();
                     var x = th.is_horizontal ? (e.clientX || (e.touches ? e.targetTouches[0].clientX : 0)) : (e.clientY || (e.touches ? e.targetTouches[0].clientY : 0));
-                    
+
                     var a = x - th.touchX - th.position;
                     var __h = (th.is_horizontal ? th.width : th.height);
                     var t, per = (x - th.touchX) / __h;

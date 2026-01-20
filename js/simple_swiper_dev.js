@@ -654,10 +654,10 @@
                 e.preventDefault();
                 index--;
                 if (index < 0) {
-                    index = def_config.num - 1;
+                    index = def_config.num;
                     animate(index * def_config.width, 0);
                     refresh_layout();
-                    index = def_config.num - 2;
+                    index = def_config.num - 1;
                     animate(index * def_config.width, def_config.duration);
                 } else {
                     animate(index * def_config.width, def_config.duration);
@@ -698,7 +698,6 @@
                         // 监听索引变化
                         to_ref(_target, "index", function (e) {
                             var _ridx = e[0];
-                            console.log(_ridx);
                             var i = 0;
                             for (; i < len; i++) {
                                 if (i === _ridx) {
@@ -717,7 +716,7 @@
                 e.preventDefault();
                 e.stopPropagation();
                 index++;
-                if (index > def_config.num - 1) {
+                if (index > def_config.num) {
                     index = 0;
                     animate(index * def_config.width, 0);
                     refresh_layout();
@@ -808,15 +807,15 @@
                 var x = e.clientX;
                 movex = x - startx - endx;
                 is_left = (x - startx) < 0;
-                var max_translate = def_config.width * (def_config.num - 1);
-                var bound = Math.abs(movex) >= max_translate;
+                var max_translate = def_config.width * (def_config.num);
+                var bound = Math.abs(movex) > max_translate;
                 if (bound) {
                     var v = 0;
                     index = v;
                     endx = v;
                     animate(v, 0);
-                } else if (movex >= 0) {
-                    index = def_config.num - 1;
+                } else if (movex > 0) {
+                    index = def_config.num;
                     endx = max_translate;
                     animate(-movex, 0);
                 }
@@ -831,11 +830,12 @@
                 let id = "#" + e.target.id;
                 if (id !== def_config.prev || id !== def_config.next) {
                     animate(index * def_config.width, def_config.duration);
-                    $(this).off(TOUCH_EVENT["move"], touch_move); is_press = false;
-                    set_postion();
+                    $(this).off(TOUCH_EVENT["move"], touch_move);
+                    if (is_press) {
+                        set_postion();
+                    }
+                    is_press = false;
                 }
-
-
             }
             function __init__touch() {
                 if (true === def_config.disabvarouch) {
@@ -848,7 +848,6 @@
             }
             __init__layout();
             init_nav();
-            $(window).on("resize", () => alert(1))
             if (false === def_config.disabvarouch) {
                 __init__touch();
             }
