@@ -32,6 +32,30 @@
             }
         }
     }
+    String.prototype.toNumber = function () {
+        if (!this) { return null }
+        var arr = this.trim().split("");
+        var i = 0;
+        var len = arr.length;
+        var numStr = "";
+        var first_tag = true;
+        while (i < len) {
+            var content = arr[i];
+            var isNumber = isNaN(content);
+            if (content === "." && first_tag) {
+                numStr = numStr + content;
+                first_tag = false;
+            }
+            else if (!isNumber) {
+                numStr = numStr + content;
+            }
+            i++;
+        }
+        if (numStr) {
+            return Number(numStr)
+        }
+
+    }
     var is_json = function (o) {
         try {
             JSON.stringify(o);
@@ -302,11 +326,15 @@
                             e.style[k] = v;
                         }
                     });
+                    return this;
                 } else {
-                    console.error('set stylesheet error');
-                    void (0);
+                    if (is_str(prop)) {
+                        return this.$el.style[prop];
+                    } else {
+                        console.error('invaild param');
+                        void (0);
+                    }
                 }
-                return this;
             },
             add: function (node) {
                 var _el = this.$el;
@@ -647,6 +675,7 @@
         function init_swiper() {
             var _target = {
                 index: 0,
+                translate: 0
             }
             var index = def_config.defaultIndex > def_config.num ? def_config.num - 1 : def_config.defaultIndex;
             function prev(e) {
@@ -684,11 +713,19 @@
                             _this = $(this),
                             active = "pagination-items-active";
                         var click_item;
+                        function click_event(e) {
+                            console.log(e);
+                        }
                         while (idx < len) {
                             if (idx === index) {
                                 click_item = $("<span class='pagination-items " + active + "'></span>");
                             } else {
                                 click_item = $("<span class='pagination-items'></span>");
+                            }
+                            if (clickable) {
+                                click_item.on("click", function () {
+                                    click_event(index);
+                                });
                             }
                             _vm.add(click_item);
                             idx += 1;
@@ -697,7 +734,8 @@
                         var children = _this.children();
                         // 监听索引变化
                         to_ref(_target, "index", function (e) {
-                            var _ridx = e[0];
+                            var _ridx = e[0] === def_config.num ? 0 : e[0];
+                            def_config.realIndex = _ridx;
                             var i = 0;
                             for (; i < len; i++) {
                                 if (i === _ridx) {
@@ -706,7 +744,6 @@
                                     children.$el[i].classList.remove(active);
                                 }
                             }
-
                         });
                     });
                 }
@@ -715,7 +752,7 @@
             function next(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                index++;
+                index += 1;
                 if (index > def_config.num) {
                     index = 0;
                     animate(index * def_config.width, 0);
@@ -726,7 +763,6 @@
                     animate(index * def_config.width, def_config.duration);
                 }
                 set_postion();
-
             }
             /** 初始化布局 */
             function __init__layout() {
@@ -746,13 +782,24 @@
             function set_postion() {
                 endx = index * def_config.width;
                 _target.index = index;
+                _target.translate = endx;
+                var cd = compute_dis();
+                var time = 0;
+                function _fun() {
+                    var rq = requestAnimationFrame(_fun);
+                    console.log(def_config.slide.$el.getBoundingClientRect()['x']);
+                    if (time >= def_config.duration) {
+                        cancelAnimationFrame(rq);
+                        return;
+                    }
+                    time += 10;
+                }
+                _fun();
             }
             if (object_contains(def_config.on, "change") && is_function(def_config.on.change)) {
-                Object.defineProperty(def_config, 'realIndex', {
-                    set: function (a, b, c) {
-                        def_config.on.change(def_config, a, b, c);
-                    }
-                });
+                to_ref(def_config, "realIndex", function (e) {
+                    def_config.on.change(def_config, e[0]);
+                })
             }
 
             /** 初始化前后切换按钮 */
@@ -784,6 +831,16 @@
                     call();
                 }
             }
+            function compute_dis() {
+                var data = def_config.slide.css("transform").replace(/translate3d\(/gi, "").replace(")", "").trim().split(",");
+                data.forEach(function (e, i) {
+                    data[i] = e.toNumber();
+                });
+                return data;
+            }
+            to_ref(_target, "translate", function (e) {
+                console.log("便宜", e);
+            });
             function compute_index(dis) {
                 var thold = is_left ? 0.34 : -0.34;
                 var val = Math.abs(dis) / def_config.width;
@@ -797,7 +854,6 @@
                 is_press = true;
                 $(document).on(TOUCH_EVENT["move"], function (e) { touch_move(e) });
             }
-
             function touch_move(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -806,6 +862,7 @@
                 }
                 var x = e.clientX;
                 movex = x - startx - endx;
+                _target.translate = movex;
                 is_left = (x - startx) < 0;
                 var max_translate = def_config.width * (def_config.num);
                 var bound = Math.abs(movex) > max_translate;
@@ -847,6 +904,7 @@
                 }
             }
             __init__layout();
+
             init_nav();
             if (false === def_config.disabvarouch) {
                 __init__touch();

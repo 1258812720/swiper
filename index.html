@@ -63,11 +63,17 @@
 			pagination: "#pagination",
 			autoplay: true,
 			loop: true,
-			defaultIndex: 0,
+			duration: 2000,
+			defaultIndex: 2,
 			disabvarouch: false, // 关闭触摸
 			lazy: {
 				enable: true,
 				prop: "data"
+			},
+			on: {
+				change(e, e1) {
+					console.log(e1);
+				}
 			}
 		}).$;
 	</script>
