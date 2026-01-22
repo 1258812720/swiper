@@ -1,6 +1,5 @@
 (function (t, e) {
     "use strict";
-    var p = 22000;
     if (t) { void 0 === t.__proto__ ? (t.SimSwiper = e, SimSwiper) : "undefined" != typeof module ? module.exports = e : t.__proto__.SimSwiper = e } else { JSwiper = e; }
 })(this, function (el, conf) {
     var ID_VERSION = "ID.VERSION." + new Date().getMilliseconds() + "" + parseInt(Math.random() * 10000);
@@ -54,7 +53,6 @@
         if (numStr) {
             return Number(numStr)
         }
-
     }
     var is_json = function (o) {
         try {
@@ -219,7 +217,6 @@
                         }
                     }
                 }
-
             },
             add_attr: function (node, k, v, is_class, id) {
                 if (is_class === undefined) {
@@ -244,6 +241,43 @@
                     this.$el = this.$el[index];
                 }
                 return this;
+            },
+            siblings: function (name = "") {
+                var t = this;
+                if (typeof name !== "string" && name !== undefined) {
+                    return t;
+                }
+                var _el = t.$el;
+                var CLASS = /^[.]/g.test(name);
+                var ID = /^[#]/g.test(name);
+                function find_sib(el) {
+                    var children = el.parentElement.children,
+                        res = [];
+                    if (children && children.length) {
+                        var i = 0, len = children.length;
+                        while (i < len) {
+                            var element = children[i];
+                            if (element !== _el) {
+                                if (name) {
+                                    var type = CLASS ? 0 : (ID ? 1 : -1);
+                                    if (type === -1 && element.tageName.toLocaleLowerCase() === name) {
+                                        res.push(element);
+                                    } else {
+                                        res.push(element);
+                                    }
+                                } else {
+                                    res.push(element);
+                                }
+                            }
+                            i++;
+                        }
+                    }
+                    return res;
+                }
+                if (!is_array(_el) && is_document(_el)) {
+                    t.$el = find_sib(_el);
+                }
+                return t;
             },
             attr: function (prop) {
                 var t = this;
@@ -580,6 +614,7 @@
     if (!(el)) {
         console.error("找不到父容器", el);
     } else {
+
         var root = $(el),
             def_config = {
                 accelerate: false, //禁用硬件加速
@@ -602,7 +637,9 @@
                 on: null,
                 realIndex: 0,
                 lazy: false
-            }
+            };
+        var base = { rootEl: root.$el };
+        Object.freeze(base);
         if (conf && typeof conf === "object" && Object.keys(conf).length > 0) {
             if (undefined === Object.assign) {
                 var result = {};
@@ -679,8 +716,10 @@
             }
             var index = def_config.defaultIndex > def_config.num ? def_config.num - 1 : def_config.defaultIndex;
             function prev(e) {
-                e.stopPropagation();
-                e.preventDefault();
+                if (e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
                 index--;
                 if (index < 0) {
                     index = def_config.num;
@@ -713,18 +752,20 @@
                             _this = $(this),
                             active = "pagination-items-active";
                         var click_item;
-                        function click_event(e) {
-                            console.log(e);
+                        function click_event(e, el) {
+                            $(el).addClass(active).siblings().removeClass(active);
+                            index = e;
+                            animate(e * def_config.width, def_config.duration, def_config.ease, set_postion);
                         }
                         while (idx < len) {
                             if (idx === index) {
-                                click_item = $("<span class='pagination-items " + active + "'></span>");
+                                click_item = $("<span index = " + idx + " class='pagination-items " + active + "'></span>");
                             } else {
-                                click_item = $("<span class='pagination-items'></span>");
+                                click_item = $("<span index=" + idx + " class='pagination-items'></span>");
                             }
                             if (clickable) {
                                 click_item.on("click", function () {
-                                    click_event(index);
+                                    click_event(this.getAttribute("index").toNumber(), this);
                                 });
                             }
                             _vm.add(click_item);
@@ -750,8 +791,11 @@
             }
 
             function next(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
                 index += 1;
                 if (index > def_config.num) {
                     index = 0;
@@ -783,11 +827,11 @@
                 endx = index * def_config.width;
                 _target.index = index;
                 _target.translate = endx;
+                return;
                 var cd = compute_dis();
                 var time = 0;
                 function _fun() {
                     var rq = requestAnimationFrame(_fun);
-                    console.log(def_config.slide.$el.getBoundingClientRect()['x']);
                     if (time >= def_config.duration) {
                         cancelAnimationFrame(rq);
                         return;
@@ -798,7 +842,7 @@
             }
             if (object_contains(def_config.on, "change") && is_function(def_config.on.change)) {
                 to_ref(def_config, "realIndex", function (e) {
-                    def_config.on.change(def_config, e[0]);
+                    def_config.on.change.call(this, def_config, e[0]);
                 })
             }
 
@@ -813,6 +857,35 @@
                     }
                 }
             }
+            /** 自动播放 */
+            var timer;
+            function auto_play() {
+                var delay_time = 2000;
+                if (object_contains(def_config, "autoplay")) {
+                    if (typeof def_config.autoplay === "number") {
+                        delay_time = def_config.autoplay;
+                    }
+                    if (!def_config.autoplay) {
+                        return;
+                    }
+                    timer = setInterval(function () {
+                        next();
+                    }, delay_time);
+                }
+            }
+            function stop_play() {
+                clearInterval(timer);
+                timer = null;
+            }
+            // $(base.rootEl).on("mouseenter", function () {
+            //     console.log(1);
+            //     stop_play();
+            // });
+            // $(base.rootEl).on("mouseleave", function () {
+            //     console.log(2);
+            //     auto_play();
+            // })
+
             /** 触摸 */
             var is_press = false;
             var startx = 0;
@@ -838,9 +911,9 @@
                 });
                 return data;
             }
-            to_ref(_target, "translate", function (e) {
-                console.log("便宜", e);
-            });
+            // to_ref(_target, "translate", function (e) {
+            //     console.log("便宜", e);
+            // });
             function compute_index(dis) {
                 var thold = is_left ? 0.34 : -0.34;
                 var val = Math.abs(dis) / def_config.width;
@@ -902,10 +975,12 @@
                     $(el).children(".swiper-wrapper").on("pointerdown", touch_start);
                     $(document).on(TOUCH_EVENT["up"], touch_end);
                 }
+                set_postion();
             }
             __init__layout();
 
             init_nav();
+            auto_play();
             if (false === def_config.disabvarouch) {
                 __init__touch();
             }
