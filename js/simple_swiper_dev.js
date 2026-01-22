@@ -217,6 +217,7 @@
                         }
                     }
                 }
+                return this;
             },
             add_attr: function (node, k, v, is_class, id) {
                 if (is_class === undefined) {
