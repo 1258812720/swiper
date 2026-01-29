@@ -55,7 +55,7 @@
 				document.documentElement.style.height = this.innerHeight + "px";
 			})
 		}
-		var $ = new SimSwiper(".heiwukong", {
+		new SimSwiper(".heiwukong", {
 			navigator: {
 				prev: "#prev",// 前进后退按钮
 				next: "#next"
@@ -63,6 +63,7 @@
 			pagination: "#pagination",
 			autoplay: false,
 			loop: true,
+			direction: "v",
 			// duration: 800,
 			defaultIndex: 2,
 			disabvarouch: false, // 关闭触摸
@@ -73,9 +74,13 @@
 			on: {
 				change(e, e1) {
 					// console.log(this);
+				},
+				transition: function (e) {
+					console.log(e);
+					// document.body.style.transform = `translateX(${e}px)`;
 				}
 			}
-		}).$;
+		});
 	</script>
 </body>
 

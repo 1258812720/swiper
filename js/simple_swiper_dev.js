@@ -684,12 +684,12 @@
             if (def_config.direction === "vertical") {// 判断方向
                 style_config.width = root_size.width + "px";
                 style_config.height = (root_size.height * size) + "px";
-                $(el).attr({ class: "vertical" });
+                $(el).addClass("vertical");
             }
             else {
                 style_config.height = root_size.height + "px";
                 style_config.width = (root_size.width * size) + "px";
-                $(el).attr({ class: "horizontal" });
+                $(el).addClass("horizontal");
             }
             slider.css(style_config).add(clone_swipers);
             $(el).children(".swiper-wrapper").add(slider); // 删除原来的
@@ -816,30 +816,12 @@
                     def_config.on.init(this);
                 }
                 setPage();
-                /*
-                $(window).on("click", function () {
-                    console.log("重置尺寸");
-                    def_config.slide.css({
-                        transition: "all 0ms"
-                    })
-                });*/
             }
             function set_postion() {
                 endx = index * def_config.width;
                 _target.index = index;
-                _target.translate = endx;
+                _target.translate = -endx;
                 return;
-                var cd = compute_dis();
-                var time = 0;
-                function _fun() {
-                    var rq = requestAnimationFrame(_fun);
-                    if (time >= def_config.duration) {
-                        cancelAnimationFrame(rq);
-                        return;
-                    }
-                    time += 10;
-                }
-                _fun();
             }
             if (object_contains(def_config.on, "change") && is_function(def_config.on.change)) {
                 to_ref(def_config, "realIndex", function (e) {
@@ -912,9 +894,13 @@
                 });
                 return data;
             }
-            // to_ref(_target, "translate", function (e) {
-            //     console.log("便宜", e);
-            // });
+            if (object_contains(def_config.on, "transition") && is_function(def_config.on.transition)) {
+                to_ref(_target, "translate", function (e) {
+                    var t = e[0];
+                    def_config.on.transition.call(_target, t)
+                });
+            }
+
             function compute_index(dis) {
                 var thold = is_left ? 0.34 : -0.34;
                 var val = Math.abs(dis) / def_config.width;
@@ -979,7 +965,6 @@
                 set_postion();
             }
             __init__layout();
-
             init_nav();
             auto_play();
             if (false === def_config.disabvarouch) {
