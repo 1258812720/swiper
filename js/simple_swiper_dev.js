@@ -554,6 +554,7 @@
                 var t = this;
                 var el = t.$el;
                 t.bind_event(ID_VERSION, el, function (e) {
+                    if (!e) { console.warn("无法为对象", e, "绑定事件"); return; }
                     e.addEventListener(event, function (e) {
                         func.call(el, e);
                     }, {
@@ -568,7 +569,7 @@
                 if (number !== ID_VERSION) {
                     throw new Error("禁止访问");
                 }
-                else if (is_document(el) && is_function(call)) {
+                else if (is_function(call) && (is_document(el) || is_window(call))) {
                     call(el);
                 } else if (is_array(el, true)) {
                     for (var ev in el) {
@@ -615,7 +616,6 @@
     if (!(el)) {
         console.error("找不到父容器", el);
     } else {
-
         var root = $(el),
             def_config = {
                 accelerate: false, //禁用硬件加速
@@ -734,7 +734,7 @@
                 set_postion();
             }
             // 设置页码
-            function setPage() {
+            function set_page() {
                 var b = def_config.pagination;
                 var _el = undefined;
                 var clickable = true;
@@ -796,7 +796,6 @@
                     e.preventDefault();
                     e.stopPropagation();
                 }
-
                 index += 1;
                 if (index > def_config.num) {
                     index = 0;
@@ -815,7 +814,7 @@
                 if (object_contains(def_config.on, "init")) {
                     def_config.on.init(this);
                 }
-                setPage();
+                set_page();
             }
             function set_postion() {
                 endx = index * def_config.width;
@@ -828,7 +827,6 @@
                     def_config.on.change.call(this, def_config, e[0]);
                 })
             }
-
             /** 初始化前后切换按钮 */
             function init_nav() {
                 if (object_contains(def_config, "navigator")) {
@@ -837,6 +835,18 @@
                     }
                     if (object_contains(def_config.navigator, "prev")) {
                         $(def_config.navigator.prev).on("click", prev);
+                    }
+                    // 按键导航
+                    if (object_contains(def_config.navigator, "key")) {
+                        $(document).on("keydown", function (e) {
+                            e.preventDefault();
+                            if (e.keyCode === 39) {
+                                next();
+                            }
+                            else if (e.keyCode === 37) {
+                                prev();
+                            }
+                        })
                     }
                 }
             }
@@ -900,7 +910,6 @@
                     def_config.on.transition.call(_target, t)
                 });
             }
-
             function compute_index(dis) {
                 var thold = is_left ? 0.34 : -0.34;
                 var val = Math.abs(dis) / def_config.width;
