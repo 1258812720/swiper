@@ -56,36 +56,35 @@
 			this.addEventListener("resize", () => {
 				document.documentElement.style.height = this.innerHeight + "px";
 			})
-		}
-		new SimSwiper(".heiwukong", {
-			navigator: {
-				prev: "#prev",// 前进后退按钮
-				next: "#next",
-				key: true
-			},
-			pagination: "#pagination",
-			autoplay: false,
-			loop: true,
-			gab: 2,
-			// direction: "v",
-			// duration: 800,
-			defaultIndex: 2,
-			disabvarouch: false, // 关闭触摸
-			lazy: {
-				enable: true,
-				prop: "data"
-			},
-			on: {
-				change(e, e1) {
-					// console.log(this);
+			new SimSwiper(".heiwukong", {
+				navigator: {
+					prev: "#prev",// 前进后退按钮
+					next: "#next",
+					key: true
 				},
-				transition: function (e) {
-					console.log(e);
-					// document.body.style.transform = `translateX(${e}px)`;
+				pagination: "#pagination",
+				autoplay: false,
+				loop: true,
+				gab: 2,
+				// direction: "v",
+				// duration: 800,
+				defaultIndex: 2,
+				disabvarouch: false, // 关闭触摸
+				lazy: {
+					enable: true,
+					prop: "data"
+				},
+				on: {
+					change(e, e1) {
+						// console.log(this);
+					},
+					transition: function (e) {
+						console.log(e);
+						// document.body.style.transform = `translateX(${e}px)`;
+					}
 				}
-			}
-		});
-	</script>
+			});
+		}</script>
 </body>
 
 </html>
