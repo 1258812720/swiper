@@ -9,6 +9,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
     border: 1px solid rgb(226, 226, 226);
 }
 
@@ -24,6 +25,7 @@
     left: 0;
     top: 0;
     height: 100%;
+    touch-action: pan-y;
 }
 
 .simple-swiper-container>.swiper-wrapper>.through {

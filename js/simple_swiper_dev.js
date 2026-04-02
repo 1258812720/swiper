@@ -1,4 +1,4 @@
-(function(t, e) {
+(function (t, e) {
 	"use strict";
 	if (t) {
 		void 0 === t.__proto__ ? (t.SimSwiper = e, SimSwiper) : "undefined" != typeof module ? module.exports = e :
@@ -6,9 +6,9 @@
 	} else {
 		JSwiper = e;
 	}
-})(this, function(el, conf) {
+})(this, function (el, conf) {
 	var ID_VERSION = "ID.VERSION." + new Date().getMilliseconds() + "" + parseInt(Math.random() * 10000);
-	var object_contains = function(obj, key) {
+	var object_contains = function (obj, key) {
 		if (!obj || !key) {
 			return false;
 		} else {
@@ -19,10 +19,10 @@
 			}
 		}
 	}
-	var is_document = function(el) {
+	var is_document = function (el) {
 		return el && (el instanceof Element || el instanceof Document || el instanceof DocumentFragment);
 	}
-	var set_props = function(el, props, call) {
+	var set_props = function (el, props, call) {
 		if (!el) {
 			return;
 		} else if (call && typeof call === "function") {
@@ -35,7 +35,7 @@
 		}
 	}
 
-	String.prototype.toNumber = function() {
+	String.prototype.toNumber = function () {
 		if (!this) {
 			return null
 		}
@@ -59,7 +59,7 @@
 			return Number(numStr)
 		}
 	}
-	var is_json = function(o) {
+	var is_json = function (o) {
 		try {
 			JSON.stringify(o);
 			return true;
@@ -67,7 +67,7 @@
 			return false;
 		}
 	}
-	var is_object = function(obj, check_blank) {
+	var is_object = function (obj, check_blank) {
 		if (undefined === check_blank) {
 			check_blank = false
 		}
@@ -87,32 +87,32 @@
 			}
 		}
 	}
-	var str_is_empty = function(str) {
+	var str_is_empty = function (str) {
 		if (!str || typeof str !== "string") {
 			return true;
 		}
 		return str.trim().length === 0;
 	}
-	var array_not_empty = function(arr) {
+	var array_not_empty = function (arr) {
 		return (arr && arr.length > 0);
 	}
-	var is_array = function(arr, check_blank) {
+	var is_array = function (arr, check_blank) {
 		if (undefined === check_blank) {
 			check_blank = false
 		}
 		return arr && typeof arr === "object" && (check_blank ? array_not_empty(arr) : arr.length !== undefined)
 	}
-	var is_function = function(f) {
+	var is_function = function (f) {
 		return f && typeof f === "function";
 	}
-	var is_str = function(str = null) {
+	var is_str = function (str = null) {
 		if (str_is_empty(str)) {
 			return false;
 		} else {
 			return Object.prototype.toString.call(str) === '[object String]'
 		}
 	}
-	var get_style = function(el, prop) {
+	var get_style = function (el, prop) {
 		var _el = undefined;
 		if (!el) {
 			return prop;
@@ -127,27 +127,27 @@
 			_el.getBoundingClientRect()[prop];
 		}
 	}
-	var has_class = function(el, class_name) {
+	var has_class = function (el, class_name) {
 		return el.classList.contains(class_name);
 	}
-	var is_window = function(e) {
+	var is_window = function (e) {
 		return e && e === window;
 	}
 
 	/**声明响应式 */
-	var to_ref = function(target, key, callback) {
+	var to_ref = function (target, key, callback) {
 		if (!target && !key && typeof key !== "string" && !target[key]) {
 			return;
 		}
 		Object.defineProperty(target, key, {
-			set: function(newValue) {
+			set: function (newValue) {
 				if (is_function(callback)) {
 					callback.call(target, [newValue])
 				}
 			}
 		})
 	}
-	var $ = function(o, parent) {
+	var $ = function (o, parent) {
 		if (parent) {
 			root = parent;
 			ctx = root.text();
@@ -185,25 +185,25 @@
 			enableReactModel: false,
 			$el: _el,
 			events: [],
-			ready: function(call) {
+			ready: function (call) {
 				if (is_function(call)) {
 					if (is_window(this.$el)) {
-						this.$el.onload = function() {
+						this.$el.onload = function () {
 							call(this.$el);
 						}
 					} else if (is_document(this.$el)) {
 						try {
-							this.$el.addEventListener("DOMContentLoaded", function() {
+							this.$el.addEventListener("DOMContentLoaded", function () {
 								call(this.$el);
 							});
 						} catch (err) {
-							void(err);
+							void (err);
 						}
 					}
 				}
 				return undefined;
 			},
-			has: function(func1, func2) {
+			has: function (func1, func2) {
 				// 判断当前元素是否存在
 				if (is_function(func1)) {
 					if (is_array(this.$el)) {
@@ -226,7 +226,7 @@
 				}
 				return this;
 			},
-			add_attr: function(node, k, v, is_class, id) {
+			add_attr: function (node, k, v, is_class, id) {
 				if (is_class === undefined) {
 					is_class = false;
 				}
@@ -242,7 +242,7 @@
 				}
 				return undefined;
 			},
-			eq: function(index = -1) {
+			eq: function (index = -1) {
 				if (index < 0) {
 					return this;
 				} else {
@@ -250,7 +250,7 @@
 				}
 				return this;
 			},
-			siblings: function(name = "") {
+			siblings: function (name = "") {
 				var t = this;
 				if (typeof name !== "string" && name !== undefined) {
 					return t;
@@ -289,13 +289,13 @@
 				}
 				return t;
 			},
-			attr: function(prop) {
+			attr: function (prop) {
 				var t = this;
 				if (is_object(prop, true)) {
-					set_props(this.$el, prop, function(e, k, v) {
+					set_props(this.$el, prop, function (e, k, v) {
 						var is_class = k === "class";
 						if (is_array(e, true)) {
-							e.forEach(function(item) {
+							e.forEach(function (item) {
 								t.add_attr(item, k, v, is_class, ID_VERSION);
 							});
 						} else {
@@ -305,7 +305,7 @@
 				}
 				return this;
 			},
-			className: function(id, name, add) {
+			className: function (id, name, add) {
 				if (ID_VERSION !== id) {
 					throw new Error("禁止访问");
 				}
@@ -313,7 +313,7 @@
 					return;
 				}
 				if (is_array(this.$el, true)) {
-					this.$el.forEach(function(item) {
+					this.$el.forEach(function (item) {
 						if (add) {
 							this.$el.classList.add(name);
 						} else {
@@ -328,15 +328,15 @@
 					}
 				}
 			},
-			removeClass: function(name) {
+			removeClass: function (name) {
 				this.className(ID_VERSION, name, false);
 				return this;
 			},
-			addClass: function(name) {
+			addClass: function (name) {
 				this.className(ID_VERSION, name, true);
 				return this;
 			},
-			delay: function(call, time) {
+			delay: function (call, time) {
 				if (time < 0) {
 					call();
 					return this;
@@ -349,9 +349,9 @@
 					node_list = _t;
 				}
 				if (is_function(call)) {
-					var t = setTimeout(function() {
+					var t = setTimeout(function () {
 						clearTimeout(t);
-						node_list.forEach(function(item) {
+						node_list.forEach(function (item) {
 							call.call(item);
 						});
 						t = null;
@@ -359,11 +359,11 @@
 				}
 				return this;
 			},
-			css: function(prop) {
+			css: function (prop) {
 				if (is_object(prop, true)) {
-					set_props(this.$el, prop, function(e, k, v) {
+					set_props(this.$el, prop, function (e, k, v) {
 						if (is_array(e, true)) {
-							e.forEach(function(item) {
+							e.forEach(function (item) {
 								item.style[k] = v;
 							});
 						} else if (is_document(e)) {
@@ -376,11 +376,11 @@
 						return this.$el.style[prop];
 					} else {
 						console.error('invaild param');
-						void(0);
+						void (0);
 					}
 				}
 			},
-			add: function(node) {
+			add: function (node) {
 				var _el = this.$el;
 				var tag = is_array(_el, true);
 
@@ -400,7 +400,7 @@
 				}
 				if (is_array(node, true)) {
 					var vm = $();
-					node.forEach(function(e) {
+					node.forEach(function (e) {
 						vm.add(e);
 					});
 					_push(this.$el, vm.$el);
@@ -409,16 +409,16 @@
 				} else if (is_object(node) && node.$el !== undefined) {
 					_push(this.$el, node.$el);
 				} else {
-					void(0);
+					void (0);
 				}
 				return this;
 			},
-			remove: function() {
+			remove: function () {
 				var this_el = this.$el;
 				if (is_array(this_el, false)) {
 					if (this_el.length > 0) {
 						var parent = this_el[0].parentNode;
-						this_el.forEach(function(item) {
+						this_el.forEach(function (item) {
 							if (item) {
 								parent.removeChild(item);
 							}
@@ -429,13 +429,13 @@
 				}
 				return this;
 			},
-			clone: function(copy_child) {
+			clone: function (copy_child) {
 				if (undefined === copy_child) {
 					copy_child = true;
 				}
 				if (is_array(this.$el, true)) {
 					var arr = [];
-					this.$el.forEach(function(e) {
+					this.$el.forEach(function (e) {
 						arr.push(e.cloneNode(copy_child));
 					});
 					return arr;
@@ -443,7 +443,7 @@
 					return this.$el.cloneNode(copy_child);
 				}
 			},
-			size: function() {
+			size: function () {
 				if (!this.$el) {
 					return 0;
 				} else if (is_array(this.$el)) {
@@ -452,14 +452,14 @@
 					return 1;
 				}
 			},
-			children: function(name) {
+			children: function (name) {
 				var list = [];
 				var first_floor_child = this.$el.children;
 				if (!name) {
 					this.$el = first_floor_child;
 					return this;
 				}
-				var _find = function(node) {
+				var _find = function (node) {
 					if (!node) {
 						return this;
 					}
@@ -477,7 +477,7 @@
 							}
 						} catch (err) {
 							console.error(err);
-							void(err);
+							void (err);
 						}
 					}
 				}
@@ -485,7 +485,7 @@
 				this.$el = list;
 				return this;
 			},
-			each: function(call) {
+			each: function (call) {
 				if (is_function(call) && this.$el) {
 					if (this.$el.length > 0) {
 						for (var key in this.$el) {
@@ -500,11 +500,11 @@
 				}
 				return this;
 			},
-			toggleClass: function(name) {
+			toggleClass: function (name) {
 				var t = this;
 				var temp_list = [];
 				if (is_array(t.$el, true)) {
-					t.$el.forEach(function(item) {
+					t.$el.forEach(function (item) {
 						temp_list.push(item);
 					});
 				} else if (is_document(t.$el)) {
@@ -513,7 +513,7 @@
 					temp_list = null;
 				}
 				if (temp_list && temp_list.length > 0) {
-					temp_list.forEach(function(item) {
+					temp_list.forEach(function (item) {
 						if (has_class(item, name)) {
 							t.removeClass(name);
 						} else {
@@ -523,7 +523,7 @@
 				}
 				return this;
 			},
-			text: function(val) {
+			text: function (val) {
 				var str_empty = str_is_empty(val);
 				if (is_document(this.$el)) {
 					if (str_empty) {
@@ -534,7 +534,7 @@
 					}
 				} else if (is_array(this.$el, true)) {
 					var contentText = "";
-					this.$el.forEach(function(item) {
+					this.$el.forEach(function (item) {
 						if (str_empty) {
 							contentText = contentText + item.innerText;
 						} else {
@@ -548,7 +548,7 @@
 					}
 				}
 			},
-			get: function(idx) {
+			get: function (idx) {
 				if (undefined === idx) {
 					idx = 0;
 				}
@@ -557,19 +557,19 @@
 				}
 				return this;
 			},
-			on: function(event, func) {
+			on: function (event, func) {
 				if (!event || !func || typeof func !== "function") {
 					console.error("params error");
 					return;
 				}
 				var t = this;
 				var el = t.$el;
-				t.bind_event(ID_VERSION, el, function(e) {
+				t.bind_event(ID_VERSION, el, function (e) {
 					if (!e) {
 						console.warn("无法为对象", e, "绑定事件");
 						return;
 					}
-					e.addEventListener(event, function(e) {
+					e.addEventListener(event, function (e) {
 						func.call(el, e);
 					}, {
 						passive: false,
@@ -579,7 +579,7 @@
 				});
 				return this;
 			},
-			bind_event: function(number, el, call) {
+			bind_event: function (number, el, call) {
 				if (number !== ID_VERSION) {
 					throw new Error("禁止访问");
 				} else if (is_function(call) && (is_document(el) || is_window(call))) {
@@ -593,20 +593,20 @@
 					}
 				}
 			},
-			off: function(event, fun) {
+			off: function (event, fun) {
 				var _events = this.events;
 				if (_events.length === 0) {
 					return;
 				}
-				this.bind_event(ID_VERSION, this.$el, function(el) { // 需要解决一下解绑后的句柄
-					_events.forEach(function(func, index) {
+				this.bind_event(ID_VERSION, this.$el, function (el) { // 需要解决一下解绑后的句柄
+					_events.forEach(function (func, index) {
 						el.removeEventListener(event, fun, true);
 						_events.splice(index, 1);
 					})
 				});
 				return this;
 			},
-			hover: function(func, func2) {
+			hover: function (func, func2) {
 				if (is_function(func)) {
 					this.on("mouseenter", func);
 				}
@@ -615,7 +615,7 @@
 				}
 				return this;
 			},
-			press: function(func, func2) {
+			press: function (func, func2) {
 				if (is_function(func)) {
 					this.on("mousedown", func);
 				}
@@ -659,10 +659,10 @@
 		if (conf && typeof conf === "object" && Object.keys(conf).length > 0) {
 			if (undefined === Object.assign) {
 				var result = {};
-				Object.keys(def_config).forEach(function(key) {
+				Object.keys(def_config).forEach(function (key) {
 					result[key] = def_config[key];
 				});
-				Object.keys(conf).forEach(function(key) {
+				Object.keys(conf).forEach(function (key) {
 					result[key] = conf[key];
 				});
 				def_config = result;
@@ -671,7 +671,7 @@
 			}
 		}
 		conf = null;
-		def_config.is_mobile = (function() {
+		def_config.is_mobile = (function () {
 			return (/Android|iPhone|iPad|X11|Mac OS X/i.test(navigator.userAgent));
 		})();
 		var TOUCH_EVENT = {
@@ -680,7 +680,7 @@
 			"up": def_config.is_mobile ? "touchend" : "pointerup"
 		};
 
-		var j = (function() {
+		var j = (function () {
 			var slider = $("<div class='swiper-slider'></div>");
 			def_config.slide = slider;
 			var swiper_items = root.children(".swiper-items");
@@ -717,7 +717,7 @@
 				def_config.height = root_size.height;
 				slider.css(style_config);
 			}
-			
+
 			slider.add(clone_swipers);
 			set_children_layout();
 			if (def_config.loop) {
@@ -773,7 +773,7 @@
 					clickable = b.click;
 				}
 				if (_el) {
-					$(_el).has(function() {
+					$(_el).has(function () {
 						var idx = 0,
 							len = def_config.num,
 							_vm = $(),
@@ -795,7 +795,7 @@
 								click_item = $("<span index=" + idx + " class='pagination-items'></span>");
 							}
 							if (clickable) {
-								click_item.on("click", function() {
+								click_item.on("click", function () {
 									click_event(this.getAttribute("index").toNumber(), this);
 								});
 							}
@@ -805,7 +805,7 @@
 						_this.add(_vm);
 						var children = _this.children();
 						// 监听索引变化
-						to_ref(_target, "index", function(e) {
+						to_ref(_target, "index", function (e) {
 							var _ridx = e[0] === def_config.num ? 0 : e[0];
 							def_config.realIndex = _ridx;
 							var i = 0;
@@ -854,7 +854,7 @@
 				return;
 			}
 			if (object_contains(def_config.on, "change") && is_function(def_config.on.change)) {
-				to_ref(def_config, "realIndex", function(e) {
+				to_ref(def_config, "realIndex", function (e) {
 					def_config.on.change.call(this, def_config, e[0]);
 				})
 			}
@@ -869,7 +869,7 @@
 					}
 					// 按键导航
 					if (object_contains(def_config.navigator, "key")) {
-						$(document).on("keydown", function(e) {
+						$(document).on("keydown", function (e) {
 							if (e.keyCode === 39) {
 								next(e);
 							} else if (e.keyCode === 37) {
@@ -891,7 +891,7 @@
 					if (!def_config.autoplay) {
 						return;
 					}
-					timer = setInterval(function() {
+					timer = setInterval(function () {
 						next();
 					}, delay_time);
 				}
@@ -933,13 +933,13 @@
 			function compute_dis() {
 				var data = def_config.slide.css("transform").replace(/translate3d\(/gi, "").replace(")", "").trim()
 					.split(",");
-				data.forEach(function(e, i) {
+				data.forEach(function (e, i) {
 					data[i] = e.toNumber();
 				});
 				return data;
 			}
 			if (object_contains(def_config.on, "transition") && is_function(def_config.on.transition)) {
-				to_ref(_target, "translate", function(e) {
+				to_ref(_target, "translate", function (e) {
 					var t = e[0];
 					def_config.on.transition.call(_target, t)
 				});
@@ -951,23 +951,27 @@
 				var i = Math.round(val + thold);
 				return i;
 			}
-
+			function preD(e) {
+				if (!def_config.is_mobile && e) {
+					e.preventDefault();
+				}
+			}
 			function touch_start(e) {
-				if(e.type !== TOUCH_EVENT['down'] && e.button!==0){
+				if (e.type !== TOUCH_EVENT['down'] && e.button !== 0) {
 					return
 				}
-				e.preventDefault();
+				preD(e);
 				e.stopPropagation();
 				startx = def_config.is_mobile ? e.targetTouches[0].clientX : e.clientX;
 				is_press = true;
-				$(document).on(TOUCH_EVENT["move"], function(e) {
+				$(document).on(TOUCH_EVENT["move"], function (e) {
 					touch_move(e)
 				});
 			}
 
 			function touch_move(e) {
-				e.preventDefault();
 				e.stopPropagation();
+				preD(e);
 				if (!is_press) {
 					return;
 				}
@@ -993,6 +997,7 @@
 			}
 
 			function touch_end(e) {
+				preD(e);
 				e.stopPropagation();
 				let id = "#" + e.target.id;
 				if (id !== def_config.prev || id !== def_config.next) {
@@ -1028,9 +1033,9 @@
 		}
 		var inits = new init_swiper(def_config);
 		var __time = null;
-		window.addEventListener("resize", function() {
+		window.addEventListener("resize", function () {
 			clearTimeout(__time);
-			__time = setTimeout(function() {
+			__time = setTimeout(function () {
 				_j.set_children_layout();
 				inits.to();
 			}, 220)
