@@ -3,21 +3,21 @@ branches: {
   }
 fileChange:
   /css:
-    newFile: !uuid '4170c1d7b98265c858eb0a305e0715c3b2077af8'
-    oldFile: !uuid '4b42ccb7efb5ee23c62a5cfc5f74419cfd301239'
-  /css/simple_style.css:
-    newFile: !uuid '01fba2487b1bdd11190a4df0710b30ed0b148721'
-    oldFile: !uuid 'e63b636d43c8e141bcab180524a255d4296436e0'
+    newFile: !uuid 'c59de933d0accfb59b35aec637e22627afe1d08b'
+    oldFile: !uuid '4170c1d7b98265c858eb0a305e0715c3b2077af8'
+  /css/style.css:
+    newFile: !uuid '4b87582358e3cc1b90477c62eea44e9109b4c517'
+    oldFile: !uuid '370d140cbff195dccfad57af72cfec5c03539495'
   /index.html:
-    newFile: !uuid 'b6a506b71a70132dbc60ef3cf897ba48e0e3e6db'
-    oldFile: !uuid '17e2f8830022cd88c708a6382b180a8c514849b9'
+    newFile: !uuid 'b075a4f4b4caadad8906cb90c9854680187032f7'
+    oldFile: !uuid 'b6a506b71a70132dbc60ef3cf897ba48e0e3e6db'
   /js:
-    newFile: !uuid '892340364a4abded29ada03b0e1e9895aeeaa248'
-    oldFile: !uuid '1cd8c6e0641c6d24d9f189c392bf08e1c3ac9c21'
+    newFile: !uuid '4e0e9d06b5d17d832032a916e2240a82059b4dab'
+    oldFile: !uuid '892340364a4abded29ada03b0e1e9895aeeaa248'
   /js/simple_swiper_dev.js:
-    newFile: !uuid '77aaa39786a8c6adcff4cd4a8f871abf035ecd4b'
-    oldFile: !uuid 'fdf32d8c6ce04fd8602cdbd8554fc187f469602e'
-gitCommitId: !uuid '3db2ef25cb278ce158ad5ae4dd99d26af2ba8d7e'
+    newFile: !uuid 'abadf167eb9dc5e0d3fe01447f69b3a21f7aaffa'
+    oldFile: !uuid '77aaa39786a8c6adcff4cd4a8f871abf035ecd4b'
+gitCommitId: !uuid '089d62fd3dc630cd0e405b4f88d3a9269ee0461e'
 renames: {
   }
-revisionId: 134
+revisionId: 135
