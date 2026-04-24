@@ -908,6 +908,8 @@
 			var startx = 0;
 			var endx = 0;
 			var is_left = false;
+			var movex = 0;
+			let startTime = null;
 
 			function animate(dis, duration, ease, call) {
 				if (undefined === ease) {
@@ -922,22 +924,12 @@
 					call();
 				}
 			}
-
-			function compute_dis() {
-				var data = def_config.slide.css("transform").replace(/translate3d\(/gi, "").replace(")", "").trim()
-					.split(",");
-				data.forEach(function (e, i) {
-					data[i] = e.toNumber();
-				});
-				return data;
-			}
 			if (object_contains(def_config.on, "transition") && is_function(def_config.on.transition)) {
 				to_ref(_target, "translate", function (e) {
 					var t = e[0];
 					def_config.on.transition.call(_target, t)
 				});
 			}
-
 			function compute_index(dis) {
 				var thold = is_left ? 0.34 : -0.34;
 				var val = Math.abs(dis) / def_config.width;
@@ -949,10 +941,13 @@
 					e.preventDefault();
 				}
 			}
+
+
 			function touch_start(e) {
 				if (e.type !== TOUCH_EVENT['down'] && e.button !== 0) {
 					return
 				}
+				startTime = new Date().getTime();
 				pre_defalut(e);
 				e.stopPropagation();
 				startx = def_config.is_mobile ? e.targetTouches[0].clientX : e.clientX;
@@ -961,7 +956,6 @@
 					touch_move(e)
 				});
 			}
-
 			function touch_move(e) {
 				e.stopPropagation();
 				pre_defalut(e);
@@ -994,7 +988,17 @@
 				e.stopPropagation();
 				let id = "#" + e.target.id;
 				if (object_contains(def_config, "freeMode") && def_config.freeMode === true) {
-					console.log("惯性滑动开启");
+					var x = def_config.is_mobile ? e.targetTouches[0].clientX : e.clientX;
+					let endTime = new Date().getTime();
+					let diffTime = endTime - startTime;
+					let velocityX = x / diffTime;// 速度
+					let positionX = x + velocityX * diffTime;  // 惯性滑动后的X位置
+					animate(positionX, def_config.duration, "ease", function () {
+						if (is_press) {
+							set_postion();
+						}
+					});
+
 				} else {
 					if (id !== def_config.prev || id !== def_config.next) {
 						animate(index * def_config.width, def_config.duration);
@@ -1002,11 +1006,9 @@
 						if (is_press) {
 							set_postion();
 						}
-
 					}
 				}
 				is_press = false;
-
 			}
 
 			function __init__touch() {
