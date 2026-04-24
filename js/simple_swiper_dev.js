@@ -731,11 +731,9 @@
 			};
 		});
 		const _j = new j();
-
 		function refresh_layout() {
 			get_style(def_config.slide.get(0));
 		}
-
 
 		function init_swiper() {
 			var _target = {
@@ -868,13 +866,16 @@
 						$(def_config.navigator.prev).on("click", prev);
 					}
 					// 按键导航
-					if (object_contains(def_config.navigator, "key")) {
+					if (object_contains(def_config.navigator, "key") && def_config.navigator['key'] === true) {
 						$(document).on("keydown", function (e) {
-							if (e.keyCode === 39) {
-								next(e);
-							} else if (e.keyCode === 37) {
-								prev(e);
+							if (!e.repeat) {
+								if (e.keyCode === 39) {
+									next(e);
+								} else if (e.keyCode === 37) {
+									prev(e);
+								}
 							}
+
 						})
 					}
 				}
@@ -901,14 +902,6 @@
 				clearInterval(timer);
 				timer = null;
 			}
-			// $(base.rootEl).on("mouseenter", function () {
-			//     console.log(1);
-			//     stop_play();
-			// });
-			// $(base.rootEl).on("mouseleave", function () {
-			//     console.log(2);
-			//     auto_play();
-			// })
 
 			/** 触摸 */
 			var is_press = false;
@@ -951,7 +944,7 @@
 				var i = Math.round(val + thold);
 				return i;
 			}
-			function preD(e) {
+			function pre_defalut(e) {
 				if (!def_config.is_mobile && e) {
 					e.preventDefault();
 				}
@@ -960,7 +953,7 @@
 				if (e.type !== TOUCH_EVENT['down'] && e.button !== 0) {
 					return
 				}
-				preD(e);
+				pre_defalut(e);
 				e.stopPropagation();
 				startx = def_config.is_mobile ? e.targetTouches[0].clientX : e.clientX;
 				is_press = true;
@@ -971,7 +964,7 @@
 
 			function touch_move(e) {
 				e.stopPropagation();
-				preD(e);
+				pre_defalut(e);
 				if (!is_press) {
 					return;
 				}
@@ -997,17 +990,23 @@
 			}
 
 			function touch_end(e) {
-				preD(e);
+				pre_defalut(e);
 				e.stopPropagation();
 				let id = "#" + e.target.id;
-				if (id !== def_config.prev || id !== def_config.next) {
-					animate(index * def_config.width, def_config.duration);
-					$(this).off(TOUCH_EVENT["move"], touch_move);
-					if (is_press) {
-						set_postion();
+				if (object_contains(def_config, "freeMode") && def_config.freeMode === true) {
+					console.log("惯性滑动开启");
+				} else {
+					if (id !== def_config.prev || id !== def_config.next) {
+						animate(index * def_config.width, def_config.duration);
+						$(this).off(TOUCH_EVENT["move"], touch_move);
+						if (is_press) {
+							set_postion();
+						}
+
 					}
-					is_press = false;
 				}
+				is_press = false;
+
 			}
 
 			function __init__touch() {

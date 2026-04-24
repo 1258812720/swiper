@@ -28,14 +28,15 @@ body {
 .heiwukong1 {
     width: 1266px;
     height: 630px;
-
+    background-color: white;
     margin-bottom: 0;
     position: relative;
     border-radius: 6px;
+    font-size: 2em;
 }
 
 .swiper-items {
-    text-align: center;
+    text-align: justify;
     height: 100%;
     position: relative;
     overflow: hidden;
