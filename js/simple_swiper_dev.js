@@ -37,7 +37,7 @@
 
 	String.prototype.toNumber = function () {
 		if (!this) {
-			return null
+			return null;
 		}
 		var arr = this.trim().split("");
 		var i = 0;
@@ -116,10 +116,10 @@
 		var _el = undefined;
 		if (!el) {
 			return prop;
-		} else if (!is_document(el)) {
-			_el = el.$el;
-		} else {
+		} else if (is_document(el)) {
 			_el = el;
+		} else {
+			_el = el.$el;
 		}
 		if (!prop) {
 			return _el.getBoundingClientRect();
@@ -179,12 +179,21 @@
 				}
 			}
 		} else {
-			_el = o;
+			_el = o.$el;
 		}
 		var g = {
 			enableReactModel: false,
 			$el: _el,
 			events: [],
+			id: null,
+			setId: function (id) {
+				if (id) {
+					this.id = id;
+				}
+			},
+			getId: function () {
+				return this.id;
+			},
 			ready: function (call) {
 				if (is_function(call)) {
 					if (is_window(this.$el)) {
@@ -439,8 +448,10 @@
 						arr.push(e.cloneNode(copy_child));
 					});
 					return arr;
-				} else {
+				} else if (is_document(this.$el)) {
 					return this.$el.cloneNode(copy_child);
+				} else {
+					return this.$el;
 				}
 			},
 			size: function () {
@@ -681,7 +692,7 @@
 		};
 
 		var j = (function () {
-			var slider = $("<div class='swiper-slider'></div>");
+			var slider = $('<div class="swiper-slider"></div>');
 			def_config.slide = slider;
 			var swiper_items = root.children(".swiper-items");
 			swiper_items.remove();
@@ -696,7 +707,6 @@
 				height: undefined,
 				width: undefined
 			}
-
 			$(el).children(".swiper-wrapper").add(slider); // 删除原来的
 			function set_children_layout() {
 				root_size = get_style($(el));
@@ -730,6 +740,7 @@
 				set_children_layout
 			};
 		});
+		def_config.slide = null;
 		const _j = new j();
 		function refresh_layout() {
 			get_style(def_config.slide.get(0));
@@ -741,7 +752,6 @@
 				translate: 0
 			}
 			var index = def_config.defaultIndex > def_config.num ? def_config.num - 1 : def_config.defaultIndex;
-
 			function prev(e) {
 				if (e) {
 					e.stopPropagation();
@@ -778,7 +788,6 @@
 							_this = $(this),
 							active = "pagination-items-active";
 						var click_item;
-
 						function click_event(e, el) {
 							$(el).addClass(active).siblings().removeClass(active);
 							index = e;
@@ -802,19 +811,22 @@
 						}
 						_this.add(_vm);
 						var children = _this.children();
-						// 监听索引变化
-						to_ref(_target, "index", function (e) {
-							var _ridx = e[0] === def_config.num ? 0 : e[0];
-							def_config.realIndex = _ridx;
-							var i = 0;
-							for (; i < len; i++) {
-								if (i === _ridx) {
-									children.$el[_ridx].classList.add(active);
-								} else {
-									children.$el[i].classList.remove(active);
+						if (children.$el) {
+							// 监听索引变化
+							to_ref(_target, "index", function (e) {
+								var _ridx = e[0] === def_config.num ? 0 : e[0];
+								def_config.realIndex = _ridx;
+								var i = 0;
+								for (; i < len; i++) {
+									if (i === _ridx) {
+										children.$el[_ridx].classList.add(active);
+									} else {
+										children.$el[i].classList.remove(active);
+									}
 								}
-							}
-						});
+							});
+						}
+
 					});
 				}
 			}
@@ -882,7 +894,6 @@
 			}
 			/** 自动播放 */
 			var timer;
-
 			function auto_play() {
 				var delay_time = 2000;
 				if (object_contains(def_config, "autoplay")) {
@@ -902,14 +913,14 @@
 				clearInterval(timer);
 				timer = null;
 			}
-
-			/** 触摸 */
+			/** 触摸 - 已修复多点触控问题 */
 			var is_press = false;
 			var startx = 0;
 			var endx = 0;
 			var is_left = false;
 			var movex = 0;
 			let startTime = null;
+			let _activeTouchId = null;
 
 			function animate(dis, duration, ease, call) {
 				if (undefined === ease) {
@@ -942,27 +953,32 @@
 				}
 			}
 
-
 			function touch_start(e) {
 				if (e.type !== TOUCH_EVENT['down'] && e.button !== 0) {
 					return
 				}
-				startTime = new Date().getTime();
 				pre_defalut(e);
 				e.stopPropagation();
-				startx = def_config.is_mobile ? e.targetTouches[0].clientX : e.clientX;
+				// 记录触控标识符，用于多点触控时追踪正确的触点
+				startTime = new Date().getTime();
+				var touch = def_config.is_mobile ? e.targetTouches[0] : e;
+				startx = touch.clientX;
+				_activeTouchId = touch.identifier !== undefined ? touch.identifier : null;
 				is_press = true;
-				$(document).on(TOUCH_EVENT["move"], function (e) {
-					touch_move(e)
+				var b_el = def_config.is_mobile ? this[0] : document;
+				$(b_el).on(TOUCH_EVENT["move"], function (e) {
+					touch_move(e);
 				});
 			}
+
 			function touch_move(e) {
 				e.stopPropagation();
 				pre_defalut(e);
 				if (!is_press) {
 					return;
 				}
-				var x = def_config.is_mobile ? e.targetTouches[0].clientX : e.clientX;
+				// 多点触控：找到与初始触点匹配的触点，如果找不到则忽略
+				var x = def_config.is_mobile ? e.changedTouches[0].clientX : e.clientX;
 				movex = x - startx - endx;
 				_target.translate = movex;
 				is_left = (x - startx) < 0;
@@ -986,37 +1002,20 @@
 			function touch_end(e) {
 				pre_defalut(e);
 				e.stopPropagation();
-				let id = "#" + e.target.id;
-				if (object_contains(def_config, "freeMode") && def_config.freeMode === true) {
-					var x = def_config.is_mobile ? e.targetTouches[0].clientX : e.clientX;
-					let endTime = new Date().getTime();
-					let diffTime = endTime - startTime;
-					let velocityX = x / diffTime;// 速度
-					let positionX = x + velocityX * diffTime;  // 惯性滑动后的X位置
-					animate(positionX, def_config.duration, "ease", function () {
-						if (is_press) {
-							set_postion();
-						}
-					});
-
-				} else {
-					if (id !== def_config.prev || id !== def_config.next) {
-						animate(index * def_config.width, def_config.duration);
-						$(this).off(TOUCH_EVENT["move"], touch_move);
-						if (is_press) {
-							set_postion();
-						}
-					}
+				if (!is_press) {
+					return;
 				}
 				is_press = false;
+				set_postion();
+				animate(index * def_config.width, def_config.duration, def_config.ease);
 			}
-
 			function __init__touch() {
 				if (true === def_config.disabvarouch) {
 					return;
 				} else {
-					$(el).children(".swiper-wrapper").on(TOUCH_EVENT['down'], touch_start);
-					$(document).on(TOUCH_EVENT["up"], touch_end);
+					var slider_el = $(el).children(".swiper-slider");
+					slider_el.on(TOUCH_EVENT['down'], touch_start);
+					def_config.is_mobile?slider_el.on(TOUCH_EVENT["up"], touch_end):$(document).on(TOUCH_EVENT["up"], touch_end);
 				}
 				set_postion();
 			}

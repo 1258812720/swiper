@@ -25,11 +25,11 @@ body {
 }
 
 .heiwukong,
-.heiwukong1 {
+.heiwukong01 {
     width: 1266px;
     height: 630px;
     background-color: white;
-    margin-bottom: 0;
+    margin-bottom: 12px;
     position: relative;
     border-radius: 6px;
     font-size: 2em;
