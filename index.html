@@ -9,7 +9,7 @@
 	<link rel="short icon" href="img/logo.ico" />
 	<link rel="stylesheet" type="text/css" href="css/simple_style.css" />
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
-	<script type="text/javascript" src="js/simple_swiper_dev.js"></script>
+	<script type="text/javascript" src="js/simple_swiper.min.js"></script>
 </head>
 
 
@@ -172,7 +172,7 @@
 				prop: "data"
 			},
 			on: {
-				change(e, e1) {
+				change:function(e, e1) {
 					// console.log(this);
 				},
 				transition: function (e) {
@@ -201,7 +201,7 @@
 				prop: "data"
 			},
 			on: {
-				change(e, e1) {
+				change:function(e, e1) {
 					// console.log(this);
 				},
 				transition: function (e) {

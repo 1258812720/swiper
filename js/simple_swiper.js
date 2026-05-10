@@ -1,712 +1,1048 @@
-
 (function (t, e) {
-    "use strict";
-    if (t) { void 0 === t.__proto__ ? (t.SimSwiper = e, SimSwiper) : "undefined" != typeof module ? module.exports = e : t.__proto__.SimSwiper = e } else { JSwiper = e; }
+	"use strict";
+	if (t) {
+		void 0 === t.__proto__ ? (t.SimSwiper = e, SimSwiper) : "undefined" != typeof module ? module.exports = e :
+			t.__proto__.SimSwiper = e
+	} else {
+		JSwiper = e;
+	}
 })(this, function (el, conf) {
-    "use strict";
-    var root = el;
-    if (!document.querySelector(el)) {
-        console.error("找不到父容器", el);
-        return;
-    };
-    function set_child_size(nodeList, rootEl, swiperGab = 0, isInsert = false) {
-        var __vm = document.createDocumentFragment();
-        for (var s in nodeList) {
-            var _i = nodeList[s];
-            if (setting.is_horizontal) {
-                setStyle(_i, {
-                    width: Math.max((getStyle(rootEl, 'width') - swiperGab * 2), 0) + 'px',
-                    height: '100%',
-                    float: 'left',
-                    marginLeft: swiperGab + "px",
-                    marginRight: swiperGab + "px"
-                });
-            } else {
-                setStyle(_i, {
-                    width: '100%',
-                    height: Math.max((getStyle(rootEl, 'height') - swiperGab * 2), 0) + 'px',
-                    marginTop: swiperGab / 2 + "px",
-                    marginBottom: swiperGab / 2 + "px"
-                });
-            }
-            if (isInsert) {
-                _i.classList.add('lazy');
-                __vm.appendChild(_i);
+	var ID_VERSION = "ID.VERSION." + new Date().getMilliseconds() + "" + parseInt(Math.random() * 10000);
+	var object_contains = function (obj, key) {
+		if (!obj || !key) {
+			return false;
+		} else {
+			if (is_object(obj)) {
+				return obj[key] !== undefined;
+			} else {
+				return false;
+			}
+		}
+	}
+	var is_document = function (el) {
+		return el && (el instanceof Element || el instanceof Document || el instanceof DocumentFragment);
+	}
+	var set_props = function (el, props, call) {
+		if (!el) {
+			return;
+		} else if (call && typeof call === "function") {
+			for (var key in props) {
+				if (Object.prototype.hasOwnProperty.call(props, key)) {
+					var element = props[key];
+					call(el, key, element);
+				}
+			}
+		}
+	}
 
-            }
-        }
-        if (isInsert) {
-            return __vm;
-        }
-    }
-    var fun = function (el) {
-        if (conf && !conf.loop) {
-            return;
-        }
-        var _el = null;
-        if (typeof el === 'string') {
-            _el = document.querySelector(el);
-        } else if (el.nodeType) {
-            _el = el;
-        }
-        getStyle(_el, "top");
-        return;
-    };
-    if (!conf) {
-        var conf = {
-            loop: true,
-            duration: 300,
-            autoplay: true,
-            easing: "ease"
-        }
-    };
-    var ArrayFind = function (arr, element) {
-        var tag = false;
-        if (arr.length) {
-            arr.forEach(function (i) {
-                if (i === element) {
-                    tag = true;
-                    return;
-                }
-            });
-        }
-        return tag;
-    };
-    /**
-     * 事件绑定
-     * __ {el:Document,event:String,fn,passive:bool}
-     */
-    var events = ["visibilitychange", "scroll", "touchstart", "pointerup", "pointermove", "pointerleave", "pointerdown", "transitionend", "click", "touchmove", "touchend", "mouseup", "mousedown", "mouseleave", "mousemove", "mouseout", "resize", "keydown"];
-    var bind = function (_el, event, fun, passive) {
-        if (_el && typeof _el === 'object') {
-            if (event && typeof event === 'string' && ArrayFind(events, event)) {
-                _el.addEventListener(event, fun, {
-                    passive: passive || false,
-                    capture: passive
-                });
-            }
-        }
-    };
-    /**
-     * 事件解绑
-     * __ {el:Document,event:String,fn}
-     */
-    var unbind = function (_el, event, fun) {
-        if (_el && typeof _el === 'object') {
-            if (event && typeof event === 'string' && ArrayFind(events, event)) {
-                _el.removeEventListener(event, fun, (/Trident/i.test(navigator.userAgent)) || is_mobile());
-            }
-        }
-    };
-    var toArray = function (o) {
-        if (!o) {
-            return []
-        }
-        var arrays = [];
-        var i = 0;
-        var len = o.length;
-        for (; i < len; i++) {
-            arrays.push(o[i]);
-        }
-        return arrays;
-    };
-    var getChild = function (el, name) {
-        var res = {
-            child: null,
-            self: null,
-            wrap: null
-        };
-        if (el && typeof el === 'string') {
-            var CLASS = /^./g.test(el);
-            var ID = /^#/g.test(el);
-            res.self = ID ? document.getElementById(el.replace(/#/, "")) : CLASS ? document.getElementsByClassName(el.replace(/./, ""))[0] : document.getElementsByTagName(el);
-        } else {
-            res.self = el;
-        }
-        if (res.self) {
-            var c = res.self.children;
-            for (var a = 0; a < c.length; a++) {
-                var i = c[a];
-                if (i.className === name.replace(".", "")) {
-                    var children = i.children;
-                    if (Array.from === undefined) {
-                        res.child = toArray(children);
-                    } else {
-                        res.child = Array.from(children);
-                    }
-                    res.wrap = i;
-                    break;
-                }
-            }
-        }
-        return res;
-    };
-    function renderNode(name, prop) {
-        if (!name && !prop) {
-            return document.createDocumentFragment();
-        }
-        var tag = document.createElement(name);
-        if (prop) {
-            for (var k in prop) {
-                tag.setAttribute(k, prop[k]);
-            }
-        }
-        return tag;
-    };
+	String.prototype.toNumber = function () {
+		if (!this) {
+			return null;
+		}
+		var arr = this.trim().split("");
+		var i = 0;
+		var len = arr.length;
+		var numStr = "";
+		var first_tag = true;
+		while (i < len) {
+			var content = arr[i];
+			var isNumber = isNaN(content);
+			if (content === "." && first_tag) {
+				numStr = numStr + content;
+				first_tag = false;
+			} else if (!isNumber) {
+				numStr = numStr + content;
+			}
+			i++;
+		}
+		if (numStr) {
+			return Number(numStr)
+		}
+	}
+	var is_json = function (o) {
+		try {
+			JSON.stringify(o);
+			return true;
+		} catch (err) {
+			return false;
+		}
+	}
+	var is_object = function (obj, check_blank) {
+		if (undefined === check_blank) {
+			check_blank = false
+		}
+		try {
+			return obj && is_json(obj) && typeof obj === "object" && Reflect.ownKeys(obj).length >= (
+				check_blank ? 1 : 0);
+		} catch (err) {
+			if (err.number === -2146823279) {
+				var t = false;
+				for (var o in obj) {
+					t = true;
+					break;
+				}
+				return t;
+			} else {
+				return false;
+			}
+		}
+	}
+	var str_is_empty = function (str) {
+		if (!str || typeof str !== "string") {
+			return true;
+		}
+		return str.trim().length === 0;
+	}
+	var array_not_empty = function (arr) {
+		return (arr && arr.length > 0);
+	}
+	var is_array = function (arr, check_blank) {
+		if (undefined === check_blank) {
+			check_blank = false
+		}
+		return arr && typeof arr === "object" && (check_blank ? array_not_empty(arr) : arr.length !== undefined)
+	}
+	var is_function = function (f) {
+		return f && typeof f === "function";
+	}
+	var is_str = function (str) {
+		if (str_is_empty(str)) {
+			return false;
+		} else {
+			return Object.prototype.toString.call(str) === '[object String]'
+		}
+	}
+	var get_style = function (el, prop) {
+		var _el = undefined;
+		if (!el) {
+			return prop;
+		} else if (is_document(el)) {
+			_el = el;
+		} else {
+			_el = el.$el;
+		}
+		if (!prop) {
+			return _el.getBoundingClientRect();
+		} else if (prop && typeof prop === "string") {
+			_el.getBoundingClientRect()[prop];
+		}
+	}
+	var has_class = function (el, class_name) {
+		return el.classList.contains(class_name);
+	}
+	var is_window = function (e) {
+		return e && e === window;
+	}
 
-    function is_blank(str) {
-        return !str || str.trim() === '';
-    };
-    var is_mobile = function () {
-        return (/Android|iPhone|iPad|X11|Mac OS X/i.test(navigator.userAgent));
-    };
-    var is_firefox = function () {
-        return (/Firefox/i.test(navigator.userAgent));
-    };
-    var con = document.querySelector(el),
-        g_conf = conf,
-        slider = null,
-        page = null,
-        duration = conf && conf.duration ? conf.duration : 300,
-        easing = conf && conf.easing ? conf.easing : "ease",
-        isCube = conf ? conf.effect && conf.effect === 'cube' : false,
-        tm = getChild(el, ".swiper-wrapper"),
-        _wc = tm.child;
-    var th = null,
-        setting = {
-            index: 0,
-            width: 0,
-            height: 0,
-            num: 1,
-            duration: undefined,
-            time: null,
-            curIndex: 0,
-            touchX: 0,
-            position: 0,
-            prevIndex: 0,
-            offIndex: -1,
-            loadEnd: false,
-            prev: null,
-            next: null,
-            accelerate: true,
-            timer: null,
-            turnOff: true,
-            moveX: 0,
-            autoplay: function () {
-                var time = typeof g_conf.autoplay === "number" ? g_conf.autoplay : 3500;
-                th.time = setInterval(
-                    function () {
-                        th._next();
-                    },
-                    time > th.duration ? time : 1400
-                );
-            },
-            init: function () {
-                var _this = this;
-                _this.prev = this._prev;
-                _this.next = this._next;
-                _this.lastNode = slider.lastChild;
-                th = _this;
-                th.duration = duration;
-                th.num = _wc.length;
-                function _set_size() {
-                    var refresh_child = slider.children;
-                    if (_this.is_horizontal) {
-                        _this.width = getStyle(con, "width");
-                        setStyle(slider, {
-                            width: isCube ? '100%' : _this.width * ((conf && conf.loop) ? _wc.length + 1 : _wc.length) +
-                                "px"
-                        });
-                        set_child_size(refresh_child, con, conf.gap, false);
-                        _this.set_default_position(false);
-                    } else {
-                        _this.height = getStyle(con, "height");
-                        setStyle(slider, {
-                            height: _this.height * (conf && conf.loop ? _wc.length + 1 : _wc.length) +
-                                "px"
-                        });
-                        set_child_size(refresh_child, con, conf.gap, false);
-                        _this.set_default_position(false);
-                    }
-                }
-                _set_size();
-                try {
-                    bind(window, "resize", function () {
-                        setStyle(slider, {
-                            transition: "all 0s",
-                        });
-                        _set_size();
-                    });
-                    if (conf && conf.button) {
-                        if (conf.button.prev) {
-                            bind(document.querySelector(
-                                (root) + ">" + conf.button["prev"]
-                            ), "click", function () {
-                                _this._prev();
-                            });
-                        };
-                        if (conf && conf.button.next) {
-                            bind(document.querySelector(
-                                (root) + ">" + conf.button["next"]
-                            ),
-                                "click",
-                                function () {
-                                    _this._next();
-                                },
-                                false
-                            );
-                        };
-                        if (!is_blank(conf.button.prevKey)) {
-                            bind(document, "keydown", function (t) {
-                                if (conf.button.prevKey === t.key) {
-                                    t.preventDefault();
-                                    th._prev();
-                                } else if (!is_blank(conf.button.nextKey) && t.key === conf.button
-                                    .nextKey) {
-                                    t.preventDefault();
-                                    th._next();
-                                }
-                            })
-                        };
-                    }
-                } catch (e) {
-                    throw new Error(e);
-                };
-                if (g_conf.autoplay) {
-                    th.boot();
-                };
-                if (!conf.disabvarouch) {
-                    this.touch_init();
-                };
-                if (g_conf.pagination && page && g_conf.pagination["el"] !== undefined) {
-                    page.childNodes[th.curIndex].classList.add("pagination-items-active");
-                    if (g_conf.pagination["click"] && g_conf.pagination["click"] !== false) {
-                        var poc = page.childNodes;
-                        var i = 0;
-                        for (; i < poc.length; i++) {
-                            poc[i].index = i;
-                            poc[i].onclick = function () {
-                                th.index = th.curIndex = this.index;
-                                th.goto();
-                            };
-                        }
-                    }
-                };
-                if (conf.init !== undefined && typeof conf.init === "function") {
-                    conf.init({
-                        el: slider.childNodes[th.curIndex],
-                        index: th.curIndex
-                    });
-                };
-                this.add(slider.firstElementChild);
-                if (conf && conf.loop) {
-                    this.add(slider.lastElementChild);
-                };
-                bind(window, "visibilitychange", function () {
-                    document.visibilityState === "visible" ? th.boot() : th.stop();
-                });
-                this.set_default_position();
-                if (typeof conf.accelerate == 'boolean') {
-                    this.accelerate = conf.accelerate;
-                };
+	/**声明响应式 */
+	var to_ref = function (target, key, callback) {
+		if (!target && !key && typeof key !== "string" && !target[key]) {
+			return;
+		}
+		Object.defineProperty(target, key, {
+			set: function (newValue) {
+				if (is_function(callback)) {
+					callback.call(target, [newValue])
+				}
+			}
+		})
+	}
+	var $ = function (o, parent) {
+		if (parent) {
+			root = parent;
+			ctx = root.text();
+		}
+		var _el = undefined;
+		if (o === undefined) {
+			_el = document.createDocumentFragment();
+		} else if (is_document(o)) {
+			_el = o;
+		} else if (!str_is_empty(o)) {
+			var CLASS = /^[.]/g.test(o);
+			var ID = /^[#]/g.test(o);
+			if (CLASS || ID) {
+				var els = document.querySelectorAll(o),
+					len = els.length;
+				_el = len === 1 ? els[0] : els;
+			} else if (/<[a-z]+[1-6]?\b[^>]*>(.*?)|<\/[a-z]+[1-6]?>/g.test(o)) {
+				try {
+					var parse = new DOMParser().parseFromString(o, "text/html");
+					_el = parse.body.firstChild;
+				} catch (err) {
+					console.error("dom 解析失败", err);
+				}
+			} else {
+				var els = document.querySelectorAll(o);
+				if (els) {
+					var len = els.length;
+					_el = len === 1 ? els[0] : els;
+				}
+			}
+		} else {
+			_el = o.$el;
+		}
+		var g = {
+			enableReactModel: false,
+			$el: _el,
+			events: [],
+			id: null,
+			setId: function (id) {
+				if (id) {
+					this.id = id;
+				}
+			},
+			getId: function () {
+				return this.id;
+			},
+			ready: function (call) {
+				if (is_function(call)) {
+					if (is_window(this.$el)) {
+						this.$el.onload = function () {
+							call(this.$el);
+						}
+					} else if (is_document(this.$el)) {
+						try {
+							this.$el.addEventListener("DOMContentLoaded", function () {
+								call(this.$el);
+							});
+						} catch (err) {
+							void (err);
+						}
+					}
+				}
+				return undefined;
+			},
+			has: function (func1, func2) {
+				// 判断当前元素是否存在
+				if (is_function(func1)) {
+					if (is_array(this.$el)) {
+						if (this.$el.length > 0) {
+							func1.call(this.$el, []);
+						} else {
+							if (func2 && is_function(func2)) {
+								func2.call(this, []);
+							}
+						}
+					} else {
+						if (this.$el) {
+							func1.call(this.$el, []);
+						} else {
+							if (func2 && is_function(func2)) {
+								func2.call(this, []);
+							}
+						}
+					}
+				}
+				return this;
+			},
+			add_attr: function (node, k, v, is_class, id) {
+				if (is_class === undefined) {
+					is_class = false;
+				}
+				if (id !== ID_VERSION) {
+					throw new Error();
+				}
+				if (is_document(node)) {
+					if (is_class) {
+						node.classList.add(v);
+					} else {
+						node.setAttribute(k, v);
+					}
+				}
+				return undefined;
+			},
+			eq: function (index) {
+				if (!index || index < 0) {
+					return this;
+				} else {
+					this.$el = this.$el[index];
+				}
+				return this;
+			},
+			siblings: function (name) {
+				var t = this;
+				if (str_is_empty(name)) {
+					return t;
+				}
+				var _el = t.$el;
+				var CLASS = /^[.]/g.test(name);
+				var ID = /^[#]/g.test(name);
 
-                return this;
-            },
-            stop: function () {
-                clearInterval(th.time);
-            },
-            boot: function () {
-                if (g_conf && typeof g_conf.autoplay === 'boolean' && g_conf.autoplay === false) {
-                    return;
-                }
-                if (th.time !== null) {
-                    clearInterval(th.time);
-                }
-                th.autoplay();
-            },
-            children: function (parent, name) {
-                if (!parent) {
-                    return;
-                }
-                var tagArr = [];
-                function deep(_p) {
-                    var c = _p ? _p.children : parent.children;
-                    for (var it = 0; it < c.length; it++) {
-                        var ea = c[it];
-                        if (ea && ea.tagName.toLowerCase() === name) {
-                            tagArr.push(ea);
-                        } else if (ea) {
-                            deep(ea);
-                        }
-                    }
-                };
-                deep();
-                return tagArr;
-            },
-            add: function (img_el) {
-                if (!img_el) {
-                    return;
-                }
-                else if (th.loadEnd) {
-                    return;
-                }
-                else {
-                    var t = null;
-                    clearTimeout(t);
-                    t = setTimeout(function () {
-                        var img = th.children(img_el, "img");
-                        if (img) {
-                            for (var i = 0; i < img.length; i++) {
-                                var _img = img[i];
-                                try {
-                                    var at = _img.getAttribute('src');
-                                    if (!at) {
-                                        var prop = conf.lazy.prop || 'data-src';
-                                        var url = _img.getAttribute(prop);
-                                        _img.setAttribute('src', url);
-                                        _img.removeAttribute(prop);
-                                        _img.classList.remove('lazy');
-                                    }
-                                } catch (e) {
-                                    console.error(e);
-                                    void (e)
-                                }
-                            }
-                            img_el.classList.remove('lazy');
-                            var path = root + ">.swiper-wrapper .lazy";
-                            var y = document.querySelectorAll(path).length;
-                            if (y <= 0) {
-                                th.loadEnd = true;
-                            }
-                        }
-                    }, Math.min((conf.duration || 0), 100));
-                }
-            },
-            _prev: function () {
-                if (this.turnOff) {
-                    this.index--;
-                    this.slide_to();
-                    this.thord(this);
-                }
-            },
-            _next: function () {
-                if (this.turnOff) {
-                    this.index++;
-                    this.slide_to();
-                    this.thord(this);
-                }
-            },
-            thord: function (eb) {
-                if (eb) {
-                    if (eb.duration > 300) {
-                        eb.turnOff = false;
-                        var _s = setTimeout(function () {
-                            eb.turnOff = true;
-                            clearTimeout(_s);
-                            _s = null;
-                        }, eb.duration);
-                    }
-                }
-            },
-            play: function () {
-                var _ = this;
-                if (!slider) {
-                    return;
-                }
-                _.curIndex = _.index === _.num ? 0 : _.index;
-                var a = slider.childNodes;
-                var c = a[th.curIndex];
-                var nodes = {
-                    curNodes: [],
-                    siblings: [],
-                    curIndex: _.curIndex
-                };
-                if (page) {
-                    var pc = page.childNodes;
-                    if (conf.pagination && page && conf.pagination.el) {
-                        var i = 0;
-                        for (; i < pc.length; i++) {
-                            if (i === th.curIndex) {
-                                nodes.curNodes.push(a[_.curIndex]);
-                                if (_.curIndex === 0) {
-                                    nodes.curNodes.push(slider.lastChild);
-                                }
-                                pc[i].classList.add("pagination-items-active");
-                            } else {
-                                pc[i].classList.remove("pagination-items-active");
-                                nodes.siblings.push(a[i]);
-                            }
-                        }
-                    }
-                }
-                if (conf.lazy && Object.keys(conf.lazy).length !== 0) {
-                    _.add(c);
-                }
-                if (conf && conf.on && typeof conf.on.change === 'function') {
-                    _.timer = setTimeout(function () {
-                        conf.on.change(nodes);
-                        clearTimeout(_.timer);
-                    }, _.duration);
-                }
-            },
-            css: function (a, b, c) {
-                if (!a || !b) {
-                    return;
-                }
-                setStyle(a, b);
-                if (c && typeof c === 'function') {
-                    c();
-                }
-            },
-            slide_to: function () {
-                var _t = this;
-                var val;
-                if (conf.loop ? (_t.index > _t.num) : (_t.index > _t.num - 1)) {
-                    val = 0;
-                    _t.transform(val, 0);
-                    _t.index = conf.loop ? 1 : 0;
-                    fun(root);
-                } else if (_t.index < 0) {
-                    if (conf.loop) {
-                        val = _t.is_horizontal ? _t.num * _t.width : _t.num * _t.height;
-                        _t.transform(val, 0);
-                    }
-                    _t.index = _t.num - 1;
-                    fun(root);
-                }
-                _t.duration = duration;
-                val = _t.is_horizontal ? _t.index * _t.width : _t.index * _t.height;
-                _t.transform(val, _t.duration);
-                th.set_position();
-                return _t;
-            },
-            is_horizontal: function () {
-                this.is_horizontal = !conf.direction || conf.direction.toLowerCase() === 'horizontal';
-            },
-            set_default_position: function (transition = true) {
-                let time = conf.duration || 300;
-                if (!transition) {
-                    time = 0;
-                }
-                this.goto(time);
-            },
-            goto: function (time, target) {
-                var __dis = this.index * (this.is_horizontal ? this.width : this.height);
-                this.transform(__dis, time),
-                    this.position = __dis;
-            },
-            transform: function (x, delay) {
-                var t = this;
-                var _prop = null;
-                if (t.accelerate) {
-                    var ts = t.is_horizontal ? "translate3d(" + (-x) + "px,0px,0px)" : "translate3d(0px," + (-x) + "px,0px)";
-                    _prop = {
-                        transform: ts,
-                        position: 'absolute',
-                        left: 0,
-                        top: 0,
-                        backfaceVisibility: 'hidden',
-                        transition: "all " + delay + "ms " + easing,
-                    };
-                } else {
-                    _prop = {
-                        transform: "translate3d(0px,0px,0px)",
-                        position: 'absolute',
-                        backfaceVisibility: 'hidden',
-                        transition: "all " + delay + "ms " + easing,
-                    };
-                    _prop[t.is_horizontal ? 'left' : 'top'] = -x + "px";
-                };
-                t.css(slider, _prop);
-                t.play();
-            },
-            touch_init: function () {
-                if (is_mobile()) {
-                    bind(con, "touchstart", th.start, false);
-                    bind(document, "touchend", th.end, false);
-                } else {
-                    bind(con, "pointerdown", th.start, false);
-                    bind(con, "pointerleave", th.stop, false);
-                    bind(document, "pointerup", th.end, false);
-                }
-            },
-            link_handler: function (b) {
-                var ar = th.children(slider, "a");
-                for (var key in ar) {
-                    if (typeof ar[key] === "object") {
-                        if (b) {
-                            ar[key].onclick = function (e) {
-                                e.preventDefault();
-                            }
-                        } else {
-                            ar[key].onclick = function () {
-                                return void (undefined);
-                            }
-                        }
-                    }
-                }
-            },
-            set_drab: function (b) {
-                setStyle(slider, {
-                    cursor: b ? "grab" : "default"
-                });
-            },
-            checked: function (n) {
-                return !(Math.floor(n) === -1);
-            },
-            start: function (e) {
-                if (!e) { return; }
-                th.stop();
-                e.stopPropagation();
-                if (is_firefox()) { e.preventDefault(); }
-                var st = e.touches ? e.touches.length - 1 : 0;
-                th.touchX = (th.is_horizontal ? (e.clientX || e.targetTouches[st].clientX) : (e.clientY || e.clientY || e.targetTouches[st].clientY));
-                if (is_mobile()) {
-                    bind(this, "touchmove", th.move, false);
-                } else {
-                    if (e.which === 1) {
-                        e.preventDefault();
-                        bind(document, "pointermove", th.move, false);
-                        th.link_handler(false); // true阻止连接跳转
-                        th.set_drab(true);
-                    }
-                }
-            },
-            move: function (e) {
-                e.stopPropagation();
-                var __loop = conf.loop;
-                try {
-                    e.preventDefault();
-                    var x = th.is_horizontal ? (e.clientX || (e.touches ? e.targetTouches[0].clientX : 0)) : (e.clientY || (e.touches ? e.targetTouches[0].clientY : 0));
+				function find_sib(el) {
+					var children = el.parentElement.children,
+						res = [];
+					if (children && children.length) {
+						var i = 0,
+							len = children.length;
+						while (i < len) {
+							var element = children[i];
+							if (element !== _el) {
+								if (name) {
+									var type = CLASS ? 0 : (ID ? 1 : -1);
+									if (type === -1 && element.tageName.toLocaleLowerCase() === name) {
+										res.push(element);
+									} else {
+										res.push(element);
+									}
+								} else {
+									res.push(element);
+								}
+							}
+							i++;
+						}
+					}
+					return res;
+				}
+				if (!is_array(_el) && is_document(_el)) {
+					t.$el = find_sib(_el);
+				}
+				return t;
+			},
+			attr: function (prop) {
+				var t = this;
+				if (is_object(prop, true)) {
+					set_props(this.$el, prop, function (e, k, v) {
+						var is_class = k === "class";
+						if (is_array(e, true)) {
+							e.forEach(function (item) {
+								t.add_attr(item, k, v, is_class, ID_VERSION);
+							});
+						} else {
+							t.add_attr(e, k, v, is_class, ID_VERSION)
+						}
+					});
+				}
+				return this;
+			},
+			className: function (id, name, add) {
+				if (ID_VERSION !== id) {
+					throw new Error("禁止访问");
+				}
+				if (!name || typeof name !== "string" || name === "") {
+					return;
+				}
+				if (is_array(this.$el, true)) {
+					this.$el.forEach(function (item) {
+						if (add) {
+							this.$el.classList.add(name);
+						} else {
+							item.classList.remove(name);
+						}
+					})
+				} else if (is_document(this.$el)) {
+					if (add) {
+						this.$el.classList.add(name);
+					} else {
+						this.$el.classList.remove(name);
+					}
+				}
+			},
+			removeClass: function (name) {
+				this.className(ID_VERSION, name, false);
+				return this;
+			},
+			addClass: function (name) {
+				this.className(ID_VERSION, name, true);
+				return this;
+			},
+			delay: function (call, time) {
+				if (time < 0) {
+					call();
+					return this;
+				}
+				var _t = this.$el;
+				var node_list = [];
+				if (is_document(_t)) {
+					node_list.push(_t);
+				} else if (is_array(_t)) {
+					node_list = _t;
+				}
+				if (is_function(call)) {
+					var t = setTimeout(function () {
+						clearTimeout(t);
+						node_list.forEach(function (item) {
+							call.call(item);
+						});
+						t = null;
+					}, time);
+				}
+				return this;
+			},
+			css: function (prop) {
+				if (is_object(prop, true)) {
+					set_props(this.$el, prop, function (e, k, v) {
+						if (is_array(e, true)) {
+							e.forEach(function (item) {
+								item.style[k] = v;
+							});
+						} else if (is_document(e)) {
+							e.style[k] = v;
+						}
+					});
+					return this;
+				} else {
+					if (is_str(prop)) {
+						return this.$el.style[prop];
+					} else {
+						console.error('invaild param');
+						void (0);
+					}
+				}
+			},
+			add: function (node) {
+				var _el = this.$el;
+				var tag = is_array(_el, true);
 
-                    var a = x - th.touchX - th.position;
-                    var __h = (th.is_horizontal ? th.width : th.height);
-                    var t, per = (x - th.touchX) / __h;
-                    if (th.checked(per)) {
-                        t = -__h / 10;
-                    } else {
-                        t = __h + 100;
-                    }
-                    if (th.min(x)) {
-                        var u = Math.abs(parseInt((a - t) / __h));
-                        if (u > th.num) {
-                            th.index = th.num;
-                        } else {
-                            th.index = u;
-                        }
-                        th.link_handler(true);
-                    }
-                    var p = Math.abs(a) >= (__loop ? th.num : th.num - 1) * __h;
-                    var tar = e.target;
-                    if (__loop) {
-                        if (p) {
-                            var _val = 0;
-                            th.position = _val;
-                            th.index = _val;
-                            th.transform(_val, 0, 0);
-                        } else if (a > 0) {
-                            th.position = th.num * __h;
-                            th.transform(th.position, 0, 0);
-                            th.index = th.num;
-                        } else {
-                            th.transform(-a, 0);
-                        }
-                    } else {
-                        if (p) {
-                            th.index = th.num - 1;
-                        } th.transform(-a, 0);
-                    };
-                } catch (er) {
-                    th.transform(-a, 0);
-                    void er;
-                }
-            },
-            end: function (e) {
-                e.stopPropagation();
-                th.transform(th.index * (th.is_horizontal ? th.width : th.height), conf.duration || 300);
-                th.prevIndex = th.index;
-                th.set_position();
-                unbind(con, "touchmove", th.move);
-                unbind(document, "pointermove", th.move);
-                unbind(con, "pointermove", th.move);
-                th.set_drab(false);
-                th.boot();
-            },
-            min: function (x) {
-                var c = Math.abs(x - this.touchX);
-                return (c / th.width) >= 0.1;
-            },
-            set_position: function () {
-                this.position = this.index * (this.is_horizontal ? this.width : this.height);
-            },
-        };
-    var globa_this = null;
+				function _push(element, insert_content) {
+					if (!insert_content) {
+						return;
+					}
+					if (tag) {
+						var i = 0,
+							len = element.length;
+						for (; i < len; i++) {
+							element[i].appendChild(insert_content);
+						}
+					} else if (is_document(_el)) {
+						element.appendChild(insert_content);
+					}
+				}
+				if (is_array(node, true)) {
+					var vm = $();
+					node.forEach(function (e) {
+						vm.add(e);
+					});
+					_push(this.$el, vm.$el);
+				} else if (is_document(node)) {
+					_push(this.$el, node);
+				} else if (is_object(node) && node.$el !== undefined) {
+					_push(this.$el, node.$el);
+				} else {
+					void (0);
+				}
+				return this;
+			},
+			remove: function () {
+				var this_el = this.$el;
+				if (is_array(this_el, false)) {
+					if (this_el.length > 0) {
+						var parent = this_el[0].parentNode;
+						this_el.forEach(function (item) {
+							if (item) {
+								parent.removeChild(item);
+							}
+						});
+					}
+				} else {
+					this_el.parentNode.removeChild(this_el);
+				}
+				return this;
+			},
+			clone: function (copy_child) {
+				if (undefined === copy_child) {
+					copy_child = true;
+				}
+				if (is_array(this.$el, true)) {
+					var arr = [];
+					this.$el.forEach(function (e) {
+						arr.push(e.cloneNode(copy_child));
+					});
+					return arr;
+				} else if (is_document(this.$el)) {
+					return this.$el.cloneNode(copy_child);
+				} else {
+					return this.$el;
+				}
+			},
+			size: function () {
+				if (!this.$el) {
+					return 0;
+				} else if (is_array(this.$el)) {
+					return this.$el.length;
+				} else {
+					return 1;
+				}
+			},
+			children: function (name) {
+				var list = [];
+				var first_floor_child = this.$el.children;
+				if (!name) {
+					this.$el = first_floor_child;
+					return this;
+				}
+				var _find = function (node) {
+					if (!node) {
+						return this;
+					}
+					var len = node.length;
+					var i = 0;
+					for (; i < len; ++i) {
+						var every_node = node[i];
+						try {
+							if (array_not_empty(every_node.children, true)) {
+								_find(every_node.children);
+							}
+							var _pirex = name.replace(".", "");
+							if (every_node.classList.contains(_pirex)) {
+								list.push(every_node);
+							}
+						} catch (err) {
+							console.error(err);
+							void (err);
+						}
+					}
+				}
+				_find(first_floor_child);
+				this.$el = list;
+				return this;
+			},
+			each: function (call) {
+				if (is_function(call) && this.$el) {
+					if (this.$el.length > 0) {
+						for (var key in this.$el) {
+							var item = this.$el[key];
+							if (is_document(item)) {
+								call.call(key, item);
+							}
+						}
+					} else {
+						console.error("当前集合不可迭代", this.$el);
+					}
+				}
+				return this;
+			},
+			toggleClass: function (name) {
+				var t = this;
+				var temp_list = [];
+				if (is_array(t.$el, true)) {
+					t.$el.forEach(function (item) {
+						temp_list.push(item);
+					});
+				} else if (is_document(t.$el)) {
+					temp_list.push(t.$el);
+				} else {
+					temp_list = null;
+				}
+				if (temp_list && temp_list.length > 0) {
+					temp_list.forEach(function (item) {
+						if (has_class(item, name)) {
+							t.removeClass(name);
+						} else {
+							t.addClass(name);
+						}
+					})
+				}
+				return this;
+			},
+			text: function (val) {
+				var str_empty = str_is_empty(val);
+				if (is_document(this.$el)) {
+					if (str_empty) {
+						return this.$el.innerText;
+					} else {
+						this.$el.innerText = val;
+						return this;
+					}
+				} else if (is_array(this.$el, true)) {
+					var contentText = "";
+					this.$el.forEach(function (item) {
+						if (str_empty) {
+							contentText = contentText + item.innerText;
+						} else {
+							item.innerText = val;
+						}
+					});
+					if (str_empty) {
+						return contentText;
+					} else {
+						return this;
+					}
+				}
+			},
+			get: function (idx) {
+				if (undefined === idx) {
+					idx = 0;
+				}
+				if (this.$el && this.$el.length) {
+					this.$el = this.$el[idx];
+				}
+				return this;
+			},
+			on: function (event, func) {
+				if (!event || !func || typeof func !== "function") {
+					console.error("params error");
+					return;
+				}
+				var t = this;
+				var el = t.$el;
+				t.bind_event(ID_VERSION, el, function (e) {
+					if (!e) {
+						console.warn("无法为对象", e, "绑定事件");
+						return;
+					}
+					e.addEventListener(event, function (e) {
+						func.call(el, e);
+					}, {
+						passive: false,
+						capture: true
+					});
+					t.events.push(func);
+				});
+				return this;
+			},
+			bind_event: function (number, el, call) {
+				if (number !== ID_VERSION) {
+					throw new Error("禁止访问");
+				} else if (is_function(call) && (is_document(el) || is_window(call))) {
+					call(el);
+				} else if (is_array(el, true)) {
+					for (var ev in el) {
+						var _el = el[ev];
+						if (is_document(_el) && is_function(call)) {
+							call(el[ev]);
+						}
+					}
+				}
+			},
+			off: function (event, fun) {
+				var _events = this.events;
+				if (_events.length === 0) {
+					return;
+				}
+				this.bind_event(ID_VERSION, this.$el, function (el) { // 需要解决一下解绑后的句柄
+					_events.forEach(function (func, index) {
+						el.removeEventListener(event, fun, true);
+						_events.splice(index, 1);
+					})
+				});
+				return this;
+			},
+			hover: function (func, func2) {
+				if (is_function(func)) {
+					this.on("mouseenter", func);
+				}
+				if (is_function(func2)) {
+					this.on("mouseleave", func2);
+				}
+				return this;
+			},
+			press: function (func, func2) {
+				if (is_function(func)) {
+					this.on("mousedown", func);
+				}
+				if (is_function(func2)) {
+					this.on("mouseup", func2);
+				}
+			}
+		};
+		return g;
+	}
+	if (!(el)) {
+		console.error("找不到父容器", el);
+	} else {
+		var root = $(el),
+			def_config = {
+				accelerate: false, //禁用硬件加速
+				direction: "horizontal", // 播放方向
+				ease: "ease", // 过渡动画
+				disabvarouch: false, // 关闭触摸
+				autoplay: true, // 自动播放
+				lazy: undefined, // 懒加载 {prop:xx,enable:boolean}
+				loop: true, // 无限循环
+				pagination: undefined, // 指示点
+				gap: 0, // 间隔
+				slide: null, // 滑块
+				num: 0, // 子滑块数量 包含复制的
+				realNum: 0, // 视觉滑块数量，不包含循环复制的
+				width: 0, // 父容器宽度
+				height: 0, // 父容器高度
+				duration: 300, // 过渡时间
+				parent: root, // 父容器
+				defaultIndex: 0, // 默认滑块显示下标
+				on: null,
+				realIndex: 0,
+				lazy: false
+			};
+		var base = {
+			rootEl: root.$el
+		};
+		Object.freeze(base);
+		if (conf && typeof conf === "object" && Object.keys(conf).length > 0) {
+			if (undefined === Object.assign) {
+				var result = {};
+				Object.keys(def_config).forEach(function (key) {
+					result[key] = def_config[key];
+				});
+				Object.keys(conf).forEach(function (key) {
+					result[key] = conf[key];
+				});
+				def_config = result;
+			} else {
+				Object.assign(def_config, conf);
+			}
+		}
+		conf = null;
+		def_config.is_mobile = (function () {
+			return (/Android|iPhone|iPad|X11|Mac OS X/i.test(navigator.userAgent));
+		})();
+		var TOUCH_EVENT = {
+			"down": def_config.is_mobile ? "touchstart" : "pointerdown",
+			"move": def_config.is_mobile ? "touchmove" : "pointermove",
+			"up": def_config.is_mobile ? "touchend" : "pointerup"
+		};
 
-    (function () {
-        var swiper_gab = parseFloat(conf.gap || 0);
-        var _vmNode = undefined;
-        setting.is_horizontal();
-        if (arguments.length !== 2) {
-            el = ".simple-swiper-container";
-        } else {
-            g_conf = conf;
-        }
-        var _wrap = renderNode("div", {
-            "class": "swiper-wrapper"
-        }),
-            _vmNode = renderNode(),
-            _slider = renderNode("div", {
-                "class": "swiper-slider"
-            });
-        if (!_wc) {
-            return;
-        }
-        try {
-            var offsetVal = swiper_gab;
-            var vm_nodes = set_child_size(_wc, con, offsetVal, true);
-            _vmNode.appendChild(vm_nodes);
-        } catch (e) {
-            void (e);
-        }
-        if (conf.loop) {
-            var _c = _wc[0].cloneNode(true);
-            _vmNode.appendChild(_c);
-        }
-        _slider.appendChild(_vmNode);
-        _wrap.appendChild(_slider);
-        con.replaceChild(_wrap, tm.wrap);
-        slider = _slider;
-        page = document.querySelector(conf && conf.pagination ? conf.pagination.el : null);
-        if (page) {
-            if (conf.pagination && conf.pagination.el) {
-                var mx = tm.child.length,
-                    vo = renderNode(),
-                    p = 0;
-                for (; p < mx; p++) {
-                    var p_el = renderNode("span", {
-                        "class": "pagination-items"
-                    });
-                    vo.appendChild(p_el);
-                }
-                page.appendChild(vo);
-            }
-        }
-        globa_this = setting.init();
-    })();
-    function setStyle(el, props) {
-        try {
-            if (!el || !props) {
-                return;
-            }
-            for (var key in props) {
-                el.style[key] = props[key];
-            }
-        } catch (err) {
-            void (err);
-        }
-    }
-    function getStyle(el, prop) {
-        return Math.ceil(parseFloat(window.getComputedStyle(el)[prop])) || el.getBoundingClientRect()[prop];
-    };
-    return globa_this;
+		var j = (function () {
+			var slider = $('<div class="swiper-slider"></div>');
+			def_config.slide = slider;
+			var swiper_items = root.children(".swiper-items");
+			swiper_items.remove();
+			var clone_swipers = swiper_items.clone(); // 最终复制的节点
+			if (def_config.loop) {
+				var last = swiper_items.get(0).clone();
+				clone_swipers.push(last);
+			}
+			var root_size = get_style($(el));
+			var size = clone_swipers.length;
+			var style_config = {
+				height: undefined,
+				width: undefined
+			}
+			$(el).children(".swiper-wrapper").add(slider); // 删除原来的
+			function set_children_layout() {
+				root_size = get_style($(el));
+				if (def_config.direction === "vertical") { // 判断方向
+					style_config.width = root_size.width + "px";
+					style_config.height = (root_size.height * size) + "px";
+					$(el).addClass("vertical");
+				} else {
+					style_config.height = root_size.height + "px";
+					style_config.width = (root_size.width * size) + "px";
+					$(el).addClass("horizontal");
+				}
+				$(el).children(".swiper-items").css({
+					width: root_size.width + "px",
+					height: root_size.height + "px"
+				});
+				def_config.width = root_size.width;
+				def_config.height = root_size.height;
+				slider.css(style_config);
+			}
+
+			slider.add(clone_swipers);
+			set_children_layout();
+			if (def_config.loop) {
+				def_config.num = size - 1;
+			} else {
+				def_config.num = size;
+			}
+			/** 空间 */
+			return {
+				set_children_layout:set_children_layout
+			}
+		});
+		def_config.slide = null;
+		var _j = new j();
+		function refresh_layout() {
+			get_style(def_config.slide.get(0));
+		}
+
+		function init_swiper() {
+			var _target = {
+				index: 0,
+				translate: 0
+			}
+			var index = def_config.defaultIndex > def_config.num ? def_config.num - 1 : def_config.defaultIndex;
+			function prev(e) {
+				if (e) {
+					e.stopPropagation();
+					e.preventDefault();
+				}
+				index--;
+				if (index < 0) {
+					index = def_config.num;
+					animate(index * def_config.width, 0);
+					refresh_layout();
+					index = def_config.num - 1;
+					animate(index * def_config.width, def_config.duration);
+				} else {
+					animate(index * def_config.width, def_config.duration);
+				}
+				set_postion();
+			}
+			// 设置页码
+			function set_page() {
+				var b = def_config.pagination;
+				var _el = undefined;
+				var clickable = true;
+				if (b && is_str(b)) {
+					_el = b;
+				} else if (object_contains(b, "el")) {
+					_el = b.el;
+					clickable = b.click;
+				}
+				if (_el) {
+					$(_el).has(function () {
+						var idx = 0,
+							len = def_config.num,
+							_vm = $(),
+							_this = $(this),
+							active = "pagination-items-active";
+						var click_item;
+						function click_event(e, el) {
+							$(el).addClass(active).siblings().removeClass(active);
+							index = e;
+							animate(e * def_config.width, def_config.duration, def_config.ease,
+								set_postion);
+						}
+						while (idx < len) {
+							if (idx === index) {
+								click_item = $("<span index = " + idx + " class='pagination-items " +
+									active + "'></span>");
+							} else {
+								click_item = $("<span index=" + idx + " class='pagination-items'></span>");
+							}
+							if (clickable) {
+								click_item.on("click", function () {
+									click_event(this.getAttribute("index").toNumber(), this);
+								});
+							}
+							_vm.add(click_item);
+							idx += 1;
+						}
+						_this.add(_vm);
+						var children = _this.children();
+						if (children.$el) {
+							// 监听索引变化
+							to_ref(_target, "index", function (e) {
+								var _ridx = e[0] === def_config.num ? 0 : e[0];
+								def_config.realIndex = _ridx;
+								var i = 0;
+								for (; i < len; i++) {
+									if (i === _ridx) {
+										children.$el[_ridx].classList.add(active);
+									} else {
+										children.$el[i].classList.remove(active);
+									}
+								}
+							});
+						}
+
+					});
+				}
+			}
+
+			function next(e) {
+				if (e) {
+					e.preventDefault();
+					e.stopPropagation();
+				}
+				index += 1;
+				if (index > def_config.num) {
+					index = 0;
+					animate(index * def_config.width, 0);
+					refresh_layout();
+					index = 1;
+					animate(index * def_config.width, def_config.duration);
+				} else {
+					animate(index * def_config.width, def_config.duration);
+				}
+				set_postion();
+			}
+			/** 初始化布局 */
+			function __init__layout() {
+				animate(index * def_config.width, 0);
+				if (object_contains(def_config.on, "init")) {
+					def_config.on.init(this);
+				}
+				set_page();
+			}
+
+			function set_postion() {
+				endx = index * def_config.width;
+				_target.index = index;
+				_target.translate = -endx;
+				return;
+			}
+			if (object_contains(def_config.on, "change") && is_function(def_config.on.change)) {
+				to_ref(def_config, "realIndex", function (e) {
+					def_config.on.change.call(this, def_config, e[0]);
+				})
+			}
+			/** 初始化前后切换按钮 */
+			function init_nav() {
+				if (object_contains(def_config, "navigator")) {
+					if (object_contains(def_config.navigator, "next")) {
+						$(def_config.navigator.next).on("click", next);
+					}
+					if (object_contains(def_config.navigator, "prev")) {
+						$(def_config.navigator.prev).on("click", prev);
+					}
+					// 按键导航
+					if (object_contains(def_config.navigator, "key") && def_config.navigator['key'] === true) {
+						$(document).on("keydown", function (e) {
+							if (!e.repeat) {
+								if (e.keyCode === 39) {
+									next(e);
+								} else if (e.keyCode === 37) {
+									prev(e);
+								}
+							}
+
+						})
+					}
+				}
+			}
+			/** 自动播放 */
+			var timer;
+			function auto_play() {
+				var delay_time = 2000;
+				if (object_contains(def_config, "autoplay")) {
+					if (typeof def_config.autoplay === "number") {
+						delay_time = def_config.autoplay;
+					}
+					if (!def_config.autoplay) {
+						return;
+					}
+					timer = setInterval(function () {
+						next();
+					}, delay_time);
+				}
+			}
+
+			function stop_play() {
+				clearInterval(timer);
+				timer = null;
+			}
+			/** 触摸 - 已修复多点触控问题 */
+			var is_press = false;
+			var startx = 0;
+			var endx = 0;
+			var is_left = false;
+			var movex = 0;
+			var startTime = null;
+			var _activeTouchId = null;
+
+			function animate(dis, duration, ease, call) {
+				if (undefined === ease) {
+					ease = "ease";
+				}
+				def_config.slide.css({
+					transition: "transform " + duration + "ms " + def_config.ease,
+					transform: "translate3d(" + -(dis) + "px,0,0)",
+					backfaceVisibility: "hidden"
+				});
+				if (is_function(call)) {
+					call();
+				}
+			}
+			if (object_contains(def_config.on, "transition") && is_function(def_config.on.transition)) {
+				to_ref(_target, "translate", function (e) {
+					var t = e[0];
+					def_config.on.transition.call(_target, t)
+				});
+			}
+			function compute_index(dis) {
+				var thold = is_left ? 0.34 : -0.34;
+				var val = Math.abs(dis) / def_config.width;
+				var i = Math.round(val + thold);
+				return i;
+			}
+			function pre_defalut(e) {
+				if (!def_config.is_mobile && e) {
+					e.preventDefault();
+				}
+			}
+
+			function touch_start(e) {
+				if (e.type !== TOUCH_EVENT['down'] && e.button !== 0) {
+					return
+				}
+				pre_defalut(e);
+				e.stopPropagation();
+				// 记录触控标识符，用于多点触控时追踪正确的触点
+				startTime = new Date().getTime();
+				var touch = def_config.is_mobile ? e.targetTouches[0] : e;
+				startx = touch.clientX;
+				_activeTouchId = touch.identifier !== undefined ? touch.identifier : null;
+				is_press = true;
+				var b_el = def_config.is_mobile ? this[0] : document;
+				$(b_el).on(TOUCH_EVENT["move"], function (e) {
+					touch_move(e);
+				});
+			}
+
+			function touch_move(e) {
+				e.stopPropagation();
+				pre_defalut(e);
+				if (!is_press) {
+					return;
+				}
+				// 多点触控：找到与初始触点匹配的触点，如果找不到则忽略
+				var x = def_config.is_mobile ? e.changedTouches[0].clientX : e.clientX;
+				movex = x - startx - endx;
+				_target.translate = movex;
+				is_left = (x - startx) < 0;
+				var max_translate = def_config.width * (def_config.num);
+				var bound = Math.abs(movex) > max_translate;
+				if (bound) {
+					var v = 0;
+					index = v;
+					endx = v;
+					animate(v, 0);
+				} else if (movex > 0) {
+					index = def_config.num;
+					endx = max_translate;
+					animate(-movex, 0);
+				} else {
+					animate(-movex, 0);
+					index = compute_index(movex);
+				}
+			}
+
+			function touch_end(e) {
+				pre_defalut(e);
+				e.stopPropagation();
+				if (!is_press) {
+					return;
+				}
+				is_press = false;
+				set_postion();
+				animate(index * def_config.width, def_config.duration, def_config.ease);
+			}
+			function __init__touch() {
+				if (true === def_config.disabvarouch) {
+					return;
+				} else {
+					var slider_el = $(el).children(".swiper-slider");
+					slider_el.on(TOUCH_EVENT['down'], touch_start);
+					def_config.is_mobile?slider_el.on(TOUCH_EVENT["up"], touch_end):$(document).on(TOUCH_EVENT["up"], touch_end);
+				}
+				set_postion();
+			}
+			__init__layout();
+			init_nav();
+			auto_play();
+			if (false === def_config.disabvarouch) {
+				__init__touch();
+			}
+			return {
+				to:function() {
+					animate(index * def_config.width, 0);
+				}
+			}
+		}
+		var inits = new init_swiper(def_config);
+		var __time = null;
+		window.addEventListener("resize", function () {
+			clearTimeout(__time);
+			__time = setTimeout(function () {
+				_j.set_children_layout();
+				inits.to();
+			}, 220)
+		})
+	}
+	return {
+		$:$,
+		ID_VERSION:ID_VERSION
+	};
 });
