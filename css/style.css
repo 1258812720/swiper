@@ -1,0 +1,65 @@
+.has {
+    color: red;
+}
+
+.btn>img {
+    width: 100%;
+    height: 100%;
+    user-select: none;
+}
+
+body {
+    background-color: rgb(58, 58, 58);
+    margin: 0;
+    padding: 0px;
+    box-sizing: border-box;
+    height: 100%;
+    height: 100%;
+    position: relative;
+    overflow-y: auto;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.heiwukong,
+.heiwukong01 {
+    width: 1266px;
+    height: 630px;
+    background-color: white;
+    margin-bottom: 12px;
+    position: relative;
+    border-radius: 6px;
+    font-size: 2em;
+}
+
+.swiper-items {
+    text-align: justify;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.swiper-items img {
+    width: 100%;
+    height: 100%;
+}
+
+.heiwukong .pagehelper {
+    text-align: right;
+}
+
+.pagehelper .pagination-items {
+    width: 10px;
+    height: 6px;
+    border-radius: 0;
+    border: none;
+    transition: width .18s;
+}
+
+.heiwukong .pagehelper .pagination-items-active {
+    width: 14px;
+    background-color: none;
+}

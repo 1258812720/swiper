@@ -1,1270 +1,1048 @@
-(function (e, fn) {
+(function (t, e) {
 	"use strict";
-	if (e.__proto__ === undefined) {
-		e.SimSwiper = fn;
-		return SimSwiper;
+	if (t) {
+		void 0 === t.__proto__ ? (t.SimSwiper = e, SimSwiper) : "undefined" != typeof module ? module.exports = e :
+			t.__proto__.SimSwiper = e
 	} else {
-		if (typeof module !== "undefined") {
-			module.exports = fn;
-		} else {
-			e.__proto__.SimSwiper = fn;
-		}
+		JSwiper = e;
 	}
 })(this, function (el, conf) {
-	"use strict";
-	var root = el;
-
-	function r(a, b) {
-		var c = a.document,
-			bn, bm,
-			d = function () {
-				function G() {
-					if (!d.isReady) {
-						try {
-							c.documentElement.doScroll("left")
-						} catch (a) {
-							setTimeout(G, 1);
-							return
-						}
-						d.ready()
-					}
-				}
-				var d = function (a, b) {
-					return new d.fn.init(a, b, g)
-				},
-					g, h = /^($)/,
-					i = /\S/,
-					m = /^<(\w+)\s*\/?>(?:<\/\1>)?$/,
-					r = /(webkit)[ \/]([\w.]+)/,
-					s = /(opera)(?:.*version)?[ \/]([\w.]+)/,
-					t = /(msie) ([\w.]+)/,
-					u = /(mozilla)(?:.*? rv:([\w.]+))?/,
-					v = navigator.userAgent,
-					w, x, y, z = Object.prototype.toString,
-					B = Array.prototype.push,
-					E = Array.prototype.indexOf,
-					F = {};
-				d.fn = d.prototype = {
-					constructor: d,
-					init: function (a, e, f) {
-						var g, i, j, k;
-						if (!a) return this;
-						if (a.nodeType) {
-							this.context = this[0] = a, this.length = 1;
-							return this
-						}
-						if (typeof a === "string") {
-							g = h.exec(a);
-							if (!g || !g[1] && e) return !e || e.jquery ? (e || f).find(a) : this
-								.constructor(e)
-								.find(a);
-							return this
-						}
-						if (d.isFunction(a)) return f.ready(a);
-						a.selector !== b && (this.selector = a.selector, this.context = a.context);
-						return d.makeArray(a, this)
-					},
-					pushStack: function (a, b, c) {
-						var e = this.constructor();
-						d.isArray(a) ? B.apply(e, a) : d.merge(e, a), e.prevObject = this, e.context = this
-							.context, b === "find" ? e.selector = this.selector + (this.selector ? " " :
-								"") +
-								c : b && (e.selector = this.selector + "." + b + "(" + c + ")");
-						return e
-					},
-					each: function (a, b) {
-						return d.each(this, a, b)
-					},
-					push: B,
-					sort: [].sort,
-					splice: [].splice
-				}, d.fn.init.prototype = d.fn, d.extend = d.fn.extend = function () {
-					var a, c, e, f, g, h, i = arguments[0] || {},
-						j = 1,
-						k = arguments.length,
-						l = !1;
-					typeof i === "boolean" && (l = i, i = arguments[1] || {}, j = 2), typeof i !== "object" && !
-						d
-							.isFunction(i) && (i = {}), k === j && (i = this, --j);
-					for (; j < k; j++)
-						if ((a = arguments[j]) != null)
-							for (c in a) {
-								e = i[c], f = a[c];
-								if (i === f) continue;
-								l && f && (d.isPlainObject(f) || (g = d.isArray(f))) ? (g ? (g = !1, h = e && d
-									.isArray(e) ? e : []) : h = e && d.isPlainObject(e) ? e : {}, i[c] =
-									d
-										.extend(l, h, f)) : f !== b && (i[c] = f)
-							}
-					return i
-				}, d.extend({
-					isReady: !1,
-					readyWait: 1,
-
-					isFunction: function (a) {
-						return d.type(a) === "function"
-					},
-					isArray: Array.isArray || function (a) {
-						return d.type(a) === "array"
-					},
-					type: function (a) {
-						return a == null ? String(a) : F[z.call(a)] || "object"
-					},
-					each: function (a, c, e) {
-						var f, g = 0,
-							h = a.length,
-							i = h === b || d.isFunction(a);
-						if (e) {
-							if (i) {
-								for (f in a)
-									if (c.apply(a[f], e) === !1) break
-							} else
-								for (; g < h;)
-									if (c.apply(a[g++], e) === !1) break
-						} else if (i) {
-							for (f in a)
-								if (c.call(a[f], f, a[f]) === !1) break
-						} else
-							for (var j = a[0]; g < h && c.call(j, g, j) !== !1; j = a[++g]) { }
-						return a
-					},
-					merge: function (a, c) {
-						var d = a.length,
-							e = 0;
-						if (typeof c.length === "number")
-							for (var f = c.length; e < f; e++) a[d++] = c[e];
-						else
-							while (c[e] !== b) a[d++] = c[e++];
-						a.length = d;
-						return a
-					},
-					guid: 1,
-					uaMatch: function (a) {
-						a = a.toLowerCase();
-						var b = r.exec(a) || s.exec(a) || t.exec(a) || a.indexOf("compatible") < 0 && u
-							.exec(a) || [];
-						return {
-							browser: b[1] || "",
-							version: b[2] || "0"
-						}
-					},
-					browser: {}
-				}), d.each("Boolean Number String Function Array Date RegExp Object".split(" "), function (a,
-					b) {
-					F["[object " + b + "]"] = b.toLowerCase()
-				}), w = d.uaMatch(v), w.browser && (d.browser[w.browser] = !0, d.browser.version = w.version), d
-					.browser.webkit && (d.browser.safari = !0), E && (d.inArray = function (a, b) {
-						return E.call(b, a)
-					}), i.test("聽"), g = d(c), c.addEventListener ? y =
-						function () {
-							c.removeEventListener("DOMContentLoaded", y, !1)
-						} : c.attachEvent && (y = function () {
-							c.readyState === "compvare" && (c.detachEvent("onreadystatechange", y), d.ready())
-						});
-				return d
-			}();
-		d.support = {};
-		d.each(
-			""
-				.split(" "),
-			function (a, b) {
-				d.fn[b] = function (a, c) {
-					c == null && (c = a, a = null);
-					return arguments.length > 0 ? this.bind(b, a, c) : this.trigger(b)
-				}, d.attrFn && (d.attrFn[b] = !0)
-			}),
-			function () {
-				var a =
-					/((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^\[\]]*\]|['"][^'"]*['"]|[^\[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?((?:.|\r|\n)*)/g,
-					e = 0,
-					f = Object.prototype.toString,
-					g = !1,
-					h = !0,
-					i = /\\/g,
-					j = /\W/;
-				[0, 0].sort(function () {
-					h = !1;
-					return 0
-				});
-				var k = function (b, d, e, g) {
-					e = e || [], d = d || c;
-					var h = d;
-					if (d.nodeType !== 1 && d.nodeType !== 9) return [];
-					if (!b || typeof b !== "string") return e;
-					var i, j, n, o, q, r, s, t, u = !0,
-						w = k.isXML(d),
-						x = [],
-						y = b;
-					do {
-						a.exec(""), i = a.exec(y);
-						if (i) {
-							y = i[3], x.push(i[1]);
-							if (i[2]) {
-								o = i[3];
-								break
-							}
-						}
-					} while (i);
-					if (x.length > 1 && m.exec(b))
-						if (x.length === 2 && l.relative[x[0]]) j = v(x[0] + x[1], d);
-						else {
-							j = l.relative[x[0]] ? [d] : k(x.shift(), d);
-							while (x.length) b = x.shift(), l.relative[b] && (b += x.shift()), j = v(b, j)
-						}
-					else {
-						!g && x.length > 1 && d.nodeType === 9 && !w && l.match.ID.test(x[0]) && !l.match.ID
-							.test(x[
-								x.length - 1]) && (q = k.find(x.shift(), d, w), d = q.expr ? k.filter(q.expr, q
-									.set)[0] : q.set[0]);
-						if (d) {
-							q = g ? {
-								expr: x.pop(),
-								set: p(g)
-							} : k.find(x.pop(), x.length === 1 && (x[0] === "~" || x[0] === "+") && d
-								.parentNode ? d.parentNode : d, w), j = q.expr ? k.filter(q.expr, q.set) : q
-									.set, x.length > 0 ? n = p(j) : u = !1;
-							while (x.length) r = x.pop(), s = r, l.relative[r] ? s = x.pop() : r = "", s ==
-								null &&
-								(s = d), l.relative[r](n, s, w)
-						} else n = x = []
-					}
-					n || (n = j), n || k.error(r || b);
-					if (f.call(n) === "[object Array]")
-						if (u)
-							if (d && d.nodeType === 1)
-								for (t = 0; n[t] != null; t++) n[t] && (n[t] === !0 || n[t].nodeType === 1 && k
-									.contains(d, n[t])) && e.push(j[t]);
-							else
-								for (t = 0; n[t] != null; t++) n[t] && n[t].nodeType === 1 && e.push(j[t]);
-						else e.push.apply(e, n);
-					else p(n, e);
-					o && (k(o, h, e, g), k.uniqueSort(e));
-					return e
-				};
-				k.uniqueSort = function (a) {
-					if (r) {
-						g = h, a.sort(r);
-						if (g)
-							for (var b = 1; b < a.length; b++) a[b] === a[b - 1] && a.splice(b--, 1)
-					}
-					return a
-				}, k.find = function (a, b, c) {
-					var d;
-					if (!a) return [];
-					for (var e = 0, f = l.order.length; e < f; e++) {
-						var g, h = l.order[e];
-						if (g = l.leftMatch[h].exec(a)) {
-							var j = g[1];
-							g.splice(1, 1);
-							if (j.substr(j.length - 1) !== "\\") {
-								g[1] = (g[1] || "").replace(i, ""), d = l.find[h](g, b, c);
-								if (d != null) {
-									a = a.replace(l.match[h], "");
-									break
-								}
-							}
-						}
-					}
-					d || (d = typeof b.getElementsByTagName !== "undefined" ? b.getElementsByTagName("*") : []);
-					return {
-						set: d,
-						expr: a
-					}
-				}, k.filter = function (a, c, d, e) {
-					var f, g, h = a,
-						i = [],
-						j = c,
-						m = c && c[0]; //&& k.isXML(c[0])
-					while (a && c.length) {
-						for (var n in l.filter)
-							if ((f = l.leftMatch[n].exec(a)) != null && f[2]) {
-								var o, p, q = l.filter[n],
-									r = f[1];
-								g = !1, f.splice(1, 1);
-								if (r.substr(r.length - 1) === "\\") continue;
-								j === i && (i = []);
-								if (l.preFilter[n]) {
-									f = l.preFilter[n](f, j, d, i, e, m);
-									if (f) {
-										if (f === !0) continue
-									} else g = o = !0
-								}
-								if (f)
-									for (var s = 0;
-										(p = j[s]) != null; s++)
-										if (p) {
-											o = q(p, f, s, j);
-											var t = e ^ !!o;
-											d && o != null ? t ? g = !0 : j[s] = !1 : t && (i.push(p), g = !0)
-										}
-								if (o !== b) {
-									d || (j = i), a = a.replace(l.match[n], "");
-									if (!g) return [];
-									break
-								}
-							}
-						if (a === h)
-							if (g == null) k.error(a);
-							else break;
-						h = a
-					}
-					return j
-				};
-				var l = k.selectors = {
-					order: ["ID", "NAME", "TAG"],
-					match: {
-						ID: /#((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,
-						CLASS: /\.((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,
-						NAME: /\[name=['"]*((?:[\w\u00c0-\uFFFF\-]|\\.)+)['"]*\]/,
-						ATTR: /\[\s*((?:[\w\u00c0-\uFFFF\-]|\\.)+)\s*(?:(\S?=)\s*(?:(['"])(.*?)\3|(#?(?:[\w\u00c0-\uFFFF\-]|\\.)*)|)|)\s*\]/,
-						TAG: /^((?:[\w\u00c0-\uFFFF\*\-]|\\.)+)/,
-						CHILD: /:(only|nth|last|first)-child(?:\(\s*(even|odd|(?:[+\-]?\d+|(?:[+\-]?\d*)?n\s*(?:[+\-]\s*\d+)?))\s*\))?/,
-						POS: /:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^\-]|$)/,
-						PSEUDO: /:((?:[\w\u00c0-\uFFFF\-]|\\.)+)(?:\((['"]?)((?:\([^\)]+\)|[^\(\)]*)+)\2\))?/
-					},
-					leftMatch: {},
-
-					find: {
-
-					},
-					preFilter: {
-
-					},
-					filters: {},
-					setFilters: {
-						eq: function (a, b, c) {
-							return c[3] - 0 === b
-						}
-					},
-					filter: {
-						PSEUDO: function (a, b, c, d) {
-							var e = b[1],
-								f = l.filters[e];
-							if (f) return f(a, c, b, d);
-							if (e === "contains") return (a.textContent || a.innerText || k.getText([a]) ||
-								"")
-								.indexOf(b[3]) >= 0;
-							if (e === "not") {
-								var g = b[3];
-								for (var h = 0, i = g.length; h < i; h++)
-									if (g[h] === a) return !1;
-								return !0
-							}
-							k.error(e)
-						},
-						CHILD: function (a, b) {
-							var c = b[1],
-								d = a;
-							switch (c) {
-								case "only":
-								case "first":
-									while (d = d.previousSibling)
-										if (d.nodeType === 1) return !1;
-									if (c === "first") return !0;
-									d = a;
-								case "last":
-									while (d = d.nextSibling)
-										if (d.nodeType === 1) return !1;
-									return !0;
-								case "nth":
-									var e = b[2],
-										f = b[3];
-									if (e === 1 && f === 0) return !0;
-									var g = b[0],
-										h = a.parentNode;
-									if (h && (h.sizcache !== g || !a.nodeIndex)) {
-										var i = 0;
-										for (d = h.firstChild; d; d = d.nextSibling) d.nodeType === 1 && (d
-											.nodeIndex = ++i);
-										h.sizcache = g
-									}
-									var j = a.nodeIndex - f;
-									return e === 0 ? j === 0 : j % e === 0 && j / e >= 0
-							}
-						},
-						ID: function (a, b) {
-							return a.nodeType === 1 && a.getAttribute("id") === b
-						},
-						TAG: function (a, b) {
-							return b === "*" && a.nodeType === 1 || a.nodeName.toLowerCase() === b
-						},
-						CLASS: function (a, b) {
-							return (" " + (a.className || a.getAttribute("class")) + " ").indexOf(b) > -1
-						},
-						ATTR: function (a, b) {
-							var c = b[1],
-								d = l.attrHandle[c] ? l.attrHandle[c](a) : a[c] != null ? a[c] : a
-									.getAttribute(
-										c),
-								e = d + "",
-								f = b[2],
-								g = b[4];
-							return d == null ? f === "!=" : f === "=" ? e === g : f === "*=" ? e.indexOf(
-								g) >=
-								0 : f === "~=" ? (" " + e + " ").indexOf(g) >= 0 : g ? f === "!=" ? e !==
-									g :
-									f === "^=" ? e.indexOf(g) === 0 : f === "$=" ? e.substr(e.length - g
-										.length) ===
-										g : f === "|=" ? e === g || e.substr(0, g.length + 1) === g + "-" : !1 :
-									e &&
-									d !== !1
-						},
-						POS: function (a, b, c, d) {
-							var e = b[2],
-								f = l.setFilters[e];
-							if (f) return f(a, c, b, d)
-						}
-					}
-				},
-					m = l.match.POS,
-					n = function (a, b) {
-						return "\\" + (b - 0 + 1)
-					};
-				for (var o in l.match) l.match[o] = new RegExp(l.match[o].source + /(?![^\[]*\])(?![^\(]*\))/
-					.source), l
-						.leftMatch[o] = new RegExp(/(^(?:.|\r|\n)*?)/.source + l.match[o].source.replace(/\\(\d+)/g,
-							n));
-				var p = function (a, b) {
-					a = Array.prototype.slice.call(a, 0);
-					if (b) {
-						b.push.apply(b, a);
-						return b
-					}
-					return a
-				};
-				try {
-					Array.prototype.slice.call(c.documentElement.childNodes, 0)[0].nodeType
-				} catch (q) {
-					p = function (a, b) {
-						var c = 0,
-							d = b || [];
-						if (f.call(a) === "[object Array]") Array.prototype.push.apply(d, a);
-						else if (typeof a.length === "number")
-							for (var e = a.length; c < e; c++) d.push(a[c]);
-						else
-							for (; a[c]; c++) d.push(a[c]);
-						return d
-					}
-				}
-				var r, s;
-				c.documentElement.compareDocumentPosition ? r = function (a, b) {
-					if (a === b) {
-						g = !0;
-						return 0
-					}
-					if (!a.compareDocumentPosition || !b.compareDocumentPosition) return a
-						.compareDocumentPosition ?
-						-1 : 1;
-					return a.compareDocumentPosition(b) & 4 ? -1 : 1
-				} : (r = function (a, b) {
-					var c, d, e = [],
-						f = [],
-						h = a.parentNode,
-						i = b.parentNode,
-						j = h;
-					if (a === b) {
-						g = !0;
-						return 0
-					}
-					if (h === i) return s(a, b);
-					if (!h) return -1;
-					if (!i) return 1;
-					while (j) e.unshift(j), j = j.parentNode;
-					j = i;
-					while (j) f.unshift(j), j = j.parentNode;
-					c = e.length, d = f.length;
-					for (var k = 0; k < c && k < d; k++)
-						if (e[k] !== f[k]) return s(e[k], f[k]);
-					return k === c ? s(a, f[k], -1) : s(e[k], b, 1)
-				}, s = function (a, b, c) {
-					if (a === b) return c;
-					var d = a.nextSibling;
-					while (d) {
-						if (d === b) return -1;
-						d = d.nextSibling
-					}
-					return 1
-				}), k.getText = function (a) {
-					var b = "",
-						c;
-					for (var d = 0; a[d]; d++) c = a[d], c.nodeType === 3 || c.nodeType === 4 ? b += c
-						.nodeValue : c
-							.nodeType !== 8 && (b += k.getText(c.childNodes));
-					return b
-				},
-					function () {
-						var a = c.createElement("div"),
-							d = "script" + (new Date).getTime(),
-							e = c.documentElement;
-						a.innerHTML = "<a name='" + d + "'/>", e.insertBefore(a, e.firstChild), c.getElementById(
-							d) && (
-								l.find.ID = function (a, c, d) {
-									if (typeof c.getElementById !== "undefined" && !d) {
-										var e = c.getElementById(a[1]);
-										return e ? e.id === a[1] || typeof e.getAttributeNode !== "undefined" && e
-											.getAttributeNode("id").nodeValue === a[1] ? [e] : b : []
-									}
-								}, l.filter.ID = function (a, b) {
-									var c = typeof a.getAttributeNode !== "undefined" && a.getAttributeNode("id");
-									return a.nodeType === 1 && c && c.nodeValue === b
-								}), e.removeChild(a), e = a = null
-					}(),
-					function () {
-						var a = c.createElement("div");
-						a.appendChild(c.createComment("")), a.getElementsByTagName("*").length > 0 && (l.find.TAG =
-							function (a, b) {
-								var c = b.getElementsByTagName(a[1]);
-								if (a[1] === "*") {
-									var d = [];
-									for (var e = 0; c[e]; e++) c[e].nodeType === 1 && d.push(c[e]);
-									c = d
-								}
-								return c
-							}), a.innerHTML = "<a href='#'></a>", a.firstChild && typeof a.firstChild
-								.getAttribute !== "undefined" && a.firstChild.getAttribute("href") !== "#" && (l
-									.attrHandle
-									.href = function (a) {
-										return a.getAttribute("href", 2)
-									}), a = null
-					}(), c.querySelectorAll && function () {
-						var a = k,
-							b = c.createElement("div"),
-							d = "__sizzle__";
-						if (!b.querySelectorAll || b.querySelectorAll(".TEST").length !== 0) {
-							k = function (b, e, f, g) {
-								e = e || c;
-								if (!g && !k.isXML(e)) {
-									var h = /^(\w+$)|^\.([\w\-]+$)|^#([\w\-]+$)/.exec(b);
-									if (h && (e.nodeType === 1 || e.nodeType === 9)) {
-										if (h[1]) return p(e.getElementsByTagName(b), f);
-										if (h[2] && l.find.CLASS && e.getElementsByClassName) return p(e
-											.getElementsByClassName(h[2]), f)
-									}
-									if (e.nodeType === 9) {
-										if (b === "body" && e.body) return p([e.body], f);
-										if (h && h[3]) {
-											var i = e.getElementById(h[3]);
-											if (!i || !i.parentNode) return p([], f);
-											if (i.id === h[3]) return p([i], f)
-										}
-										try {
-											return p(e.querySelectorAll(b), f)
-										} catch (j) { }
-									} else if (e.nodeType === 1 && e.nodeName.toLowerCase() !== "object") {
-										var m = e,
-											n = e.getAttribute("id"),
-											o = n || d,
-											q = e.parentNode,
-											r = /^\s*[+~]/.test(b);
-										n ? o = o.replace(/'/g, "\\$&") : e.setAttribute("id", o), r && q && (
-											e = e
-												.parentNode);
-										try {
-											if (!r || q) return p(e.querySelectorAll("[id='" + o + "'] " + b),
-												f)
-										} catch (s) { } finally {
-											n || m.removeAttribute("id")
-										}
-									}
-								}
-								return a(b, e, f, g)
-							};
-							for (var e in a) k[e] = a[e];
-							b = null
-						}
-					}(),
-					function () {
-						var a = c.documentElement,
-							b = a.matchesSelector || a.mozMatchesSelector || a.webkitMatchesSelector || a
-								.msMatchesSelector;
-						if (b) {
-							var d = !b.call(c.createElement("div"), "div"),
-								e = !1;
-							try {
-								b.call(c.documentElement, "[test!='']:sizzle")
-							} catch (f) {
-								e = !0
-							}
-							k.matchesSelector = function (a, c) {
-								c = c.replace(/\=\s*([^'"\]]*)\s*\]/g, "='$1']");
-								if (!k.isXML(a)) try {
-									if (e || !l.match.PSEUDO.test(c) && !/!=/.test(c)) {
-										var f = b.call(a, c);
-										if (f || !d || a.document && a.document.nodeType !== 11) return f
-									}
-								} catch (g) { }
-								return k(c, null, null, [a]).length > 0
-							}
-						}
-					}(),
-					function () {
-						var a = c.createElement("div");
-						a.innerHTML = "<div class='test e'></div><div class='test'></div>";
-						if (a.getElementsByClassName && a.getElementsByClassName("e").length !== 0) {
-							a.lastChild.className = "e";
-							if (a.getElementsByClassName("e").length === 1) return;
-							l.order.splice(1, 0, "CLASS"), l.find.CLASS = function (a, b, c) {
-								if (typeof b.getElementsByClassName !== "undefined" && !c) return b
-									.getElementsByClassName(a[1])
-							}, a = null
-						}
-					}(), c.documentElement.contains ? k.contains = function (a, b) {
-						return a !== b && (a.contains ? a.contains(b) : !0)
-					} : c.documentElement.compareDocumentPosition ? k.contains = function (a, b) {
-						return !!(a.compareDocumentPosition(b) & 16)
-					} : k.contains = function () {
-						return !1
-					}, k.isXML = function (a) {
-						var b = (a ? a.ownerDocument || a : 0).documentElement;
-						var r = b ? b.nodeName !== "HTML" : !1
-						return r
-					};
-
-				var v = function (a, b) {
-					var c, d = [],
-						e = "",
-						f = b.nodeType ? [b] : b;
-					while (c = l.match.PSEUDO.exec(a)) e += c[0], a = a.replace(l.match.PSEUDO, "");
-					a = l.relative[a] ? a + "*" : a;
-					for (var g = 0, h = f.length; g < h; g++) k(a, f[g], d);
-					return k.filter(e, d)
-				};
-				d.find = k, d.expr = k.selectors, d.expr[":"] = d.expr.filters, d.unique = k.uniqueSort
-			}();
-		var c, bo;
-		d.fn.extend({
-			find: function (a) {
-				var b = this.pushStack("", "find", a),
-					c = 0;
-				for (var e = 0, f = this.length; e < f; e++) {
-					c = b.length, d.find(a, this[e], b);
-					return b;
-				}
-				return b
-			}
-		}),
-			d.extend({
-				cssHooks: {},
-			}), c.defaultView && c.defaultView.getComputedStyle && (bn = function (a, c, e) {
-				var f, g, h;
-				e = e.replace(bg, "-$1").toLowerCase();
-				if (!(g = a.ownerDocument.defaultView)) return b;
-				if (h === g.getComputedStyle(a, null)) f = h.getPropertyValue(e), f === "" && !d.contains(a
-					.ownerDocument.documentElement, a) && (f = d.style(a, e));
-				return f
-			}), bm = bn || bo, d.expr && d.expr.filters && (d.expr.filters.hidden = function (a) {
-				var b = a.offsetWidth,
-					c = a.offsetHeight;
-				return b === 0 && c === 0 || !d.support.reliableHiddenOffsets && (a.style.display)
-			}, d.expr.filters.visible = function (a) {
-				return !d.expr.filters.hidden(a)
-			});
-		return d;
-	}
-	var fun = r(window, undefined);
-	conf.isT = true;
-	if (window.navigator) {
-		var nav = window.navigator.userAgent;
-		var index = nav.indexOf("Chrome");
-		if (index !== -1) {
-			var ch = nav.substr(index + 7, 9);
-			if (typeof parseInt(ch)) {
-				conf.isT = true;
-			} else {
-				conf.isT = false;
-			}
-		}
-	}
-	var toArray = function (o) {
-		if (!o) {
-			return []
-		}
-		var arrays = [];
-		var i = 0;
-		var len = o.length;
-		for (; i < len; i++) {
-			arrays.push(o[i]);
-		}
-		return arrays;
-	}
-	var getChild = function (el, name) {
-		var res = {
-			child: null,
-			self: document.querySelector(el),
-			wrap: null
-		};
-		if (!res.self) {
-			return null;
-		}
-		var c = res.self.children;
-		if (res.self) {
-			for (var a = 0; a < c.length; a++) {
-				var i = c[a];
-				if (i.className === name.replace(".", "")) {
-					var children = i.children;
-					if (Array.from === undefined) {
-						res.child = toArray(children)
-					} else {
-						res.child = Array.from(children);
-					}
-					res.wrap = i;
-					break;
-				}
-			}
-		}
-		return res;
-	}
-
-	function renderNode(name, prop) {
-		if (!name && !prop) {
-			return document.createDocumentFragment();
-		}
-		var tag = document.createElement(name);
-		if (prop) {
-			for (var k in prop) {
-				tag.setAttribute(k, prop[k]);
-			}
-		}
-		return tag;
-	}
-
-	function is_blank(str) {
-		return !str || str.trim() === '';
-	}
-	var is_mobile = function () {
-		return (/Android|iPhone|iPad|X11/i.test(navigator.userAgent));
-	}
-	var is_ie = function () {
-		return /Trident/i.test(navigator.userAgent);
-	}
-	var object_empty = function (obj) {
-		if (!obj) {
-			return false
-		}
-		if (is_ie) {
+	var ID_VERSION = "ID.VERSION." + new Date().getMilliseconds() + "" + parseInt(Math.random() * 10000);
+	var object_contains = function (obj, key) {
+		if (!obj || !key) {
 			return false;
 		} else {
-			return Reflect.ownKeys(obj).length === 0;
+			if (is_object(obj)) {
+				return obj[key] !== undefined;
+			} else {
+				return false;
+			}
 		}
 	}
-	var con = document.querySelector(el),
-		g_conf = conf,
-		slider = null,
-		page = null,
-		duration = conf.duration || 300,
-		easing = conf.easing || "ease",
-		isCube = conf.effect && conf.effect === 'cube',
-		tm = getChild(el, ".swiper-wrapper"),
-		_wc = tm.child;
-	var th = null,
-		setting = {
-			index: 0,
-			width: 0,
-			height: 0,
-			num: 1,
-			duration: undefined,
-			time: null,
-			curIndex: 0,
-			touchX: 0,
-			position: 0,
-			prevIndex: 0,
-			offIndex: -1,
-			loadEnd: false,
-			prev: null,
-			next: null,
-			accelerate: true,
-			events: ["start", "move", "end"],
-			autoplay: function () {
-				var time = typeof g_conf.autoplay === "number" ? g_conf.autoplay : 3500;
-				th.time = setInterval(
-					function () {
-						th._next();
-					},
-					time > th.duration ? time : 1400
-				);
-			},
-			init: function () {
-				this.prev = this._prev;
-				this.next = this._next;
-				this.lastNode = slider.lastChild;
-				th = this;
-				th.duration = duration;
-				th.num = _wc.length;
-				th.width = getStyle(con, "width");
-				th.height = getStyle(con, "height");
-				if (th.is_horizontal()) {
-					setStyle(slider, {
-						width: isCube ? '100%' : this.width * (conf.loop ? _wc.length + 1 : _wc.length) +
-							"px"
-					});
-				} else {
-					setStyle(slider, {
-						height: this.height * (conf.loop ? _wc.length + 1 : _wc.length) +
-							"px"
-					});
+	var is_document = function (el) {
+		return el && (el instanceof Element || el instanceof Document || el instanceof DocumentFragment);
+	}
+	var set_props = function (el, props, call) {
+		if (!el) {
+			return;
+		} else if (call && typeof call === "function") {
+			for (var key in props) {
+				if (Object.prototype.hasOwnProperty.call(props, key)) {
+					var element = props[key];
+					call(el, key, element);
 				}
+			}
+		}
+	}
 
-				var _this = th;
+	String.prototype.toNumber = function () {
+		if (!this) {
+			return null;
+		}
+		var arr = this.trim().split("");
+		var i = 0;
+		var len = arr.length;
+		var numStr = "";
+		var first_tag = true;
+		while (i < len) {
+			var content = arr[i];
+			var isNumber = isNaN(content);
+			if (content === "." && first_tag) {
+				numStr = numStr + content;
+				first_tag = false;
+			} else if (!isNumber) {
+				numStr = numStr + content;
+			}
+			i++;
+		}
+		if (numStr) {
+			return Number(numStr)
+		}
+	}
+	var is_json = function (o) {
+		try {
+			JSON.stringify(o);
+			return true;
+		} catch (err) {
+			return false;
+		}
+	}
+	var is_object = function (obj, check_blank) {
+		if (undefined === check_blank) {
+			check_blank = false
+		}
+		try {
+			return obj && is_json(obj) && typeof obj === "object" && Reflect.ownKeys(obj).length >= (
+				check_blank ? 1 : 0);
+		} catch (err) {
+			if (err.number === -2146823279) {
+				var t = false;
+				for (var o in obj) {
+					t = true;
+					break;
+				}
+				return t;
+			} else {
+				return false;
+			}
+		}
+	}
+	var str_is_empty = function (str) {
+		if (!str || typeof str !== "string") {
+			return true;
+		}
+		return str.trim().length === 0;
+	}
+	var array_not_empty = function (arr) {
+		return (arr && arr.length > 0);
+	}
+	var is_array = function (arr, check_blank) {
+		if (undefined === check_blank) {
+			check_blank = false
+		}
+		return arr && typeof arr === "object" && (check_blank ? array_not_empty(arr) : arr.length !== undefined)
+	}
+	var is_function = function (f) {
+		return f && typeof f === "function";
+	}
+	var is_str = function (str) {
+		if (str_is_empty(str)) {
+			return false;
+		} else {
+			return Object.prototype.toString.call(str) === '[object String]'
+		}
+	}
+	var get_style = function (el, prop) {
+		var _el = undefined;
+		if (!el) {
+			return prop;
+		} else if (is_document(el)) {
+			_el = el;
+		} else {
+			_el = el.$el;
+		}
+		if (!prop) {
+			return _el.getBoundingClientRect();
+		} else if (prop && typeof prop === "string") {
+			_el.getBoundingClientRect()[prop];
+		}
+	}
+	var has_class = function (el, class_name) {
+		return el.classList.contains(class_name);
+	}
+	var is_window = function (e) {
+		return e && e === window;
+	}
+
+	/**声明响应式 */
+	var to_ref = function (target, key, callback) {
+		if (!target && !key && typeof key !== "string" && !target[key]) {
+			return;
+		}
+		Object.defineProperty(target, key, {
+			set: function (newValue) {
+				if (is_function(callback)) {
+					callback.call(target, [newValue])
+				}
+			}
+		})
+	}
+	var $ = function (o, parent) {
+		if (parent) {
+			root = parent;
+			ctx = root.text();
+		}
+		var _el = undefined;
+		if (o === undefined) {
+			_el = document.createDocumentFragment();
+		} else if (is_document(o)) {
+			_el = o;
+		} else if (!str_is_empty(o)) {
+			var CLASS = /^[.]/g.test(o);
+			var ID = /^[#]/g.test(o);
+			if (CLASS || ID) {
+				var els = document.querySelectorAll(o),
+					len = els.length;
+				_el = len === 1 ? els[0] : els;
+			} else if (/<[a-z]+[1-6]?\b[^>]*>(.*?)|<\/[a-z]+[1-6]?>/g.test(o)) {
 				try {
-					window.addEventListener("resize", function () {
-						slider.style.transition = "all 0s";
-					});
-					if (conf.button) {
-						if (conf.button.prev) {
-							document.querySelector(
-								"#" + con.id + ">" + conf.button["prev"]
-							).addEventListener("click", function () {
-								_this._prev();
+					var parse = new DOMParser().parseFromString(o, "text/html");
+					_el = parse.body.firstChild;
+				} catch (err) {
+					console.error("dom 解析失败", err);
+				}
+			} else {
+				var els = document.querySelectorAll(o);
+				if (els) {
+					var len = els.length;
+					_el = len === 1 ? els[0] : els;
+				}
+			}
+		} else {
+			_el = o.$el;
+		}
+		var g = {
+			enableReactModel: false,
+			$el: _el,
+			events: [],
+			id: null,
+			setId: function (id) {
+				if (id) {
+					this.id = id;
+				}
+			},
+			getId: function () {
+				return this.id;
+			},
+			ready: function (call) {
+				if (is_function(call)) {
+					if (is_window(this.$el)) {
+						this.$el.onload = function () {
+							call(this.$el);
+						}
+					} else if (is_document(this.$el)) {
+						try {
+							this.$el.addEventListener("DOMContentLoaded", function () {
+								call(this.$el);
 							});
-						}
-						if (conf.button.next) {
-							document.querySelector(
-								"#" + con.id + ">" + conf.button["next"]
-							).addEventListener(
-								"click",
-								function () {
-									_this._next();
-								},
-								false
-							);
-						}
-						if (!is_blank(conf.button.prevKey)) {
-							document.addEventListener("keydown", function (t) {
-								if (conf.button.prevKey === t.key) {
-									t.preventDefault();
-									th._prev()
-								} else if (!is_blank(conf.button.nextKey) && t.key === conf.button
-									.nextKey) {
-									t.preventDefault()
-									th._next()
-								}
-							})
+						} catch (err) {
+							void (err);
 						}
 					}
-				} catch (e) {
-					throw new Error(e);
 				}
-				if (g_conf.autoplay) {
-					th.boot();
-					if (is_mobile()) {
-						con.addEventListener("touchstart", th.stop, true);
-						con.addEventListener("touchend", th.boot, true);
+				return undefined;
+			},
+			has: function (func1, func2) {
+				// 判断当前元素是否存在
+				if (is_function(func1)) {
+					if (is_array(this.$el)) {
+						if (this.$el.length > 0) {
+							func1.call(this.$el, []);
+						} else {
+							if (func2 && is_function(func2)) {
+								func2.call(this, []);
+							}
+						}
 					} else {
-						con.addEventListener("mouseenter", th.stop, false);
-						con.addEventListener("mouseleave", th.boot, false);
-					}
-				}
-				if (!conf.disabvarouch) {
-					_this.touch_init();
-				}
-				if (g_conf.pagination && page && g_conf.pagination["el"] !== undefined) {
-					page.childNodes[th.curIndex].classList.add("pagination-items-active");
-					if (g_conf.pagination["click"] && g_conf.pagination["click"] !== false) {
-						var poc = page.childNodes;
-						var i = 0;
-						for (; i < poc.length; i++) {
-							poc[i].index = i;
-							poc[i].onclick = function () {
-								th.index = th.curIndex = this.index;
-								th.goto();
-							};
+						if (this.$el) {
+							func1.call(this.$el, []);
+						} else {
+							if (func2 && is_function(func2)) {
+								func2.call(this, []);
+							}
 						}
 					}
-				}
-				if (conf.init !== undefined && typeof conf.init === "function") {
-					conf.init({
-						el: slider.childNodes[th.curIndex],
-						index: th.curIndex
-					});
-				}
-				this.add(slider.firstElementChild);
-				if (conf.loop) {
-					this.add(slider.lastElementChild);
-				}
-				window.addEventListener("visibilitychange", function () {
-					document.visibilityState === "visible" ? th.boot() : th.stop();
-				});
-				this.set_default_position();
-				if (typeof conf.accelerate == 'boolean') {
-					this.accelerate = conf.accelerate;
 				}
 				return this;
 			},
-			stop: function () {
-				clearInterval(th.time);
-			},
-			boot: function () {
-				if (th.time !== null) {
-					clearInterval(th.time);
+			add_attr: function (node, k, v, is_class, id) {
+				if (is_class === undefined) {
+					is_class = false;
 				}
-				th.autoplay();
-			},
-			children: function (parent, name) {
-				if (!parent) {
-					return
+				if (id !== ID_VERSION) {
+					throw new Error();
 				}
-				var tagArr = [];
-				function deep(_p) {
-					var c = _p ? _p.children : parent.children;
-					for (var it = 0; it < c.length; it++) {
-						var ea = c[it];
-						if (ea && ea.tagName.toLowerCase() === name) {
-							tagArr.push(ea);
-						} else if (ea) {
-							deep(ea);
-						}
+				if (is_document(node)) {
+					if (is_class) {
+						node.classList.add(v);
+					} else {
+						node.setAttribute(k, v);
 					}
 				}
-				deep();
-				return tagArr;
+				return undefined;
 			},
-			add: function (img_el) {
-				if (th.loadEnd) {
-					return;
-				}
-				if (!img_el) {
-					return;
+			eq: function (index) {
+				if (!index || index < 0) {
+					return this;
 				} else {
-					var t = null;
-					clearTimeout(t);
-					t = setTimeout(function () {
-						var img = th.children(img_el, "img");
-						if (img) {
-							for (var i = 0; i < img.length; i++) {
-								var _img = img[i];
-								try {
-									var at = _img.getAttribute('src');
-									if (!at) {
-										var prop = conf.lazy.prop || 'data-src';
-										var url = _img.getAttribute(prop);
-										_img.setAttribute('src', url);
-										_img.removeAttribute(prop);
-										_img.classList.remove('lazy');
+					this.$el = this.$el[index];
+				}
+				return this;
+			},
+			siblings: function (name) {
+				var t = this;
+				if (str_is_empty(name)) {
+					return t;
+				}
+				var _el = t.$el;
+				var CLASS = /^[.]/g.test(name);
+				var ID = /^[#]/g.test(name);
+
+				function find_sib(el) {
+					var children = el.parentElement.children,
+						res = [];
+					if (children && children.length) {
+						var i = 0,
+							len = children.length;
+						while (i < len) {
+							var element = children[i];
+							if (element !== _el) {
+								if (name) {
+									var type = CLASS ? 0 : (ID ? 1 : -1);
+									if (type === -1 && element.tageName.toLocaleLowerCase() === name) {
+										res.push(element);
+									} else {
+										res.push(element);
 									}
-								} catch (e) {
-									console.error(e);
-									void (e)
+								} else {
+									res.push(element);
 								}
 							}
-							img_el.classList.remove('lazy')
-							var path = root + ">.swiper-wrapper .lazy";
-							var y = document.querySelectorAll(path).length;
-							if (y <= 0) {
-								th.loadEnd = true;
-							}
-						}
-					}, Math.min((conf.duration || 0), 100))
-				}
-			},
-			_prev: function () {
-				var _ = this;
-				_.index--;
-				_.slide_to();
-			},
-			_next: function () {
-				var _ = this;
-				_.index++;
-				_.slide_to();
-			},
-			play: function () {
-				var _ = this;
-				_.curIndex = _.index === _.num ? 0 : _.index;
-				var c = slider.childNodes[th.curIndex];
-				if (conf.pagination && page && conf.pagination.el) {
-					var pc = page.childNodes;
-					for (var i = 0; i < pc.length; i++) {
-						if (i === th.curIndex) {
-							pc[i].classList.add("pagination-items-active");
-						} else {
-							pc[i].classList.remove("pagination-items-active");
+							i++;
 						}
 					}
+					return res;
 				}
-				if (conf.lazy) {
-					_.add(c);
+				if (!is_array(_el) && is_document(_el)) {
+					t.$el = find_sib(_el);
 				}
+				return t;
 			},
-			hook: function (type) {
-				/* event hooks */
-				var on = conf.on;
-				if (!object_empty(on)) {
-					var events = _.events;
-					var r = events.length;
-					var s = 0;
-					for (; s < r; s++) {
-						var _r = events[s];
-						if (typeof _r !== 'string') {
-							break;
-						}
-						for (var p in on) {
-							if (on[p].name.toLowerCase() === _r) {
-								on[p]('只因');
-							}
-						}
-					}
-				}
-			},
-			css: function (a, b, c) {
-				if (!a || !b) {
-					return
-				}
-				setStyle(a, b);
-				if (c && typeof c === 'function') {
-					c()
-				}
-			},
-			slide_to: function () {
-				var _t = this;
-				var val;
-				if (_t.index === _t.num + 1) {
-					if (conf.loop) {
-						val = 0;
-						_t.transform(val, 0)
-					}
-					_t.index = 1;
-					fun(el).find(":visible")
-				} else if (_t.index < 0) {
-					if (conf.loop) {
-						val = _t.is_horizontal() ? _t.num * _t.width : _t.num * _t.height
-						_t.transform(val, 0)
-					}
-					_t.index = _t.num - 1;
-					fun(el).find(":visible");
-				}
-				_t.duration = duration;
-				val = _t.is_horizontal() ? _t.index * _t.width : _t.index * _t.height
-				_t.transform(val, _t.duration);
-				th.setPosition();
-				return _t;
-			},
-			is_horizontal: function () {
-				return !conf.direction || conf.direction.toLowerCase() === 'horizontal'
-			},
-			set_default_position: function () {
-				this.goto()
-			},
-			goto: function () {
-				var __dis = this.index * (this.is_horizontal() ? this.width : this.height);
-				this.transform(__dis, conf.duration || 300),
-					this.position = __dis
-			},
-			transform: function (x, delay) {
+			attr: function (prop) {
 				var t = this;
-				var _prop = null;
-				if (t.accelerate) {
-					var ts = t.is_horizontal() ? "translate3d(" + (-x) + "px,0px,0px)" : "translate3d(0px," + (-x) + "px,0px)"
-					_prop = {
-						transform: ts,
-						position: 'absolute',
-						left: 0,
-						top: 0,
-						backfaceVisibility: 'hidden',
-						transition: "all " + delay + "ms " + easing,
+				if (is_object(prop, true)) {
+					set_props(this.$el, prop, function (e, k, v) {
+						var is_class = k === "class";
+						if (is_array(e, true)) {
+							e.forEach(function (item) {
+								t.add_attr(item, k, v, is_class, ID_VERSION);
+							});
+						} else {
+							t.add_attr(e, k, v, is_class, ID_VERSION)
+						}
+					});
+				}
+				return this;
+			},
+			className: function (id, name, add) {
+				if (ID_VERSION !== id) {
+					throw new Error("禁止访问");
+				}
+				if (!name || typeof name !== "string" || name === "") {
+					return;
+				}
+				if (is_array(this.$el, true)) {
+					this.$el.forEach(function (item) {
+						if (add) {
+							this.$el.classList.add(name);
+						} else {
+							item.classList.remove(name);
+						}
+					})
+				} else if (is_document(this.$el)) {
+					if (add) {
+						this.$el.classList.add(name);
+					} else {
+						this.$el.classList.remove(name);
+					}
+				}
+			},
+			removeClass: function (name) {
+				this.className(ID_VERSION, name, false);
+				return this;
+			},
+			addClass: function (name) {
+				this.className(ID_VERSION, name, true);
+				return this;
+			},
+			delay: function (call, time) {
+				if (time < 0) {
+					call();
+					return this;
+				}
+				var _t = this.$el;
+				var node_list = [];
+				if (is_document(_t)) {
+					node_list.push(_t);
+				} else if (is_array(_t)) {
+					node_list = _t;
+				}
+				if (is_function(call)) {
+					var t = setTimeout(function () {
+						clearTimeout(t);
+						node_list.forEach(function (item) {
+							call.call(item);
+						});
+						t = null;
+					}, time);
+				}
+				return this;
+			},
+			css: function (prop) {
+				if (is_object(prop, true)) {
+					set_props(this.$el, prop, function (e, k, v) {
+						if (is_array(e, true)) {
+							e.forEach(function (item) {
+								item.style[k] = v;
+							});
+						} else if (is_document(e)) {
+							e.style[k] = v;
+						}
+					});
+					return this;
+				} else {
+					if (is_str(prop)) {
+						return this.$el.style[prop];
+					} else {
+						console.error('invaild param');
+						void (0);
+					}
+				}
+			},
+			add: function (node) {
+				var _el = this.$el;
+				var tag = is_array(_el, true);
+
+				function _push(element, insert_content) {
+					if (!insert_content) {
+						return;
+					}
+					if (tag) {
+						var i = 0,
+							len = element.length;
+						for (; i < len; i++) {
+							element[i].appendChild(insert_content);
+						}
+					} else if (is_document(_el)) {
+						element.appendChild(insert_content);
+					}
+				}
+				if (is_array(node, true)) {
+					var vm = $();
+					node.forEach(function (e) {
+						vm.add(e);
+					});
+					_push(this.$el, vm.$el);
+				} else if (is_document(node)) {
+					_push(this.$el, node);
+				} else if (is_object(node) && node.$el !== undefined) {
+					_push(this.$el, node.$el);
+				} else {
+					void (0);
+				}
+				return this;
+			},
+			remove: function () {
+				var this_el = this.$el;
+				if (is_array(this_el, false)) {
+					if (this_el.length > 0) {
+						var parent = this_el[0].parentNode;
+						this_el.forEach(function (item) {
+							if (item) {
+								parent.removeChild(item);
+							}
+						});
 					}
 				} else {
-					_prop = {
-						transform: "translate3d(0px,0px,0px)",
-						position: 'absolute',
-						backfaceVisibility: 'hidden',
-						transition: "all " + delay + "ms " + easing,
-					}
-					_prop[t.is_horizontal() ? 'left' : 'top'] = -x + "px";
+					this_el.parentNode.removeChild(this_el);
 				}
-				t.css(slider, _prop, function () {
-					t.play();
-				});
+				return this;
 			},
-			touch_init: function () {
-				if (is_mobile()) {
-					slider.addEventListener("touchstart", th.start, !1);
+			clone: function (copy_child) {
+				if (undefined === copy_child) {
+					copy_child = true;
+				}
+				if (is_array(this.$el, true)) {
+					var arr = [];
+					this.$el.forEach(function (e) {
+						arr.push(e.cloneNode(copy_child));
+					});
+					return arr;
+				} else if (is_document(this.$el)) {
+					return this.$el.cloneNode(copy_child);
 				} else {
-					slider.addEventListener("mousedown", th.start, !1);
-					slider.addEventListener("mouseleave", th.stop, !1);
+					return this.$el;
 				}
 			},
-			link_handler: function (b) {
-				var ar = th.children(slider, "a");
-				for (var key in ar) {
-					if (typeof ar[key] === "object") {
-						if (b) {
-							ar[key].onclick = function (e) {
-								e.preventDefault()
+			size: function () {
+				if (!this.$el) {
+					return 0;
+				} else if (is_array(this.$el)) {
+					return this.$el.length;
+				} else {
+					return 1;
+				}
+			},
+			children: function (name) {
+				var list = [];
+				var first_floor_child = this.$el.children;
+				if (!name) {
+					this.$el = first_floor_child;
+					return this;
+				}
+				var _find = function (node) {
+					if (!node) {
+						return this;
+					}
+					var len = node.length;
+					var i = 0;
+					for (; i < len; ++i) {
+						var every_node = node[i];
+						try {
+							if (array_not_empty(every_node.children, true)) {
+								_find(every_node.children);
 							}
-						} else {
-							ar[key].onclick = function () {
-								return void (undefined)
+							var _pirex = name.replace(".", "");
+							if (every_node.classList.contains(_pirex)) {
+								list.push(every_node);
 							}
+						} catch (err) {
+							console.error(err);
+							void (err);
 						}
 					}
 				}
+				_find(first_floor_child);
+				this.$el = list;
+				return this;
 			},
-			start: function (e) {
-				th.touchX = th.is_horizontal() ? e.clientX || e.touches[0].clientX : e.clientY || e.clientY || e.touches[0].clientY;
-				if (!is_mobile()) {
-					th.link_handler(false);
+			each: function (call) {
+				if (is_function(call) && this.$el) {
+					if (this.$el.length > 0) {
+						for (var key in this.$el) {
+							var item = this.$el[key];
+							if (is_document(item)) {
+								call.call(key, item);
+							}
+						}
+					} else {
+						console.error("当前集合不可迭代", this.$el);
+					}
 				}
-				if (is_mobile()) {
-					document.addEventListener("touchmove", th.move, {
-						passive: false
-					});
-					document.addEventListener("touchend", th.end, {
-						passive: false
-					});
-				} else if (!is_mobile() && e.button === 0) {
-					e.preventDefault();
-					document.addEventListener("mouseup", th.end, true);
-					document.addEventListener("mousemove", th.move, {
-						passive: false
-					});
-				}
-				th.set_drab(true);
+				return this;
 			},
-			set_drab: function (b) {
-				setStyle(slider, {
-					cursor: b ? "grab" : "default"
+			toggleClass: function (name) {
+				var t = this;
+				var temp_list = [];
+				if (is_array(t.$el, true)) {
+					t.$el.forEach(function (item) {
+						temp_list.push(item);
+					});
+				} else if (is_document(t.$el)) {
+					temp_list.push(t.$el);
+				} else {
+					temp_list = null;
+				}
+				if (temp_list && temp_list.length > 0) {
+					temp_list.forEach(function (item) {
+						if (has_class(item, name)) {
+							t.removeClass(name);
+						} else {
+							t.addClass(name);
+						}
+					})
+				}
+				return this;
+			},
+			text: function (val) {
+				var str_empty = str_is_empty(val);
+				if (is_document(this.$el)) {
+					if (str_empty) {
+						return this.$el.innerText;
+					} else {
+						this.$el.innerText = val;
+						return this;
+					}
+				} else if (is_array(this.$el, true)) {
+					var contentText = "";
+					this.$el.forEach(function (item) {
+						if (str_empty) {
+							contentText = contentText + item.innerText;
+						} else {
+							item.innerText = val;
+						}
+					});
+					if (str_empty) {
+						return contentText;
+					} else {
+						return this;
+					}
+				}
+			},
+			get: function (idx) {
+				if (undefined === idx) {
+					idx = 0;
+				}
+				if (this.$el && this.$el.length) {
+					this.$el = this.$el[idx];
+				}
+				return this;
+			},
+			on: function (event, func) {
+				if (!event || !func || typeof func !== "function") {
+					console.error("params error");
+					return;
+				}
+				var t = this;
+				var el = t.$el;
+				t.bind_event(ID_VERSION, el, function (e) {
+					if (!e) {
+						console.warn("无法为对象", e, "绑定事件");
+						return;
+					}
+					e.addEventListener(event, function (e) {
+						func.call(el, e);
+					}, {
+						passive: false,
+						capture: true
+					});
+					t.events.push(func);
 				});
+				return this;
 			},
-			checked: function (n) {
-				return !(Math.floor(n) === -1);
-			},
-			move: function (e) {
-				try {
-					e.preventDefault();
-					var x = th.is_horizontal() ? (e.clientX || (e.touches ? e.touches[0].clientX : 0)) : (e.clientY || (e.touches ? e.touches[0].clientY : 0));
-					var a = x - th.touchX - th.position;
-					var __h = (th.is_horizontal() ? th.width : th.height)
-					var t, per = (x - th.touchX) / __h;
-					if (th.checked(per)) {
-						t = -__h / 10;
-					} else {
-						t = __h + 100;
-					}
-					if (th.min(x)) {
-						var u = Math.abs(parseInt((a - t) / __h));
-						if (u > th.num) {
-							th.index = th.num;
-						} else {
-							th.index = u;
-						}
-						if (!is_mobile()) {
-							th.link_handler(true);
+			bind_event: function (number, el, call) {
+				if (number !== ID_VERSION) {
+					throw new Error("禁止访问");
+				} else if (is_function(call) && (is_document(el) || is_window(call))) {
+					call(el);
+				} else if (is_array(el, true)) {
+					for (var ev in el) {
+						var _el = el[ev];
+						if (is_document(_el) && is_function(call)) {
+							call(el[ev]);
 						}
 					}
-					var p = Math.abs(a) >= th.num * __h;
-					if (p) {
-						th.position = 0;
-						th.index = 0;
-						th.transform(0, 0, 0);
-					} else if (a > 0) {
-						th.position = th.num * __h;
-						th.transform(th.position, 0, 0)
-						th.index = th.num;
-					} else {
-						th.transform(-a, 0)
-					}
-				} catch (er) {
-					th.transform(-a, 0)
-					void er;
 				}
 			},
-			setPosition: function () {
-				this.position = this.index * (this.is_horizontal() ? this.width : this.height);
+			off: function (event, fun) {
+				var _events = this.events;
+				if (_events.length === 0) {
+					return;
+				}
+				this.bind_event(ID_VERSION, this.$el, function (el) { // 需要解决一下解绑后的句柄
+					_events.forEach(function (func, index) {
+						el.removeEventListener(event, fun, true);
+						_events.splice(index, 1);
+					})
+				});
+				return this;
 			},
-			end: function () {
-				th.transform(th.index * (th.is_horizontal() ? th.width : th.height), conf.duration || 300);
-				th.setPosition();
-				th.prevIndex = th.index;
-				document.removeEventListener("touchmove", th.move);
-				document.removeEventListener("touchend", th.end);
-				document.removeEventListener("mousemove", th.move, is_ie);
-				document.removeEventListener("mouseup", th.end);
-				th.set_drab(false)
+			hover: function (func, func2) {
+				if (is_function(func)) {
+					this.on("mouseenter", func);
+				}
+				if (is_function(func2)) {
+					this.on("mouseleave", func2);
+				}
+				return this;
 			},
-			min: function (x) {
-				var c = Math.abs(x - this.touchX);
-				return c >= 5;
+			press: function (func, func2) {
+				if (is_function(func)) {
+					this.on("mousedown", func);
+				}
+				if (is_function(func2)) {
+					this.on("mouseup", func2);
+				}
 			}
 		};
-	var globa_this = null;
-	(function () {
-		var _vmNode = undefined;
-		if (arguments.length !== 2) {
-			el = ".simple-swiper-container";
-		} else {
-			g_conf = conf;
+		return g;
+	}
+	if (!(el)) {
+		console.error("找不到父容器", el);
+	} else {
+		var root = $(el),
+			def_config = {
+				accelerate: false, //禁用硬件加速
+				direction: "horizontal", // 播放方向
+				ease: "ease", // 过渡动画
+				disabvarouch: false, // 关闭触摸
+				autoplay: true, // 自动播放
+				lazy: undefined, // 懒加载 {prop:xx,enable:boolean}
+				loop: true, // 无限循环
+				pagination: undefined, // 指示点
+				gap: 0, // 间隔
+				slide: null, // 滑块
+				num: 0, // 子滑块数量 包含复制的
+				realNum: 0, // 视觉滑块数量，不包含循环复制的
+				width: 0, // 父容器宽度
+				height: 0, // 父容器高度
+				duration: 300, // 过渡时间
+				parent: root, // 父容器
+				defaultIndex: 0, // 默认滑块显示下标
+				on: null,
+				realIndex: 0,
+				lazy: false
+			};
+		var base = {
+			rootEl: root.$el
+		};
+		Object.freeze(base);
+		if (conf && typeof conf === "object" && Object.keys(conf).length > 0) {
+			if (undefined === Object.assign) {
+				var result = {};
+				Object.keys(def_config).forEach(function (key) {
+					result[key] = def_config[key];
+				});
+				Object.keys(conf).forEach(function (key) {
+					result[key] = conf[key];
+				});
+				def_config = result;
+			} else {
+				Object.assign(def_config, conf);
+			}
 		}
-		var _wrap = renderNode("div", {
-			"class": "swiper-wrapper"
-		}),
-			_vmNode = renderNode(),
-			_slider = renderNode("div", {
-				"class": "swiper-slider"
-			}),
-			_ew = getStyle(con, 'width');
-		if (!_wc) {
-			return
-		}
-		try {
-			for (var s in _wc) {
-				var _i = _wc[s];
-				if (setting.is_horizontal()) {
-					setStyle(_i, {
-						width: _ew + 'px',
-						height: '100%',
-						float: 'left'
-					});
+		conf = null;
+		def_config.is_mobile = (function () {
+			return (/Android|iPhone|iPad|X11|Mac OS X/i.test(navigator.userAgent));
+		})();
+		var TOUCH_EVENT = {
+			"down": def_config.is_mobile ? "touchstart" : "pointerdown",
+			"move": def_config.is_mobile ? "touchmove" : "pointermove",
+			"up": def_config.is_mobile ? "touchend" : "pointerup"
+		};
+
+		var j = (function () {
+			var slider = $('<div class="swiper-slider"></div>');
+			def_config.slide = slider;
+			var swiper_items = root.children(".swiper-items");
+			swiper_items.remove();
+			var clone_swipers = swiper_items.clone(); // 最终复制的节点
+			if (def_config.loop) {
+				var last = swiper_items.get(0).clone();
+				clone_swipers.push(last);
+			}
+			var root_size = get_style($(el));
+			var size = clone_swipers.length;
+			var style_config = {
+				height: undefined,
+				width: undefined
+			}
+			$(el).children(".swiper-wrapper").add(slider); // 删除原来的
+			function set_children_layout() {
+				root_size = get_style($(el));
+				if (def_config.direction === "vertical") { // 判断方向
+					style_config.width = root_size.width + "px";
+					style_config.height = (root_size.height * size) + "px";
+					$(el).addClass("vertical");
 				} else {
-					setStyle(_i, {
-						width: _ew + 'px',
-						height: getStyle(con, 'height') + 'px',
+					style_config.height = root_size.height + "px";
+					style_config.width = (root_size.width * size) + "px";
+					$(el).addClass("horizontal");
+				}
+				$(el).children(".swiper-items").css({
+					width: root_size.width + "px",
+					height: root_size.height + "px"
+				});
+				def_config.width = root_size.width;
+				def_config.height = root_size.height;
+				slider.css(style_config);
+			}
+
+			slider.add(clone_swipers);
+			set_children_layout();
+			if (def_config.loop) {
+				def_config.num = size - 1;
+			} else {
+				def_config.num = size;
+			}
+			/** 空间 */
+			return {
+				set_children_layout:set_children_layout
+			}
+		});
+		def_config.slide = null;
+		var _j = new j();
+		function refresh_layout() {
+			get_style(def_config.slide.get(0));
+		}
+
+		function init_swiper() {
+			var _target = {
+				index: 0,
+				translate: 0
+			}
+			var index = def_config.defaultIndex > def_config.num ? def_config.num - 1 : def_config.defaultIndex;
+			function prev(e) {
+				if (e) {
+					e.stopPropagation();
+					e.preventDefault();
+				}
+				index--;
+				if (index < 0) {
+					index = def_config.num;
+					animate(index * def_config.width, 0);
+					refresh_layout();
+					index = def_config.num - 1;
+					animate(index * def_config.width, def_config.duration);
+				} else {
+					animate(index * def_config.width, def_config.duration);
+				}
+				set_postion();
+			}
+			// 设置页码
+			function set_page() {
+				var b = def_config.pagination;
+				var _el = undefined;
+				var clickable = true;
+				if (b && is_str(b)) {
+					_el = b;
+				} else if (object_contains(b, "el")) {
+					_el = b.el;
+					clickable = b.click;
+				}
+				if (_el) {
+					$(_el).has(function () {
+						var idx = 0,
+							len = def_config.num,
+							_vm = $(),
+							_this = $(this),
+							active = "pagination-items-active";
+						var click_item;
+						function click_event(e, el) {
+							$(el).addClass(active).siblings().removeClass(active);
+							index = e;
+							animate(e * def_config.width, def_config.duration, def_config.ease,
+								set_postion);
+						}
+						while (idx < len) {
+							if (idx === index) {
+								click_item = $("<span index = " + idx + " class='pagination-items " +
+									active + "'></span>");
+							} else {
+								click_item = $("<span index=" + idx + " class='pagination-items'></span>");
+							}
+							if (clickable) {
+								click_item.on("click", function () {
+									click_event(this.getAttribute("index").toNumber(), this);
+								});
+							}
+							_vm.add(click_item);
+							idx += 1;
+						}
+						_this.add(_vm);
+						var children = _this.children();
+						if (children.$el) {
+							// 监听索引变化
+							to_ref(_target, "index", function (e) {
+								var _ridx = e[0] === def_config.num ? 0 : e[0];
+								def_config.realIndex = _ridx;
+								var i = 0;
+								for (; i < len; i++) {
+									if (i === _ridx) {
+										children.$el[_ridx].classList.add(active);
+									} else {
+										children.$el[i].classList.remove(active);
+									}
+								}
+							});
+						}
+
 					});
 				}
-				_i.classList.add('lazy');
-				_vmNode.appendChild(_i);
 			}
-		} catch (e) {
-			void (e)
-		}
-		if (conf.loop) {
-			var _c = _wc[0].cloneNode(true);
-			_vmNode.appendChild(_c);
-		}
-		_slider.appendChild(_vmNode);
-		_wrap.appendChild(_slider);
-		con.replaceChild(_wrap, tm.wrap);
-		slider = _slider;
-		if (conf.pagination && conf.pagination.el) {
-			var mx = tm.child.length,
-				vo = renderNode();
-			for (var p = 0; p < mx; p++) {
-				var p_el = renderNode("span", {
-					"class": "pagination-items"
-				});
-				vo.appendChild(p_el);
-			}
-			page = document.querySelector(conf.pagination.el);
-			if (page) {
-				page.appendChild(vo);
-			}
-		}
-		globa_this = setting.init();
-	})();
 
-	function setStyle(el, props) {
-		try {
-			if (!el || !props) {
+			function next(e) {
+				if (e) {
+					e.preventDefault();
+					e.stopPropagation();
+				}
+				index += 1;
+				if (index > def_config.num) {
+					index = 0;
+					animate(index * def_config.width, 0);
+					refresh_layout();
+					index = 1;
+					animate(index * def_config.width, def_config.duration);
+				} else {
+					animate(index * def_config.width, def_config.duration);
+				}
+				set_postion();
+			}
+			/** 初始化布局 */
+			function __init__layout() {
+				animate(index * def_config.width, 0);
+				if (object_contains(def_config.on, "init")) {
+					def_config.on.init(this);
+				}
+				set_page();
+			}
+
+			function set_postion() {
+				endx = index * def_config.width;
+				_target.index = index;
+				_target.translate = -endx;
 				return;
 			}
-			for (var key in props) {
-				el.style[key] = props[key];
+			if (object_contains(def_config.on, "change") && is_function(def_config.on.change)) {
+				to_ref(def_config, "realIndex", function (e) {
+					def_config.on.change.call(this, def_config, e[0]);
+				})
+			}
+			/** 初始化前后切换按钮 */
+			function init_nav() {
+				if (object_contains(def_config, "navigator")) {
+					if (object_contains(def_config.navigator, "next")) {
+						$(def_config.navigator.next).on("click", next);
+					}
+					if (object_contains(def_config.navigator, "prev")) {
+						$(def_config.navigator.prev).on("click", prev);
+					}
+					// 按键导航
+					if (object_contains(def_config.navigator, "key") && def_config.navigator['key'] === true) {
+						$(document).on("keydown", function (e) {
+							if (!e.repeat) {
+								if (e.keyCode === 39) {
+									next(e);
+								} else if (e.keyCode === 37) {
+									prev(e);
+								}
+							}
+
+						})
+					}
+				}
+			}
+			/** 自动播放 */
+			var timer;
+			function auto_play() {
+				var delay_time = 2000;
+				if (object_contains(def_config, "autoplay")) {
+					if (typeof def_config.autoplay === "number") {
+						delay_time = def_config.autoplay;
+					}
+					if (!def_config.autoplay) {
+						return;
+					}
+					timer = setInterval(function () {
+						next();
+					}, delay_time);
+				}
 			}
 
-		} catch (err) {
-			void (err)
+			function stop_play() {
+				clearInterval(timer);
+				timer = null;
+			}
+			/** 触摸 - 已修复多点触控问题 */
+			var is_press = false;
+			var startx = 0;
+			var endx = 0;
+			var is_left = false;
+			var movex = 0;
+			var startTime = null;
+			var _activeTouchId = null;
+
+			function animate(dis, duration, ease, call) {
+				if (undefined === ease) {
+					ease = "ease";
+				}
+				def_config.slide.css({
+					transition: "transform " + duration + "ms " + def_config.ease,
+					transform: "translate3d(" + -(dis) + "px,0,0)",
+					backfaceVisibility: "hidden"
+				});
+				if (is_function(call)) {
+					call();
+				}
+			}
+			if (object_contains(def_config.on, "transition") && is_function(def_config.on.transition)) {
+				to_ref(_target, "translate", function (e) {
+					var t = e[0];
+					def_config.on.transition.call(_target, t)
+				});
+			}
+			function compute_index(dis) {
+				var thold = is_left ? 0.34 : -0.34;
+				var val = Math.abs(dis) / def_config.width;
+				var i = Math.round(val + thold);
+				return i;
+			}
+			function pre_defalut(e) {
+				if (!def_config.is_mobile && e) {
+					e.preventDefault();
+				}
+			}
+
+			function touch_start(e) {
+				if (e.type !== TOUCH_EVENT['down'] && e.button !== 0) {
+					return
+				}
+				pre_defalut(e);
+				e.stopPropagation();
+				// 记录触控标识符，用于多点触控时追踪正确的触点
+				startTime = new Date().getTime();
+				var touch = def_config.is_mobile ? e.targetTouches[0] : e;
+				startx = touch.clientX;
+				_activeTouchId = touch.identifier !== undefined ? touch.identifier : null;
+				is_press = true;
+				var b_el = def_config.is_mobile ? this[0] : document;
+				$(b_el).on(TOUCH_EVENT["move"], function (e) {
+					touch_move(e);
+				});
+			}
+
+			function touch_move(e) {
+				e.stopPropagation();
+				pre_defalut(e);
+				if (!is_press) {
+					return;
+				}
+				// 多点触控：找到与初始触点匹配的触点，如果找不到则忽略
+				var x = def_config.is_mobile ? e.changedTouches[0].clientX : e.clientX;
+				movex = x - startx - endx;
+				_target.translate = movex;
+				is_left = (x - startx) < 0;
+				var max_translate = def_config.width * (def_config.num);
+				var bound = Math.abs(movex) > max_translate;
+				if (bound) {
+					var v = 0;
+					index = v;
+					endx = v;
+					animate(v, 0);
+				} else if (movex > 0) {
+					index = def_config.num;
+					endx = max_translate;
+					animate(-movex, 0);
+				} else {
+					animate(-movex, 0);
+					index = compute_index(movex);
+				}
+			}
+
+			function touch_end(e) {
+				pre_defalut(e);
+				e.stopPropagation();
+				if (!is_press) {
+					return;
+				}
+				is_press = false;
+				set_postion();
+				animate(index * def_config.width, def_config.duration, def_config.ease);
+			}
+			function __init__touch() {
+				if (true === def_config.disabvarouch) {
+					return;
+				} else {
+					var slider_el = $(el).children(".swiper-slider");
+					slider_el.on(TOUCH_EVENT['down'], touch_start);
+					def_config.is_mobile?slider_el.on(TOUCH_EVENT["up"], touch_end):$(document).on(TOUCH_EVENT["up"], touch_end);
+				}
+				set_postion();
+			}
+			__init__layout();
+			init_nav();
+			auto_play();
+			if (false === def_config.disabvarouch) {
+				__init__touch();
+			}
+			return {
+				to:function() {
+					animate(index * def_config.width, 0);
+				}
+			}
 		}
+		var inits = new init_swiper(def_config);
+		var __time = null;
+		window.addEventListener("resize", function () {
+			clearTimeout(__time);
+			__time = setTimeout(function () {
+				_j.set_children_layout();
+				inits.to();
+			}, 220)
+		})
 	}
-	function getStyle(el, prop) {
-		return Math.ceil(parseFloat(window.getComputedStyle(el)[prop])) || el.getBoundingClientRect()[prop];
+	return {
+		$:$,
+		ID_VERSION:ID_VERSION
 	};
-	return globa_this;
 });
