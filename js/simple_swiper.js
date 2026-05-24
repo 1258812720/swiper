@@ -901,9 +901,9 @@
 			}
 			/** 自动播放 */
 			var timer;
-			var isIe = navigator.appVersion.indexOf("Trident") !==-1;
+			var isIe = navigator.appVersion.indexOf("Trident") !== -1;
 			function auto_play() {
-				if(isIe){
+				if (isIe) {
 					return;
 				}
 				var delay_time = 2000;
@@ -916,14 +916,21 @@
 					}, delay_time);
 				}
 			}
+			function play_slide(play) {
+				if (!play) {
+					clearInterval(timer);
+					timer = null;
+				} else {
+					auto_play();
+				}
+			}
 			if (object_contains(def_config, "autoplay") && !isIe) {
 				$(el).hover(function (e) {
 					e.stopPropagation();
-					clearInterval(timer);
-					timer = null;
+					play_slide(false);
 				}, function (e) {
 					e.stopPropagation();
-					auto_play();
+					play_slide(true);
 				});
 			}
 			function stop_play() {
@@ -971,9 +978,12 @@
 			}
 
 			function touch_start(e) {
-				if (e.type !== TOUCH_EVENT['down'] && e.button !== 0) {
-					return
+				if (e.type !== TOUCH_EVENT['down']) {
+					return;
+				} else if (e.button && e.button !== 0) {
+					return;
 				}
+				play_slide(false);
 				pre_defalut(e);
 				e.stopPropagation();
 				// 记录触控标识符，用于多点触控时追踪正确的触点
@@ -1019,6 +1029,7 @@
 			function touch_end(e) {
 				pre_defalut(e);
 				e.stopPropagation();
+				play_slide(true);
 				if (!is_press) {
 					return;
 				}
