@@ -568,7 +568,7 @@
 				}
 				return this;
 			},
-			on: function (event, func) {
+			on: function (event, func, opt) {
 				if (!event || !func || typeof func !== "function") {
 					console.error("params error");
 					return;
@@ -580,12 +580,13 @@
 						console.warn("无法为对象", e, "绑定事件");
 						return;
 					}
-					e.addEventListener(event, function (e) {
-						func.call(el, e);
-					}, {
+					var _opt = opt || {
 						passive: false,
 						capture: true
-					});
+					};
+					e.addEventListener(event, function (e) {
+						func.call(el, e);
+					}, _opt);
 					t.events.push(func);
 				});
 				return this;
@@ -619,10 +620,16 @@
 			},
 			hover: function (func, func2) {
 				if (is_function(func)) {
-					this.on("mouseenter", func);
+					this.on("mouseenter", func, {
+						passive: false,
+						capture: false
+					});
 				}
 				if (is_function(func2)) {
-					this.on("mouseleave", func2);
+					this.on("mouseleave", func2, {
+						passive: false,
+						capture: false
+					});
 				}
 				return this;
 			},
@@ -737,7 +744,7 @@
 			}
 			/** 空间 */
 			return {
-				set_children_layout:set_children_layout
+				set_children_layout: set_children_layout
 			}
 		});
 		def_config.slide = null;
@@ -894,21 +901,31 @@
 			}
 			/** 自动播放 */
 			var timer;
+			var isIe = navigator.appVersion.indexOf("Trident") !==-1;
 			function auto_play() {
+				if(isIe){
+					return;
+				}
 				var delay_time = 2000;
 				if (object_contains(def_config, "autoplay")) {
 					if (typeof def_config.autoplay === "number") {
 						delay_time = def_config.autoplay;
-					}
-					if (!def_config.autoplay) {
-						return;
 					}
 					timer = setInterval(function () {
 						next();
 					}, delay_time);
 				}
 			}
-
+			if (object_contains(def_config, "autoplay") && !isIe) {
+				$(el).hover(function (e) {
+					e.stopPropagation();
+					clearInterval(timer);
+					timer = null;
+				}, function (e) {
+					e.stopPropagation();
+					auto_play();
+				});
+			}
 			function stop_play() {
 				clearInterval(timer);
 				timer = null;
@@ -1015,7 +1032,7 @@
 				} else {
 					var slider_el = $(el).children(".swiper-slider");
 					slider_el.on(TOUCH_EVENT['down'], touch_start);
-					def_config.is_mobile?slider_el.on(TOUCH_EVENT["up"], touch_end):$(document).on(TOUCH_EVENT["up"], touch_end);
+					def_config.is_mobile ? slider_el.on(TOUCH_EVENT["up"], touch_end) : $(document).on(TOUCH_EVENT["up"], touch_end);
 				}
 				set_postion();
 			}
@@ -1026,7 +1043,7 @@
 				__init__touch();
 			}
 			return {
-				to:function() {
+				to: function () {
 					animate(index * def_config.width, 0);
 				}
 			}
@@ -1042,7 +1059,7 @@
 		})
 	}
 	return {
-		$:$,
-		ID_VERSION:ID_VERSION
+		$: $,
+		ID_VERSION: ID_VERSION
 	};
 });
