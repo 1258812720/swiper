@@ -911,9 +911,11 @@
 					if (typeof def_config.autoplay === "number") {
 						delay_time = def_config.autoplay;
 					}
-					timer = setInterval(function () {
-						next();
-					}, delay_time);
+					if (timer === null) {
+						timer = setInterval(function () {
+							next();
+						}, delay_time);
+					}
 				}
 			}
 			function play_slide(play) {
