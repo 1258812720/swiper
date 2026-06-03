@@ -392,7 +392,6 @@
 			add: function (node) {
 				var _el = this.$el;
 				var tag = is_array(_el, true);
-
 				function _push(element, insert_content) {
 					if (!insert_content) {
 						return;
@@ -673,6 +672,7 @@
 		var base = {
 			rootEl: root.$el
 		};
+		var swiper_items;
 		Object.freeze(base);
 		if (conf && typeof conf === "object" && Object.keys(conf).length > 0) {
 			if (undefined === Object.assign) {
@@ -701,7 +701,10 @@
 		var j = (function () {
 			var slider = $('<div class="swiper-slider"></div>');
 			def_config.slide = slider;
-			var swiper_items = root.children(".swiper-items");
+			swiper_items = root.children(".swiper-items");
+			if (swiper_items.size() === 0) {
+				throw new Error("找不到滑块元素，请确保父容器下存在 class 为 swiper-items 的子元素");
+			}
 			swiper_items.remove();
 			var clone_swipers = swiper_items.clone(); // 最终复制的节点
 			if (def_config.loop) {
@@ -726,7 +729,7 @@
 					style_config.width = (root_size.width * size) + "px";
 					$(el).addClass("horizontal");
 				}
-				$(el).children(".swiper-items").css({
+				swiper_items = $(el).children(".swiper-items").css({
 					width: root_size.width + "px",
 					height: root_size.height + "px"
 				});
@@ -837,7 +840,7 @@
 					});
 				}
 			}
-
+			// 下一页
 			function next(e) {
 				if (e) {
 					e.preventDefault();
@@ -947,7 +950,7 @@
 			var movex = 0;
 			var startTime = null;
 			var _activeTouchId = null;
-
+			var is_click = false;
 			function animate(dis, duration, ease, call) {
 				if (undefined === ease) {
 					ease = "ease";
@@ -978,7 +981,45 @@
 					e.preventDefault();
 				}
 			}
+			// 获取滑块里面的a标签
+			var all_links = [];
+			function get_links() {
+				swiper_items.each(function (e) {
+					var t_link = e;
+					var links = t_link.getElementsByTagName("a");
+					all_links.push(links);
+				});
+			}
 
+			// 阻止a标签跳转
+			function prevent_link(prevent) {
+				if (all_links && all_links.length > 0) {
+					for (var i = 0; i < all_links.length; i++) {
+						var link = all_links[i];
+						if (link) {
+							for (var j = 0; j < link.length; j++) {
+								var _link = link[j];
+								if (_link && is_document(_link)) {
+									if (prevent) {
+										_link.addEventListener("click", pre_defalut, {
+											passive: false,
+											capture: true
+										});
+									} else {
+										_link.removeEventListener("click", pre_defalut, {
+											passive: false,
+											capture: true
+										});
+									}
+
+								}
+							}
+						}
+					}
+				}
+			}
+
+			// 触摸开始
 			function touch_start(e) {
 				if (e.type !== TOUCH_EVENT['down']) {
 					return;
@@ -988,7 +1029,6 @@
 				play_slide(false);
 				pre_defalut(e);
 				e.stopPropagation();
-				// 记录触控标识符，用于多点触控时追踪正确的触点
 				startTime = new Date().getTime();
 				var touch = def_config.is_mobile ? e.targetTouches[0] : e;
 				startx = touch.clientX;
@@ -998,6 +1038,7 @@
 				$(b_el).on(TOUCH_EVENT["move"], function (e) {
 					touch_move(e);
 				});
+				is_click = false;
 			}
 
 			function touch_move(e) {
@@ -1012,7 +1053,8 @@
 				_target.translate = movex;
 				is_left = (x - startx) < 0;
 				var max_translate = def_config.width * (def_config.num);
-				var bound = Math.abs(movex) > max_translate;
+				is_click = Math.abs(x - startx) >= 20;
+				var bound = Math.abs(movex) > max_translate;// 边界判定
 				if (bound) {
 					var v = 0;
 					index = v;
@@ -1029,6 +1071,7 @@
 			}
 
 			function touch_end(e) {
+				prevent_link(is_click);
 				pre_defalut(e);
 				e.stopPropagation();
 				play_slide(true);
@@ -1050,6 +1093,7 @@
 				set_postion();
 			}
 			__init__layout();
+			get_links();
 			init_nav();
 			auto_play();
 			if (false === def_config.disabvarouch) {
