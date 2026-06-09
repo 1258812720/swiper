@@ -611,7 +611,10 @@
 				}
 				this.bind_event(ID_VERSION, this.$el, function (el) { // 需要解决一下解绑后的句柄
 					_events.forEach(function (func, index) {
-						el.removeEventListener(event, fun, true);
+						el.removeEventListener(event, fun, {
+							passive: false,
+							capture: true
+						});
 						_events.splice(index, 1);
 					})
 				});
@@ -638,6 +641,23 @@
 				}
 				if (is_function(func2)) {
 					this.on("mouseup", func2);
+				}
+			},
+			hasAttr: function (attr) {
+				if (!attr || typeof attr !== "string") {
+					return false;
+				} else if (is_document(this.$el)) {
+					return this.$el.hasAttribute(attr);
+				} else if (is_array(this.$el, true)) {
+					var has_attr = false;
+					this.$el.forEach(function (item) {
+						if (item.hasAttribute(attr)) {
+							has_attr = true;
+						}
+					});
+					return has_attr;
+				} else {
+					return false;
 				}
 			}
 		};
@@ -667,7 +687,6 @@
 				defaultIndex: 0, // 默认滑块显示下标
 				on: null,
 				realIndex: 0,
-				lazy: false
 			};
 		var base = {
 			rootEl: root.$el
@@ -700,6 +719,7 @@
 
 		var j = (function () {
 			var slider = $('<div class="swiper-slider"></div>');
+			var laout_style = def_config.direction === "horizontal" ? 0 : 1;
 			def_config.slide = slider;
 			swiper_items = root.children(".swiper-items");
 			if (swiper_items.size() === 0) {
@@ -720,14 +740,14 @@
 			$(el).children(".swiper-wrapper").add(slider); // 删除原来的
 			function set_children_layout() {
 				root_size = get_style($(el));
-				if (def_config.direction === "vertical") { // 判断方向
+				if (laout_style === 1) { // 判断方向
 					style_config.width = root_size.width + "px";
 					style_config.height = (root_size.height * size) + "px";
-					$(el).addClass("vertical");
-				} else {
+					$(el).addClass(def_config.direction || "vertical");
+				} else if (laout_style === 0) {
 					style_config.height = root_size.height + "px";
 					style_config.width = (root_size.width * size) + "px";
-					$(el).addClass("horizontal");
+					$(el).addClass(def_config.direction || 'horizontal');
 				}
 				swiper_items = $(el).children(".swiper-items").css({
 					width: root_size.width + "px",
@@ -737,7 +757,6 @@
 				def_config.height = root_size.height;
 				slider.css(style_config);
 			}
-
 			slider.add(clone_swipers);
 			set_children_layout();
 			if (def_config.loop) {
@@ -755,7 +774,8 @@
 		function refresh_layout() {
 			get_style(def_config.slide.get(0));
 		}
-
+		var isVertical = def_config.direction === "vertical";
+		var distance = isVertical ? def_config.height : def_config.width;
 		function init_swiper() {
 			var _target = {
 				index: 0,
@@ -770,12 +790,12 @@
 				index--;
 				if (index < 0) {
 					index = def_config.num;
-					animate(index * def_config.width, 0);
+					animate(index * distance, 0);
 					refresh_layout();
 					index = def_config.num - 1;
-					animate(index * def_config.width, def_config.duration);
+					animate(index * distance, def_config.duration);
 				} else {
-					animate(index * def_config.width, def_config.duration);
+					animate(index * distance, def_config.duration);
 				}
 				set_postion();
 			}
@@ -801,7 +821,7 @@
 						function click_event(e, el) {
 							$(el).addClass(active).siblings().removeClass(active);
 							index = e;
-							animate(e * def_config.width, def_config.duration, def_config.ease,
+							animate(e * distance, def_config.duration, def_config.ease,
 								set_postion);
 						}
 						while (idx < len) {
@@ -821,11 +841,14 @@
 						}
 						_this.add(_vm);
 						var children = _this.children();
+						var count = 0;
 						if (children.$el) {
 							// 监听索引变化
 							to_ref(_target, "index", function (e) {
 								var _ridx = e[0] === def_config.num ? 0 : e[0];
 								def_config.realIndex = _ridx;
+								var sel_item = swiper_items.$el[_ridx];
+								var isLast = _ridx === 0;
 								var i = 0;
 								for (; i < len; i++) {
 									if (i === _ridx) {
@@ -834,9 +857,14 @@
 										children.$el[i].classList.remove(active);
 									}
 								}
+								if (def_config.lazy && def_config.lazy.enable) {
+									if (count < def_config.num) {
+										load_image(sel_item, isLast);
+									}
+									count++;
+								}
 							});
 						}
-
 					});
 				}
 			}
@@ -849,18 +877,18 @@
 				index += 1;
 				if (index > def_config.num) {
 					index = 0;
-					animate(index * def_config.width, 0);
+					animate(index * distance, 0);
 					refresh_layout();
 					index = 1;
-					animate(index * def_config.width, def_config.duration);
+					animate(index * distance, def_config.duration);
 				} else {
-					animate(index * def_config.width, def_config.duration);
+					animate(index * distance, def_config.duration);
 				}
 				set_postion();
 			}
 			/** 初始化布局 */
 			function __init__layout() {
-				animate(index * def_config.width, 0);
+				animate(index * distance, 0);
 				if (object_contains(def_config.on, "init")) {
 					def_config.on.init(this);
 				}
@@ -868,7 +896,7 @@
 			}
 
 			function set_postion() {
-				endx = index * def_config.width;
+				endx = index * distance;
 				_target.index = index;
 				_target.translate = -endx;
 				return;
@@ -955,9 +983,10 @@
 				if (undefined === ease) {
 					ease = "ease";
 				}
+				var transform = isVertical ? "translate3d(0," + -(dis) + "px,0)" : "translate3d(" + -(dis) + "px,0,0)";
 				def_config.slide.css({
 					transition: "transform " + duration + "ms " + def_config.ease,
-					transform: "translate3d(" + -(dis) + "px,0,0)",
+					transform: transform,
 					backfaceVisibility: "hidden"
 				});
 				if (is_function(call)) {
@@ -972,7 +1001,7 @@
 			}
 			function compute_index(dis) {
 				var thold = is_left ? 0.34 : -0.34;
-				var val = Math.abs(dis) / def_config.width;
+				var val = Math.abs(dis) / distance;
 				var i = Math.round(val + thold);
 				return i;
 			}
@@ -986,11 +1015,32 @@
 			function get_links() {
 				swiper_items.each(function (e) {
 					var t_link = e;
-					var links = t_link.getElementsByTagName("a");
+					var links = t_link.children;
 					all_links.push(links);
 				});
 			}
 
+			function load_image(item, last) {
+				var images = new Array();
+				images.push(item.getElementsByTagName("img"));
+				if (last) {
+					images.push(swiper_items.$el[def_config.num].getElementsByTagName("img"));
+				}
+				if (images && images.length > 0) {
+					var prop = def_config.lazy && def_config.lazy.prop ? def_config.lazy.prop : "data-src";
+					for (var j = 0; j < images.length; j++) {
+						var img_list = images[j];
+						for (var i = 0; i < img_list.length; i++) {
+							var img = img_list[i];
+							var data_src = img.getAttribute(prop);
+							if (data_src) {
+								img.setAttribute("src", data_src);
+								img.removeAttribute(prop);
+							}
+						}
+					}
+				}
+			}
 			// 阻止a标签跳转
 			function prevent_link(prevent) {
 				if (all_links && all_links.length > 0) {
@@ -1001,17 +1051,16 @@
 								var _link = link[j];
 								if (_link && is_document(_link)) {
 									if (prevent) {
-										_link.addEventListener("click", pre_defalut, {
+										$(_link).$el.addEventListener("click", pre_defalut, {
 											passive: false,
 											capture: true
 										});
 									} else {
-										_link.removeEventListener("click", pre_defalut, {
+										$(_link).$el.removeEventListener("click", pre_defalut, {
 											passive: false,
 											capture: true
 										});
 									}
-
 								}
 							}
 						}
@@ -1031,7 +1080,7 @@
 				e.stopPropagation();
 				startTime = new Date().getTime();
 				var touch = def_config.is_mobile ? e.targetTouches[0] : e;
-				startx = touch.clientX;
+				startx = touch[isVertical ? "clientY" : "clientX"];
 				_activeTouchId = touch.identifier !== undefined ? touch.identifier : null;
 				is_press = true;
 				var b_el = def_config.is_mobile ? this[0] : document;
@@ -1048,11 +1097,11 @@
 					return;
 				}
 				// 多点触控：找到与初始触点匹配的触点，如果找不到则忽略
-				var x = def_config.is_mobile ? e.changedTouches[0].clientX : e.clientX;
+				var x = def_config.is_mobile ? e.changedTouches[0][isVertical ? "clientY" : "clientX"] : e[isVertical ? "clientY" : "clientX"];
 				movex = x - startx - endx;
 				_target.translate = movex;
 				is_left = (x - startx) < 0;
-				var max_translate = def_config.width * (def_config.num);
+				var max_translate = distance * (def_config.num);
 				is_click = Math.abs(x - startx) >= 20;
 				var bound = Math.abs(movex) > max_translate;// 边界判定
 				if (bound) {
@@ -1080,7 +1129,7 @@
 				}
 				is_press = false;
 				set_postion();
-				animate(index * def_config.width, def_config.duration, def_config.ease);
+				animate(index * distance, def_config.duration, def_config.ease);
 			}
 			function __init__touch() {
 				if (true === def_config.disabvarouch) {
@@ -1101,7 +1150,7 @@
 			}
 			return {
 				to: function () {
-					animate(index * def_config.width, 0);
+					animate(index * distance, 0);
 				}
 			}
 		}

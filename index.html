@@ -9,30 +9,35 @@
 	<link rel="short icon" href="img/logo.ico" />
 	<link rel="stylesheet" type="text/css" href="css/simple_style.css" />
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
-	<script type="text/javascript" src="js/simple_swiper.min.js"></script>
+	<script type="text/javascript" src="js/simple_swiper.js"></script>
 </head>
+
 <body style="display: flex;align-items: center;justify-content: center;height: 100vh;">
 	<div class="app">
 		<div class="demo01 simple-swiper-container">
 			<div class="swiper-wrapper">
 				<div class="swiper-items">
 					<a href="https://www.ithome.com/0/958/391.htm">
-						<img src="https://img.ithome.com/newsuploadfiles/focus/7da8b79c-7897-412e-b487-6cb23679bca0.jpg?x-bce-process=image/auto-orient,o_1/format,f_avif" alt="">
+						<img ops="img/banner01.jpg"
+							alt="">
 					</a>
 				</div>
 				<div class="swiper-items">
 					<a href="https://www.ithome.com/0/958/498.htm">
-						<img src="https://img.ithome.com/newsuploadfiles/focus/dd52b763-cb01-455b-a162-7a3b93c6359e.jpg?x-bce-process=image/auto-orient,o_1/format,f_avif" alt="">
+						<img ops="img/banner02.jpg"
+							alt="">
 					</a>
 				</div>
 				<div class="swiper-items">
 					<a href="https://www.ithome.com/0/958/391.htm">
-						<img src="https://img.ithome.com/newsuploadfiles/focus/382e7c52-314f-49b7-944a-e88aa9b37458.jpg?x-bce-process=image/auto-orient,o_1/format,f_avif" alt="">
+						<img ops="img/banner03.jpg"
+							alt="">
 					</a>
 				</div>
 				<div class="swiper-items">
 					<a href="https://www.ithome.com/0/958/238.htm">
-						<img src="https://img.ithome.com/newsuploadfiles/focus/d14e25e7-c3db-4370-bef3-6627f9e7dac2.jpg?x-bce-process=image/auto-orient,o_1/format,f_avif" alt="">
+						<img ops="img/banner04.jpg"
+							alt="">
 					</a>
 				</div>
 			</div>
@@ -45,23 +50,28 @@
 			<div class="swiper-wrapper">
 				<div class="swiper-items">
 					<a href="https://www.ithome.com/0/958/391.htm">
-						<img src="https://img.ithome.com/newsuploadfiles/focus/7da8b79c-7897-412e-b487-6cb23679bca0.jpg?x-bce-process=image/auto-orient,o_1/format,f_avif" alt="">
+						<img data="img/banner01.jpg"
+							alt="">
 					</a>
 				</div>
 				<div class="swiper-items">
 					<a href="https://www.ithome.com/0/958/498.htm">
-						<img src="https://img.ithome.com/newsuploadfiles/focus/dd52b763-cb01-455b-a162-7a3b93c6359e.jpg?x-bce-process=image/auto-orient,o_1/format,f_avif" alt="">
+						<img data="img/banner02.jpg"
+							alt="">
 					</a>
 				</div>
 				<div class="swiper-items">
 					<a href="https://www.ithome.com/0/958/391.htm">
-						<img src="https://img.ithome.com/newsuploadfiles/focus/382e7c52-314f-49b7-944a-e88aa9b37458.jpg?x-bce-process=image/auto-orient,o_1/format,f_avif" alt="">
+						<img data="img/banner03.jpg"
+							alt="">
 					</a>
 				</div>
 				<div class="swiper-items">
-					<a href="https://www.ithome.com/0/958/238.htm">
-						<img src="https://img.ithome.com/newsuploadfiles/focus/d14e25e7-c3db-4370-bef3-6627f9e7dac2.jpg?x-bce-process=image/auto-orient,o_1/format,f_avif" alt="">
-					</a>
+					这是一个按钮
+					<button onclick="alert('用户点击了')">点击我</button>
+					<button onclick="alert('用户点击了')">点击我</button>
+					<button onclick="alert('用户点击了')">点击我</button>
+					<button onclick="alert('用户点击了')">点击我</button>
 				</div>
 			</div>
 			<div class="pagehelper pagination" id="pagination01"></div>
@@ -78,6 +88,7 @@
 				prev: "#prev",// 前进后退按钮
 				next: "#next"
 			},
+			direction: "vertical",
 			pagination: "#pagination",
 			autoplay: 5000,
 			loop: true,
@@ -86,7 +97,7 @@
 			disabvarouch: false, // 关闭触摸
 			lazy: {
 				enable: true,
-				prop: "data"
+				prop: "ops"
 			},
 			on: {
 				transition: function (e) {
@@ -98,7 +109,8 @@
 		new SimSwiper(".demo02", {
 			navigator: {
 				prev: "#prev01",// 前进后退按钮
-				next: "#next01"
+				next: "#next01",
+				key: true
 			},
 			pagination: "#pagination01",
 			autoplay: 5000,
@@ -109,15 +121,10 @@
 			lazy: {
 				enable: true,
 				prop: "data"
-			},
-			on: {
-				transition: function (e) {
-					// console.log(e);
-					// document.body.style.transform = `translateX(${e}px)`;
-				}
 			}
 		});
-		
+
 	</script>
 </body>
+
 </html>
