@@ -4,7 +4,7 @@
 		void 0 === t.__proto__ ? (t.SimSwiper = e, SimSwiper) : "undefined" != typeof module ? module.exports = e :
 			t.__proto__.SimSwiper = e
 	} else {
-		JSwiper = e;
+		SimSwiper = e;
 	}
 })(this, function (el, conf) {
 	var ID_VERSION = "ID.VERSION." + new Date().getMilliseconds() + "" + parseInt(Math.random() * 10000);
@@ -382,7 +382,7 @@
 					return this;
 				} else {
 					if (is_str(prop)) {
-						return this.$el.style[prop];
+						return get_style(this.$el)[prop];
 					} else {
 						console.error('invaild param');
 						void (0);
@@ -659,6 +659,23 @@
 				} else {
 					return false;
 				}
+			}, hasClass: function (name) {
+				var _ = this.$el;
+				var t = false;
+				if (!name || typeof name !== "string") {
+					t = false;
+				}
+				else if (is_document(_)) {
+					t=  has_class(_, name);
+				}
+				else if (is_array(_)) {
+					_.forEach(function (item) {
+						if(item){
+							t= t && has_class(item, name);
+						}
+					});
+				}
+				return t;
 			}
 		};
 		return g;
@@ -775,7 +792,21 @@
 			get_style(def_config.slide.get(0));
 		}
 		var isVertical = def_config.direction === "vertical";
-		var distance = isVertical ? def_config.height : def_config.width;
+		var distance = -1;
+		function setDistance() {
+			distance = isVertical ? def_config.height : def_config.width
+		}
+		setDistance();
+		// 更新数据
+		function update_data() {
+			let _el = $(el);
+			let width = _el.css("width");
+			let height = _el.css("height");
+			def_config.height = height;
+			def_config.width = width;
+			setDistance();
+
+		}
 		function init_swiper() {
 			var _target = {
 				index: 0,
@@ -841,7 +872,6 @@
 						}
 						_this.add(_vm);
 						var children = _this.children();
-						var count = 0;
 						if (children.$el) {
 							// 监听索引变化
 							to_ref(_target, "index", function (e) {
@@ -858,10 +888,7 @@
 									}
 								}
 								if (def_config.lazy && def_config.lazy.enable) {
-									if (count < def_config.num) {
-										load_image(sel_item, isLast);
-									}
-									count++;
+									load_image(sel_item, isLast);
 								}
 							});
 						}
@@ -931,10 +958,14 @@
 				}
 			}
 			/** 自动播放 */
-			var timer;
+			var timer = null;
 			var isIe = navigator.appVersion.indexOf("Trident") !== -1;
 			function auto_play() {
 				if (isIe) {
+
+					return;
+				}
+				if (def_config.autoplay === false) {
 					return;
 				}
 				var delay_time = 2000;
@@ -949,10 +980,11 @@
 					}
 				}
 			}
+			var isHover = false;
+			auto_play();
 			function play_slide(play) {
 				if (!play) {
-					clearInterval(timer);
-					timer = null;
+					stop_play();
 				} else {
 					auto_play();
 				}
@@ -960,9 +992,11 @@
 			if (object_contains(def_config, "autoplay") && !isIe) {
 				$(el).hover(function (e) {
 					e.stopPropagation();
+					isHover = true;
 					play_slide(false);
 				}, function (e) {
 					e.stopPropagation();
+					isHover = false;
 					play_slide(true);
 				});
 			}
@@ -971,13 +1005,12 @@
 				timer = null;
 			}
 			/** 触摸 - 已修复多点触控问题 */
+
 			var is_press = false;
 			var startx = 0;
 			var endx = 0;
 			var is_left = false;
 			var movex = 0;
-			var startTime = null;
-			var _activeTouchId = null;
 			var is_click = false;
 			function animate(dis, duration, ease, call) {
 				if (undefined === ease) {
@@ -1006,12 +1039,14 @@
 				return i;
 			}
 			function pre_defalut(e) {
-				if (!def_config.is_mobile && e) {
+				if ((!def_config.is_mobile && e) || isVertical) {
 					e.preventDefault();
 				}
 			}
+
 			// 获取滑块里面的a标签
 			var all_links = [];
+			var images = new Array();
 			function get_links() {
 				swiper_items.each(function (e) {
 					var t_link = e;
@@ -1019,9 +1054,10 @@
 					all_links.push(links);
 				});
 			}
-
 			function load_image(item, last) {
-				var images = new Array();
+				if($(item).hasClass("swiper-slide-active")){
+					return;
+				}
 				images.push(item.getElementsByTagName("img"));
 				if (last) {
 					images.push(swiper_items.$el[def_config.num].getElementsByTagName("img"));
@@ -1030,6 +1066,9 @@
 					var prop = def_config.lazy && def_config.lazy.prop ? def_config.lazy.prop : "data-src";
 					for (var j = 0; j < images.length; j++) {
 						var img_list = images[j];
+						if (!img_list) {
+							continue;
+						}
 						for (var i = 0; i < img_list.length; i++) {
 							var img = img_list[i];
 							var data_src = img.getAttribute(prop);
@@ -1039,6 +1078,10 @@
 							}
 						}
 					}
+				}
+				$(item).addClass("swiper-slide-active");
+				if (last) {
+					$(swiper_items.$el[def_config.num]).addClass("swiper-slide-active");
 				}
 			}
 			// 阻止a标签跳转
@@ -1123,7 +1166,9 @@
 				prevent_link(is_click);
 				pre_defalut(e);
 				e.stopPropagation();
-				play_slide(true);
+				if (!isHover) {
+					play_slide(true);
+				}
 				if (!is_press) {
 					return;
 				}
@@ -1160,8 +1205,9 @@
 			clearTimeout(__time);
 			__time = setTimeout(function () {
 				_j.set_children_layout();
+				update_data();
 				inits.to();
-			}, 220)
+			}, 240)
 		})
 	}
 	return {
