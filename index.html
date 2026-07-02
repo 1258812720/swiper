@@ -7,123 +7,64 @@
 	<meta name="def-grey" content="false" />
 	<meta http-equiv="X-UA-Compatible" content="edge" />
 	<link rel="short icon" href="img/logo.ico" />
-	<link rel="stylesheet" type="text/css" href="css/simple_style.css" />
+	<link rel="stylesheet" type="text/css" href="css/swiper.css" />
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
-	<script type="text/javascript" src="js/simple_swiper.min.js"></script>
+	<script type="text/javascript" src="js/swiper.min.js"></script>
 </head>
 
 <body style="display: flex;align-items: center;justify-content: center;height: 100vh;">
 	<div class="app">
 		<div class="demo01 simple-swiper-container">
 			<div class="swiper-wrapper">
-				<div class="swiper-items">
-					<a href="https://www.ithome.com/0/958/391.htm">
-						<img ops="img/banner01.jpg"
-							alt="">
-					</a>
-				</div>
-				<div class="swiper-items">
-					<a href="https://www.ithome.com/0/958/498.htm">
-						<img ops="img/banner02.jpg"
-							alt="">
-					</a>
-				</div>
-				<div class="swiper-items">
-					<a href="https://www.ithome.com/0/958/391.htm">
-						<img ops="img/banner03.jpg"
-							alt="">
-					</a>
-				</div>
-				<div class="swiper-items">
-					<a href="https://www.ithome.com/0/958/238.htm">
-						<img ops="img/banner04.jpg"
-							alt="">
-					</a>
-				</div>
+				<div class="swiper-items grid-layout"> </div>
+				<div class="swiper-items grid-layout"> </div>
+				<div class="swiper-items grid-layout"> </div>
 			</div>
 			<div class="pagehelper pagination" id="pagination"></div>
 			<span id="prev" class="btn btn-prev">
 			</span>
 			<span id="next" class="btn btn-next"> </span>
 		</div>
-		<div class="demo02 simple-swiper-container">
-			<div class="swiper-wrapper">
-				<div class="swiper-items">
-					<a href="https://www.ithome.com/0/958/391.htm">
-						<img data="img/banner01.jpg"
-							alt="">
-					</a>
-				</div>
-				<div class="swiper-items">
-					<a href="https://www.ithome.com/0/958/498.htm">
-						<img data="img/banner02.jpg"
-							alt="">
-					</a>
-				</div>
-				<div class="swiper-items">
-					<a href="https://www.ithome.com/0/958/391.htm">
-						<img data="img/banner03.jpg"
-							alt="">
-					</a>
-				</div>
-				<div class="swiper-items">
-					这是一个按钮
-					<button onclick="alert('用户点击了')">点击我</button>
-					<button onclick="alert('用户点击了')">点击我</button>
-					<button onclick="alert('用户点击了')">点击我</button>
-					<button onclick="alert('用户点击了')">点击我</button>
-				</div>
-			</div>
-			<div class="pagehelper pagination" id="pagination01"></div>
-			<span id="prev01" class="btn btn-prev">
-			</span>
-			<span id="next01" class="btn btn-next"> </span>
-		</div>
 	</div>
 	</div>
 
 	<script type="text/javascript">
+		var arr = [];
+		var group = [];
+		for (var i = 1; i <= 36; i++) {
+			group.push("img/" + i + ".webp");
+		}
+		var items = document.querySelectorAll(".swiper-items");
+		var c = 12;
+		function showMsg(i) {
+			alert("点击了图片"+i);
+		}
+		for (var i = 0; i < 3; i++) {
+			arr.push(group.slice(i * c, (i + 1) * c));
+			var ts = arr[i];
+			var node = items[i];
+			for (var j = 0; j < ts.length; j++) {
+				var content = '<div class="picture-container" onclick="showMsg(\'' + ts[j] + '\')"><img ops="' + ts[j] + '" alt="err"/></div>';
+				node.innerHTML += content;
+			}
+		}
 		new SimSwiper(".demo01", {
 			navigator: {
 				prev: "#prev",// 前进后退按钮
-				next: "#next"
+				next: "#next",
+				key: false,
 			},
-			direction: "vertical",
+			// direction: "vertical",
 			pagination: "#pagination",
-			autoplay: 5000,
+			autoplay: false,
 			loop: true,
-			gab: 2,
 			defaultIndex: 0,
 			disabvarouch: false, // 关闭触摸
 			lazy: {
 				enable: true,
 				prop: "ops"
-			},
-			on: {
-				transition: function (e) {
-					// console.log(e);
-					// document.body.style.transform = `translateX(${e}px)`;
-				}
 			}
 		});
-		new SimSwiper(".demo02", {
-			navigator: {
-				prev: "#prev01",// 前进后退按钮
-				next: "#next01",
-				key: true
-			},
-			pagination: "#pagination01",
-			autoplay: 5000,
-			loop: true,
-			gab: 2,
-			defaultIndex: 0,
-			disabvarouch: false, // 关闭触摸
-			lazy: {
-				enable: true,
-				prop: "data"
-			}
-		});
-
 	</script>
 </body>
 
